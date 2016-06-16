@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.megaport.api</groupId>
+    <artifactId>client</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <packaging>jar</packaging>
+    <name>Megaport API Client SDK</name>
+    <description>This library is a Java wrapper for the Megaport API.</description>
+    <url>http://dev.megaport.com</url>
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Adam Wells</name>
+            <email>adam.wells@megaport.com</email>
+            <organization>Megaport</organization>
+            <organizationUrl>http://www.megaport.com</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git@github.com:megaport/Java-MegaportAPI.git</connection>
+        <developerConnection>scm:git:git@github.com:megaport/Java-MegaportAPI.git</developerConnection>
+        <url>git@github.com:megaport/Java-MegaportAPI.git</url>
+    </scm>
+
+</project>

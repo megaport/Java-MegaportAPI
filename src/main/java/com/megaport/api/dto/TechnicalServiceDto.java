@@ -1,6 +1,8 @@
 package com.megaport.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.megaport.api.util.DateDeserializer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,8 +24,11 @@ public class TechnicalServiceDto implements Serializable{
     private VxcDistanceBand vxcDistanceBand = null;
     private String intercapPath = null;
     private Boolean vxcPermitted = true;
+    @JsonDeserialize(using = DateDeserializer.class)
     private Date createDate;
+    @JsonDeserialize(using = DateDeserializer.class)
     private Date terminationDate;
+    @JsonDeserialize(using = DateDeserializer.class)
     private Date contractStartDate;
     private Integer payerCompanyId;
     private Integer minimumSpeed;

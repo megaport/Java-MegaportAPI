@@ -2,6 +2,8 @@ package com.megaport.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.megaport.api.util.DateDeserializer;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -27,12 +29,20 @@ public class VxcServiceDto implements Serializable {
     private String vxcApprovalMessage;
     private String vxcApprovalUid;
     private UsageAlgorithm usageAlgorithm;
+
+    @JsonDeserialize(using = DateDeserializer.class)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date createDate;
+
+    @JsonDeserialize(using = DateDeserializer.class)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date terminateDate;
+
+    @JsonDeserialize(using = DateDeserializer.class)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String costCentre;
+
+    @JsonDeserialize(using = DateDeserializer.class)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String,Object> resources = new HashMap<>();
 

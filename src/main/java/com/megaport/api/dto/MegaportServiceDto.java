@@ -2,6 +2,8 @@ package com.megaport.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.megaport.api.util.DateDeserializer;
 
 import java.io.Serializable;
 import java.util.*;
@@ -16,8 +18,10 @@ public class MegaportServiceDto implements Serializable {
     private String productUid;
     private String productName;
     private String provisioningStatus;
+    @JsonDeserialize(using = DateDeserializer.class)
     private Date createDate;
     private Integer portSpeed;
+    @JsonDeserialize(using = DateDeserializer.class)
     private Date terminateDate;
     private String market;
     private Integer locationId;

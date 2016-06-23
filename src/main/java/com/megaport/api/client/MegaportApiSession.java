@@ -181,12 +181,26 @@ public class MegaportApiSession {
         return new OrderResponseDto();
     }
 
-    public List<PortLocationDto> findPortLocations(){
-        return new ArrayList<>();
+    public List<PortLocationDto> findPortLocations() throws Exception{
+        String url = server + "/v2/locations";
+        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        if (response.getStatus() == 200){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsList(json, PortLocationDto.class);
+        } else {
+            throw handleError(response);
+        }
     }
 
-    public TechnicalServiceDto findServiceDetail(String productUid){
-        return new TechnicalServiceDto();
+    public TechnicalServiceDto findServiceDetail(String productUid) throws Exception{
+        String url = server + "/v2/product/" + productUid;
+        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        if (response.getStatus() == 200){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsObject(json, TechnicalServiceDto.class);
+        } else {
+            throw handleError(response);
+        }
     }
 
     public List<ActiveLogDto> findServiceLogs(String productUid){

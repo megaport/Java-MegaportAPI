@@ -203,8 +203,15 @@ public class MegaportApiSession {
         }
     }
 
-    public List<ActiveLogDto> findServiceLogs(String productUid){
-        return new ArrayList<>();
+    public List<ActiveLogDto> findServiceLogs(String productUid) throws Exception{
+        String url = server + "/v2/product/" + productUid + "/logs";
+        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        if (response.getStatus() == 200){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsList(json, ActiveLogDto.class);
+        } else {
+            throw handleError(response);
+        }
     }
 
     public GraphDto findServiceUsage(String productUid){

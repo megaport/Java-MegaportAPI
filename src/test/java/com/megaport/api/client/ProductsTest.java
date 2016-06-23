@@ -1,9 +1,6 @@
 package com.megaport.api.client;
 
-import com.megaport.api.dto.Environment;
-import com.megaport.api.dto.MegaportServiceDto;
-import com.megaport.api.dto.PartnerPortDto;
-import com.megaport.api.dto.TechnicalServiceDto;
+import com.megaport.api.dto.*;
 import com.megaport.api.exceptions.InvalidCredentialsException;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,8 +39,15 @@ public class ProductsTest {
     public void testFindServiceDetail() throws Exception{
 
         TechnicalServiceDto product = session.findServiceDetail("533d8ab9-2026-4617-bd19-cb9976417ba5");
-
         assertTrue(product != null);
+
+    }
+
+    @Test
+    public void testFindServiceLogs() throws Exception{
+
+        List<ActiveLogDto> serviceLogs = session.findServiceLogs("533d8ab9-2026-4617-bd19-cb9976417ba5");
+        assertTrue(serviceLogs != null);
 
     }
 

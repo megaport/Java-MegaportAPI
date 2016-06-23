@@ -5,6 +5,8 @@ import com.megaport.api.exceptions.InvalidCredentialsException;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
@@ -48,6 +50,21 @@ public class ProductsTest {
 
         List<ActiveLogDto> serviceLogs = session.findServiceLogs("533d8ab9-2026-4617-bd19-cb9976417ba5");
         assertTrue(serviceLogs != null);
+
+    }
+
+    @Test
+    public void testFindUsageData() throws Exception{
+
+        GraphDto graphDto = session.findServiceUsage("533d8ab9-2026-4617-bd19-cb9976417ba5", null, null);
+        assertTrue(graphDto != null);
+
+        Date to = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        Date from = cal.getTime();
+        graphDto = session.findServiceUsage("533d8ab9-2026-4617-bd19-cb9976417ba5", from, to);
+        assertTrue(graphDto != null);
 
     }
 

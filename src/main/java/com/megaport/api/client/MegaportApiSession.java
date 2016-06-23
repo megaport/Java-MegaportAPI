@@ -13,10 +13,7 @@ import com.megaport.api.util.JsonConverter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by adam.wells on 17/06/2016.
@@ -214,8 +211,20 @@ public class MegaportApiSession {
         }
     }
 
-    public GraphDto findServiceUsage(String productUid){
-        return new GraphDto();
+    public GraphDto findServiceUsage(String productUid, Date from, Date to) throws Exception{
+        String url = server + "/v2/graph/mbps";
+        HttpResponse<JsonNode> response;
+        if (from != null && to != null){
+            response = Unirest.get(url).header("X-Auth-Token", token).queryString("productIdOrUid", productUid).queryString("from", from.getTime()).queryString("to", to.getTime()).asJson();
+        } else {
+            response = Unirest.get(url).header("X-Auth-Token", token).queryString("productIdOrUid", productUid).asJson();
+        }
+        if (response.getStatus() == 200){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsObject(json, GraphDto.class);
+        } else {
+            throw handleError(response);
+        }
     }
 
     public String getToken() {

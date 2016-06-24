@@ -28,12 +28,17 @@ public class MegaportServiceDto implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String costCentre;
     private Boolean vxcpermitted;
+    private Integer term;
+    private ProductType productType;
 
     private Set<VxcServiceDto> associatedVxcs = new HashSet<>();
     private Set<IxServiceDto> associatedIxs  = new HashSet<>();
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String,Object> resources = new HashMap<>();
+
+    private final List<Integer> validPortSpeeds = Arrays.asList(1000,10000,100000);
+    private final List<Integer> validTerms = Arrays.asList(1,12,24,36,48,60);
 
     public String getProductUid() {
         return productUid;
@@ -55,7 +60,23 @@ public class MegaportServiceDto implements Serializable {
         return provisioningStatus;
     }
 
-    public void setProvisioningStatus( String provisioningStatus ) {
+    public Integer getTerm() {
+        return term;
+    }
+
+    public void setTerm(Integer term) {
+        this.term = term;
+    }
+
+    public ProductType getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
+
+    public void setProvisioningStatus(String provisioningStatus ) {
         this.provisioningStatus = provisioningStatus;
     }
 

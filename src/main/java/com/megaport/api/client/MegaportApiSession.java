@@ -170,8 +170,17 @@ public class MegaportApiSession {
 
     }
 
-    public List<ServiceLineItemDto> validateOrder(List<MegaportServiceDto> megaportServiceDtos){
-        return new ArrayList<>();
+    public List<ServiceLineItemDto> validateOrder(List<MegaportServiceDto> megaportServiceDtos) throws Exception{
+
+        String url = server + "/v2/networkdesign/validate";
+        HttpResponse<JsonNode> response = Unirest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(megaportServiceDtos)).asJson();
+        if (response.getStatus() == 200){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsList(json, ServiceLineItemDto.class);
+        } else {
+            throw handleError(response);
+        }
+
     }
 
     public OrderResponseDto placeOrder(List<MegaportServiceDto> megaportServiceDtos){

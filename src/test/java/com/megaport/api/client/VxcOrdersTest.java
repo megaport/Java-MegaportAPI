@@ -40,6 +40,18 @@ public class VxcOrdersTest {
 
     }
 
+    @Test
+    public void testOrderVxc() throws Exception {
+
+        List<MegaportServiceDto> order = new ArrayList<>();
+        order.add(createGoodVxc());
+
+        // prices for this account will be $0
+        String orderResponse = session.placeOrder(order);
+        assertTrue(orderResponse.contains("created"));
+
+    }
+
 
     @Test
     public void testCreateBadVxcNoSpeed() throws Exception {

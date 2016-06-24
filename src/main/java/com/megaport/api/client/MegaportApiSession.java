@@ -183,8 +183,16 @@ public class MegaportApiSession {
 
     }
 
-    public OrderResponseDto placeOrder(List<MegaportServiceDto> megaportServiceDtos){
-        return new OrderResponseDto();
+    public String placeOrder(List<MegaportServiceDto> megaportServiceDtos) throws Exception{
+
+        String url = server + "/v2/networkdesign/buy";
+        HttpResponse<JsonNode> response = Unirest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(megaportServiceDtos)).asJson();
+        if (response.getStatus() == 200){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJson(json).get("data").toString();
+        } else {
+            throw handleError(response);
+        }
     }
 
     public List<PortLocationDto> findPortLocations() throws Exception{

@@ -31,7 +31,7 @@ public class MegaportServiceDto implements Serializable {
     private Integer term;
     private ProductType productType;
 
-    private Set<VxcServiceDto> associatedVxcs = new HashSet<>();
+    private List<VxcServiceDto> associatedVxcs = new ArrayList<>();
     private Set<IxServiceDto> associatedIxs  = new HashSet<>();
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -136,11 +136,11 @@ public class MegaportServiceDto implements Serializable {
         this.vxcpermitted = vxcpermitted;
     }
 
-    public Set<VxcServiceDto> getAssociatedVxcs() {
+    public List<VxcServiceDto> getAssociatedVxcs() {
         return associatedVxcs;
     }
 
-    public void setAssociatedVxcs( Set<VxcServiceDto> associatedVxcs ) {
+    public void setAssociatedVxcs( List<VxcServiceDto> associatedVxcs ) {
         if ( associatedVxcs != null ) this.associatedVxcs = associatedVxcs;
     }
 

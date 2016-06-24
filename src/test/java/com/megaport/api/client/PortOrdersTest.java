@@ -14,7 +14,7 @@ import static org.junit.Assert.fail;
 /**
  * Created by adam.wells on 17/06/2016.
  */
-public class OrdersTest {
+public class PortOrdersTest {
 
     MegaportApiSession session;
 
@@ -35,6 +35,18 @@ public class OrdersTest {
         // prices for this account will be $0
         List<ServiceLineItemDto> serviceLineItemDtos = session.validateOrder(order);
         assertEquals(1, serviceLineItemDtos.size());
+
+    }
+
+    @Test
+    public void testOrderPort() throws Exception {
+
+        List<MegaportServiceDto> order = new ArrayList<>();
+        order.add(createGoodPort());
+
+        // prices for this account will be $0
+        String orderResponse = session.placeOrder(order);
+        assertTrue(orderResponse.contains("created"));
 
     }
 

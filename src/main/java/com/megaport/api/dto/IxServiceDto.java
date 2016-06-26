@@ -18,6 +18,7 @@ public class IxServiceDto implements Serializable {
     private String productUid;
     private String productName;
     private Integer vlan;
+    private Integer rateLimit;
     private String macAddress;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer asn;
@@ -33,6 +34,14 @@ public class IxServiceDto implements Serializable {
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String,Object> resources = new HashMap<>();
+
+    public Integer getRateLimit() {
+        return rateLimit;
+    }
+
+    public void setRateLimit(Integer rateLimit) {
+        this.rateLimit = rateLimit;
+    }
 
     public String getProductName() {
         return productName;

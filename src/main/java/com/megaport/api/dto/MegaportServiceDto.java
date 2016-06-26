@@ -32,7 +32,7 @@ public class MegaportServiceDto implements Serializable {
     private ProductType productType;
 
     private List<VxcServiceDto> associatedVxcs = new ArrayList<>();
-    private Set<IxServiceDto> associatedIxs  = new HashSet<>();
+    private List<IxServiceDto> associatedIxs  = new ArrayList<>();
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String,Object> resources = new HashMap<>();
@@ -148,11 +148,11 @@ public class MegaportServiceDto implements Serializable {
         if ( associatedVxcs != null ) this.associatedVxcs.addAll(associatedVxcs);
     }
 
-    public Set<IxServiceDto> getAssociatedIxs() {
+    public List<IxServiceDto> getAssociatedIxs() {
         return associatedIxs;
     }
 
-    public void setAssociatedIxs( Set<IxServiceDto> associatedIxs ) {
+    public void setAssociatedIxs( ArrayList<IxServiceDto> associatedIxs ) {
         if ( associatedIxs != null ) this.associatedIxs = associatedIxs;
     }
 

@@ -206,6 +206,22 @@ public class MegaportApiSession {
         }
     }
 
+    /**
+     * Find a list of available IX services for a given location.
+     * @return
+     * @throws Exception
+     */
+    public List<IxDto> findIxForLocation(Integer locationId) throws Exception{
+        String url = server + "/v2/product/ix/types";
+        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).queryString("locationId", locationId).asJson();
+        if (response.getStatus() == 200){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsList(json, IxDto.class);
+        } else {
+            throw handleError(response);
+        }
+    }
+
     public TechnicalServiceDto findServiceDetail(String productUid) throws Exception{
         String url = server + "/v2/product/" + productUid;
         HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();

@@ -29,7 +29,7 @@ public class VxcOrdersTest {
     }
 
     @Test
-    public void testValidateVxc() throws Exception {
+    public void testValidateVxcOrder() throws Exception {
 
         List<MegaportServiceDto> order = new ArrayList<>();
         order.add(createGoodVxc());

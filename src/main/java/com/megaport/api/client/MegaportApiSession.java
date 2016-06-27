@@ -222,6 +222,49 @@ public class MegaportApiSession {
         }
     }
 
+    public void modifyVxcOrCxc(VxcServiceModificationDto dto) throws Exception{
+
+        Map<String,Object> fieldMap = new HashMap<>();
+        fieldMap.put("name", dto.getProductName());
+        fieldMap.put("aEndVlan", dto.getaEndVlan());
+        fieldMap.put("bEndVlan", dto.getbEndVlan());
+        fieldMap.put("rateLimit", dto.getRateLimit());
+
+        String url = server + "/v2/product/vxc/" + dto.getProductUid();
+        HttpResponse<JsonNode> response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();
+        if (response.getStatus() != 200){
+            throw handleError(response);
+        }
+    }
+
+    public void modifyIx(IxServiceModificationDto dto) throws Exception{
+
+        Map<String,Object> fieldMap = new HashMap<>();
+        fieldMap.put("name", dto.getProductName());
+        fieldMap.put("rateLimit", dto.getRateLimit());
+        fieldMap.put("vlan", dto.getVlan());
+        fieldMap.put("macAddress", dto.getMacAddress());
+        fieldMap.put("asn", dto.getAsn());
+
+        String url = server + "/v2/product/ix/" + dto.getProductUid();
+        HttpResponse<JsonNode> response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();
+        if (response.getStatus() != 200){
+            throw handleError(response);
+        }
+    }
+
+    public void modifyPort(String name, String productUid) throws Exception{
+
+        Map<String,Object> fieldMap = new HashMap<>();
+        fieldMap.put("name", name);
+
+        String url = server + "/v2/product/" + productUid;
+        HttpResponse<JsonNode> response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();
+        if (response.getStatus() != 200){
+            throw handleError(response);
+        }
+    }
+
     public TechnicalServiceDto findServiceDetail(String productUid) throws Exception{
         String url = server + "/v2/product/" + productUid;
         HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
@@ -265,8 +308,16 @@ public class MegaportApiSession {
     }
 
     private Exception handleError(HttpResponse<JsonNode> response) throws InvalidCredentialsException, BadRequestException{
-        if ((response.getStatus() == 401) || (response.getStatus() == 403)){
+        if (response.getStatus() == 401){
             return new InvalidCredentialsException("Login failed - your session may have expired");
+        } else if (response.getStatus() == 403) {
+            HashMap<String, Object> responseMap = JsonConverter.fromJson(response.getBody().toString());
+            String message = (String) responseMap.get("message");
+            if (message == null) {
+                return new BadRequestException(response.getBody().toString());
+            } else {
+                return new BadRequestException(message);
+            }
         } else if (response.getStatus() == 400) {
             return new BadRequestException(response.getBody().toString());
         } else {

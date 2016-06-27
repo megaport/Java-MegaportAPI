@@ -29,6 +29,7 @@ public class VxcServiceDto implements Serializable {
     private String vxcApprovalMessage;
     private String vxcApprovalUid;
     private UsageAlgorithm usageAlgorithm;
+    private Map<String, Object> partnerConfigs = new HashMap<>();
 
     @JsonDeserialize(using = DateDeserializer.class)
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -164,6 +165,14 @@ public class VxcServiceDto implements Serializable {
 
     public void setbEnd( VxcEndDto bEnd ) {
         this.bEnd = bEnd;
+    }
+
+    public Map<String, Object> getPartnerConfigs() {
+        return partnerConfigs;
+    }
+
+    public void setPartnerConfigs(Map<String, Object> partnerConfigs) {
+        this.partnerConfigs = partnerConfigs;
     }
 
     public Map<String, Object> getResources() {

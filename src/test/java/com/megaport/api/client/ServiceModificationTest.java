@@ -46,4 +46,66 @@ public class ServiceModificationTest {
         }
     }
 
+    @Test
+    public void testChangeIxService() throws Exception{
+
+        List<MegaportServiceDto> ports = session.findPorts();
+
+        // look for a testing service that is not decommissioned
+        String productUid = null;
+        for (MegaportServiceDto port : ports){
+            if (port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
+                if (port.getAssociatedIxs().size() > 0){
+                    for (IxServiceDto ix : port.getAssociatedIxs()){
+                        productUid = ix.getProductUid();
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (productUid != null) {
+            IxServiceModificationDto dto = new IxServiceModificationDto();
+            dto.setProductUid(productUid);
+            dto.setProductName("1234");
+            dto.setAsn(1234);
+            dto.setMacAddress("a0:00:00:00:00:00");
+            dto.setVlan(1234);
+            dto.setRateLimit(1234);
+            session.modifyIx(dto);
+            TechnicalServiceDto product = session.findServiceDetail(productUid);
+            assertEquals("New Name", product.getServiceName());
+        }
+    }
+
+    @Test
+    public void testChangeVxcService() throws Exception{
+
+        List<MegaportServiceDto> ports = session.findPorts();
+
+        // look for a testing service that is not decommissioned
+        String productUid = null;
+        for (MegaportServiceDto port : ports){
+            if (port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
+                if (port.getAssociatedVxcs().size() > 0){
+                    for (VxcServiceDto vxc : port.getAssociatedVxcs()){
+                        productUid = vxc.getProductUid();
+                    }
+                }
+            }
+        }
+
+        if (productUid != null) {
+            VxcServiceModificationDto dto = new VxcServiceModificationDto();
+            dto.setProductUid(productUid);
+            dto.setProductName("1234");
+            dto.setRateLimit(1234);
+            dto.setaEndVlan(1234);
+            dto.setbEndVlan(1234);
+            session.modifyVxcOrCxc(dto);
+            TechnicalServiceDto product = session.findServiceDetail(productUid);
+            assertEquals("1234", product.getServiceName());
+        }
+    }
+
 }

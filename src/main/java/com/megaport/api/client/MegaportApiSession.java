@@ -303,6 +303,14 @@ public class MegaportApiSession {
         }
     }
 
+    public void lifecycle(String productUid, LifecycleAction action) throws Exception{
+        String url = server + "/v2/product/" + productUid + "/action/" + action.toString();
+        HttpResponse<JsonNode> response = Unirest.put(url).header("X-Auth-Token", token).asJson();
+        if (response.getStatus() != 200){
+            throw handleError(response);
+        }
+    }
+
     public String getToken() {
         return token;
     }

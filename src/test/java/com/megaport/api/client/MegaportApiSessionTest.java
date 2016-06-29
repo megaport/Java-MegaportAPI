@@ -19,7 +19,7 @@ public class MegaportApiSessionTest {
     @Test
     public void testCreateSession() throws Exception{
 
-        MegaportApiSession session = new MegaportApiSession(Environment.LOCALHOST, "wsmithers", "password");
+        MegaportApiSession session = new MegaportApiSession(Environment.TRAINING, "wsmithers", "password");
         assertTrue(session.isValid());
 
         session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");

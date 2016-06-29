@@ -32,13 +32,14 @@ public class JsonConverter {
 
     public static <T extends Object> List<T> fromJsonDataAsList(String jsonString, Class<T> typeReference) {
 
-        HashMap<String, Object> map = fromJson(jsonString);
-        List<Map<String,Object>> list = (List<Map<String,Object>>) map.get("data");
-
         List<T> result = new ArrayList<>();
 
-        for (Map<String,Object> item : list){
-            result.add(fromJson(toJson(item),typeReference));
+        HashMap<String, Object> map = fromJson(jsonString);
+        if (!map.get("data").equals("[]")){
+            List<Map<String,Object>> list = (List<Map<String,Object>>) map.get("data");
+            for (Map<String,Object> item : list){
+                result.add(fromJson(toJson(item),typeReference));
+            }
         }
 
         return result;

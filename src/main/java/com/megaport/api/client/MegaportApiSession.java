@@ -30,12 +30,28 @@ public class MegaportApiSession {
         environments.put(Environment.LOCALHOST, "http://localhost:8080");
     }
 
+    /**
+     * Constructor for Megaport API session
+     * @param environment
+     * @param token
+     * @throws InvalidCredentialsException
+     * @throws UnirestException
+     */
     public MegaportApiSession(Environment environment, String token) throws InvalidCredentialsException, UnirestException{
         this.token = token;
         this.server = environments.get(environment);
         login(null, null, token);
     }
 
+    /**
+     * Constructor for Megaport API session
+     * @param environment
+     * @param username
+     * @param password
+     * @throws InvalidCredentialsException
+     * @throws IOException
+     * @throws UnirestException
+     */
     public MegaportApiSession(Environment environment, String username, String password) throws InvalidCredentialsException, IOException, UnirestException {
         this.server = environments.get(environment);
         login(username, password, null);
@@ -46,6 +62,9 @@ public class MegaportApiSession {
      * @param server
      * @param username
      * @param password
+     * @throws InvalidCredentialsException
+     * @throws IOException
+     * @throws UnirestException
      */
     public MegaportApiSession(String server, String username, String password) throws InvalidCredentialsException, IOException, UnirestException {
         this.server = validateServer(server);
@@ -56,16 +75,30 @@ public class MegaportApiSession {
      * Use this only if you get instruction from Megaport support.
      * @param server
      * @param token
+     * @throws InvalidCredentialsException
+     * @throws IOException
+     * @throws UnirestException
      */
     public MegaportApiSession(String server, String token) throws InvalidCredentialsException, IOException, UnirestException {
         this.server = validateServer(server);
         login(null, null, token);
     }
 
+    /**
+     * Validates token and server for session
+     * @return
+     */
     public Boolean isValid(){
         return token != null && server != null;
     }
 
+    /**
+     * Validate server details for session.
+     * @param server
+     * @return The validated server
+     * @throws UnreachableHostException
+     * @throws IOException
+     */
     private String validateServer(String server) throws UnreachableHostException, IOException {
 
         String host;
@@ -94,6 +127,14 @@ public class MegaportApiSession {
 
     }
 
+    /**
+     * Login method
+     * @param username
+     * @param password
+     * @param token
+     * @throws InvalidCredentialsException
+     * @throws UnirestException
+     */
     private void login(String username, String password, String token) throws InvalidCredentialsException, UnirestException{
 
         HttpResponse<JsonNode> response;
@@ -116,10 +157,8 @@ public class MegaportApiSession {
 
     /**
      * This will return the list of Ports owned by the logged-in user.
-     * @return List<MegaportServiceDto>
-     * @throws BadRequestException
-     * @throws InvalidCredentialsException
-     * @throws IOException
+     * @return {@link List} of {@link MegaportServiceDto}
+     * @throws Exception
      */
     public List<MegaportServiceDto> findPorts() throws Exception{
 
@@ -136,7 +175,7 @@ public class MegaportApiSession {
 
     /**
      * This will return a list of Port services owned by other Megaport users; you can order a VXC to any of these ports.
-     * @return
+     * @return {@link List} of {@link PartnerPortDto}
      * @throws Exception
      */
     public List<PartnerPortDto> findPartnerPorts() throws Exception{
@@ -155,7 +194,8 @@ public class MegaportApiSession {
     /**
      * Given your Azure service key, obtained from Microsoft ExpressRoute, this end point will return the primary and secondary ExpressRoute ports.
      * @param serviceKey
-     * @return
+     * @return {@link AzurePortsDto} of the primary and secondary ExpressRoute ports
+     * @throws Exception
      */
     public AzurePortsDto findAzurePorts(String serviceKey) throws Exception {
 
@@ -170,6 +210,12 @@ public class MegaportApiSession {
 
     }
 
+    /**
+     * This invokes the validation of the order details provided
+     * @param megaportServiceDtos
+     * @return {@link List} of valid {@link ServiceLineItemDto}
+     * @throws Exception
+     */
     public List<ServiceLineItemDto> validateOrder(List<MegaportServiceDto> megaportServiceDtos) throws Exception{
 
         String url = server + "/v2/networkdesign/validate";
@@ -183,6 +229,12 @@ public class MegaportApiSession {
 
     }
 
+    /**
+     * Place an order
+     * @param megaportServiceDtos
+     * @return Returns the response for placing an order
+     * @throws Exception
+     */
     public String placeOrder(List<MegaportServiceDto> megaportServiceDtos) throws Exception{
 
         String url = server + "/v2/networkdesign/buy";
@@ -287,6 +339,14 @@ public class MegaportApiSession {
         }
     }
 
+    /**
+     * Find a service usage
+     * @param productUid
+     * @param from
+     * @param to
+     * @return {@link GraphDto} of service usage
+     * @throws Exception
+     */
     public GraphDto findServiceUsage(String productUid, Date from, Date to) throws Exception{
         String url = server + "/v2/graph/mbps";
         HttpResponse<JsonNode> response;
@@ -303,6 +363,12 @@ public class MegaportApiSession {
         }
     }
 
+    /**
+     * Invoke a lifecycle action
+     * @param productUid
+     * @param action
+     * @throws Exception
+     */
     public void lifecycle(String productUid, LifecycleAction action) throws Exception{
         String url = server + "/v2/product/" + productUid + "/action/" + action.toString();
         HttpResponse<JsonNode> response = Unirest.put(url).header("X-Auth-Token", token).asJson();
@@ -311,10 +377,21 @@ public class MegaportApiSession {
         }
     }
 
+    /**
+     * Get a token for the session
+     * @return The session token
+     */
     public String getToken() {
         return token;
     }
 
+    /**
+     *
+     * @param response
+     * @return The exception being handled
+     * @throws InvalidCredentialsException
+     * @throws BadRequestException
+     */
     private Exception handleError(HttpResponse<JsonNode> response) throws InvalidCredentialsException, BadRequestException{
         if (response.getStatus() == 401){
             return new InvalidCredentialsException("Login failed - your session may have expired");

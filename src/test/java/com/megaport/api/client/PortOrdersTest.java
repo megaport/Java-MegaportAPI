@@ -1,6 +1,7 @@
 package com.megaport.api.client;
 
 import com.megaport.api.dto.*;
+import com.megaport.api.exceptions.BadRequestException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,7 +22,7 @@ public class PortOrdersTest {
     @Before
     public void init() throws Exception {
 
-        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.STAGING, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
     }
@@ -59,7 +60,7 @@ public class PortOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -74,7 +75,7 @@ public class PortOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -89,7 +90,7 @@ public class PortOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -104,7 +105,7 @@ public class PortOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -119,7 +120,7 @@ public class PortOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 

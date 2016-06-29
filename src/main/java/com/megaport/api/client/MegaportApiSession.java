@@ -28,6 +28,7 @@ public class MegaportApiSession {
         environments.put(Environment.PRODUCTION, "https://api.megaport.com");
         environments.put(Environment.TRAINING, "https://api-training.megaport.com");
         environments.put(Environment.LOCALHOST, "http://localhost:8080");
+        environments.put(Environment.STAGING, "https://api-staging.megaport.com");
     }
 
     /**
@@ -148,6 +149,9 @@ public class MegaportApiSession {
             String json = response.getBody().toString();
             HashMap<String, Object> map = JsonConverter.fromJson(json);
             Map<String,Object> data = (Map<String,Object>) map.get("data");
+            if (data == null) {
+                System.out.println(json);
+            }
             this.token = (String) data.get("session");
         } else {
             throw new InvalidCredentialsException("Login failed");

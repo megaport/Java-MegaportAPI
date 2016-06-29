@@ -21,7 +21,7 @@ public class IxServiceDto implements Serializable {
     private Integer rateLimit;
     private String macAddress;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Integer asn;
+    private Long asn;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String networkServiceType;
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -76,11 +76,11 @@ public class IxServiceDto implements Serializable {
         this.macAddress = macAddress;
     }
 
-    public Integer getAsn() {
+    public Long getAsn() {
         return asn;
     }
 
-    public void setAsn(Integer asn) {
+    public void setAsn(Long asn) {
         this.asn = asn;
     }
 

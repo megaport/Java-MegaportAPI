@@ -1,6 +1,7 @@
 package com.megaport.api.client;
 
 import com.megaport.api.dto.*;
+import com.megaport.api.exceptions.BadRequestException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +23,7 @@ public class IxOrdersTest {
     @Before
     public void init() throws Exception {
 
-        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.LOCALHOST, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
     }
@@ -71,7 +72,7 @@ public class IxOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -86,22 +87,7 @@ public class IxOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Test
-    public void testCreateBadIxVlanMissing() throws Exception {
-
-        List<MegaportServiceDto> order = new ArrayList<>();
-        order.add(createBadVlanMissing());
-
-        try {
-            session.validateOrder(order);
-            fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -116,7 +102,7 @@ public class IxOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -131,23 +117,23 @@ public class IxOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
     }
 
     @Test
-    public void testCreateBadIxBadSpeed3() throws Exception {
+    public void testCreateIxNullSpeed() throws Exception {
 
+        // null speed will just use the Port speed
         List<MegaportServiceDto> order = new ArrayList<>();
-        order.add(createBadBadSpeed3());
+        order.add(createIxNullSpeed());
 
         try {
             session.validateOrder(order);
+        } catch (BadRequestException e) {
             fail();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
     }
@@ -161,7 +147,7 @@ public class IxOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -176,7 +162,7 @@ public class IxOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -191,7 +177,7 @@ public class IxOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -206,7 +192,7 @@ public class IxOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -221,7 +207,7 @@ public class IxOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -236,7 +222,7 @@ public class IxOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -252,7 +238,7 @@ public class IxOrdersTest {
         IxServiceDto ixDto = new IxServiceDto();
         ixDto.setProductName("My Melbourne IX");
         ixDto.setNetworkServiceType("Melbourne IX");
-        ixDto.setAsn(12345);
+        ixDto.setAsn(12345L);
         ixDto.setMacAddress("00:23:45:67:89:ab");
         ixDto.setRateLimit(500);
         ixDto.setVlan(101);
@@ -264,19 +250,13 @@ public class IxOrdersTest {
 
     private MegaportServiceDto createBadAsn(){
         MegaportServiceDto dto = createGoodIx();
-        dto.getAssociatedIxs().get(0).setAsn(-1);
+        dto.getAssociatedIxs().get(0).setAsn(-1L);
         return dto;
     }
 
     private MegaportServiceDto createBadVlan(){
         MegaportServiceDto dto = createGoodIx();
         dto.getAssociatedIxs().get(0).setVlan(-13);
-        return dto;
-    }
-
-    private MegaportServiceDto createBadVlanMissing(){
-        MegaportServiceDto dto = createGoodIx();
-        dto.getAssociatedIxs().get(0).setVlan(null);
         return dto;
     }
 
@@ -292,7 +272,7 @@ public class IxOrdersTest {
         return dto;
     }
 
-    private MegaportServiceDto createBadBadSpeed3(){
+    private MegaportServiceDto createIxNullSpeed(){
         MegaportServiceDto dto = createGoodIx();
         dto.getAssociatedIxs().get(0).setRateLimit(null);
         return dto;
@@ -300,7 +280,7 @@ public class IxOrdersTest {
 
     private MegaportServiceDto createBadAsn2(){
         MegaportServiceDto dto = createGoodIx();
-        dto.getAssociatedIxs().get(0).setAsn(429496729);
+        dto.getAssociatedIxs().get(0).setAsn(Long.valueOf(Integer.MAX_VALUE) + 1);
         return dto;
     }
 

@@ -1,6 +1,7 @@
 package com.megaport.api.client;
 
 import com.megaport.api.dto.*;
+import com.megaport.api.exceptions.BadRequestException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ public class VxcOrdersTest {
     @Before
     public void init() throws Exception {
 
-        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.LOCALHOST, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
     }
@@ -62,7 +63,7 @@ public class VxcOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -77,7 +78,7 @@ public class VxcOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -92,7 +93,7 @@ public class VxcOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -107,7 +108,7 @@ public class VxcOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -122,7 +123,7 @@ public class VxcOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -137,22 +138,7 @@ public class VxcOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Test
-    public void testCreateBadVxcNoAEnd() throws Exception {
-
-        List<MegaportServiceDto> order = new ArrayList<>();
-        order.add(createBadVxcNoAEnd());
-
-        try {
-            session.validateOrder(order);
-            fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -167,7 +153,7 @@ public class VxcOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -182,7 +168,7 @@ public class VxcOrdersTest {
         try {
             List<ServiceLineItemDto> serviceLineItemDtos = session.validateOrder(order);
             assertEquals(1, serviceLineItemDtos.size());
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             fail();
         }
 
@@ -197,7 +183,7 @@ public class VxcOrdersTest {
         try {
             session.validateOrder(order);
             fail();
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             e.printStackTrace();
         }
 
@@ -262,12 +248,6 @@ public class VxcOrdersTest {
     private MegaportServiceDto createBadVxcBadBEndProductUid(){
         MegaportServiceDto dto = createGoodVxc();
         dto.getAssociatedVxcs().get(0).getbEnd().setProductUid("aasdadsadadadsasd");
-        return dto;
-    }
-
-    private MegaportServiceDto createBadVxcNoAEnd(){
-        MegaportServiceDto dto = createGoodVxc();
-        dto.getAssociatedVxcs().get(0).setaEnd(null);
         return dto;
     }
 

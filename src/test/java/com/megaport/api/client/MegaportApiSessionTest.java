@@ -22,7 +22,7 @@ public class MegaportApiSessionTest {
         MegaportApiSession session = new MegaportApiSession(Environment.TRAINING, "wsmithers", "password");
         assertTrue(session.isValid());
 
-        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.STAGING, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
         session = new MegaportApiSession("https://api-training.megaport.com", "api.test", "s0me-s3cret#");
@@ -30,7 +30,7 @@ public class MegaportApiSessionTest {
 
         String goodToken = session.getToken();
 
-        session = new MegaportApiSession(Environment.TRAINING, goodToken);
+        session = new MegaportApiSession(Environment.STAGING, goodToken);
         assertTrue(session.isValid());
 
         session = new MegaportApiSession("https://api-training.megaport.com", goodToken);
@@ -45,7 +45,7 @@ public class MegaportApiSessionTest {
     public void testFailValidation() throws Exception{
 
         try {
-            MegaportApiSession session = new MegaportApiSession(Environment.TRAINING, "api.test", "bad-password");
+            MegaportApiSession session = new MegaportApiSession(Environment.STAGING, "api.test", "bad-password");
             fail();
         } catch (InvalidCredentialsException e){
             // expect to be here bad password
@@ -59,7 +59,7 @@ public class MegaportApiSessionTest {
         }
 
         try {
-            MegaportApiSession session = new MegaportApiSession(Environment.TRAINING, "bad-token");
+            MegaportApiSession session = new MegaportApiSession(Environment.STAGING, "bad-token");
             fail();
         } catch (InvalidCredentialsException e){
             // expect to be here bad password

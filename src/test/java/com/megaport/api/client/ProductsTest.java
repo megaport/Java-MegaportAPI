@@ -22,7 +22,7 @@ public class ProductsTest {
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.LOCALHOST, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
     }

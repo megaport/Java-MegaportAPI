@@ -2,8 +2,8 @@
 
 This library is a wrapper around the Megaport RESTful API that is documented at dev.megaport.com.
 
-How to Get
-==========
+How do I get the library?
+=========================
 
 You can add this library as a Maven dependency:
 
@@ -15,8 +15,8 @@ You can add this library as a Maven dependency:
 </dependency>
 ```
 
-How to use
-==========
+How do I use the library?
+=========================
 
 The entry point for this library is ```MegaportApiSession```.  You create one of these, passing in some credentials or a valid token.
 

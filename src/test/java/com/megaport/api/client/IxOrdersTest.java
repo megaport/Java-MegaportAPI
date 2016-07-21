@@ -23,7 +23,7 @@ public class IxOrdersTest {
     @Before
     public void init() throws Exception {
 
-        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.LOCALHOST, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
     }
@@ -32,7 +32,7 @@ public class IxOrdersTest {
     public void testFindAvailableIxByLocation() throws Exception{
 
         List<IxDto> ixForLocation = session.findIxForLocation(3);
-        assertEquals(4, ixForLocation.size());
+        assertEquals(5, ixForLocation.size());
 
     }
 
@@ -286,6 +286,7 @@ public class IxOrdersTest {
 
     private MegaportServiceDto createBadIxEmpty(){
         MegaportServiceDto dto = createGoodIx();
+        dto.setProductUid(null);
         dto.getAssociatedIxs().clear();
         return dto;
     }

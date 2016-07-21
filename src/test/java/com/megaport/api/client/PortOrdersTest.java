@@ -22,7 +22,7 @@ public class PortOrdersTest {
     @Before
     public void init() throws Exception {
 
-        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.LOCALHOST, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
     }
@@ -47,7 +47,6 @@ public class PortOrdersTest {
 
         // prices for this account will be $0
         String orderResponse = session.placeOrder(order);
-        assertTrue(orderResponse.contains("created"));
 
     }
 
@@ -135,7 +134,7 @@ public class PortOrdersTest {
         dto.setTerm(24);
         dto.setProductType(ProductType.MEGAPORT);
         dto.setProductName("My New Port");
-        dto.setProvisioningStatus("DESIGN");
+        dto.setProvisioningStatus(ProvisioningStatus.DESIGN);
         dto.setPortSpeed(10000);
 
         return dto;
@@ -148,7 +147,7 @@ public class PortOrdersTest {
         dto.setLocationId(3);
         dto.setTerm(24);
         dto.setProductType(ProductType.MEGAPORT);
-        dto.setProvisioningStatus("DESIGN");
+        dto.setProvisioningStatus(ProvisioningStatus.DESIGN);
         dto.setPortSpeed(10000);
 
         return dto;
@@ -162,7 +161,7 @@ public class PortOrdersTest {
         dto.setTerm(24);
         dto.setProductType(ProductType.MEGAPORT);
         dto.setProductName("My New Port");
-        dto.setProvisioningStatus("DESIGN");
+        dto.setProvisioningStatus(ProvisioningStatus.DESIGN);
 
         return dto;
     }
@@ -175,7 +174,7 @@ public class PortOrdersTest {
         dto.setTerm(24);
         dto.setProductType(ProductType.MEGAPORT);
         dto.setProductName("My New Port");
-        dto.setProvisioningStatus("DESIGN");
+        dto.setProvisioningStatus(ProvisioningStatus.DESIGN);
         dto.setPortSpeed(10000);
 
         return dto;
@@ -189,7 +188,7 @@ public class PortOrdersTest {
         dto.setTerm(24);
         dto.setProductType(ProductType.MEGAPORT);
         dto.setProductName("My New Port");
-        dto.setProvisioningStatus("DESIGN");
+        dto.setProvisioningStatus(ProvisioningStatus.DESIGN);
         dto.setPortSpeed(3);
 
         return dto;

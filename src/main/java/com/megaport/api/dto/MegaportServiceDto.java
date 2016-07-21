@@ -17,7 +17,7 @@ public class MegaportServiceDto implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String productUid;
     private String productName;
-    private String provisioningStatus;
+    private ProvisioningStatus provisioningStatus;
     @JsonDeserialize(using = DateDeserializer.class)
     private Date createDate;
     private Integer portSpeed;
@@ -56,7 +56,7 @@ public class MegaportServiceDto implements Serializable {
         this.productName = productName;
     }
 
-    public String getProvisioningStatus() {
+    public ProvisioningStatus getProvisioningStatus() {
         return provisioningStatus;
     }
 
@@ -76,7 +76,7 @@ public class MegaportServiceDto implements Serializable {
         this.productType = productType;
     }
 
-    public void setProvisioningStatus(String provisioningStatus ) {
+    public void setProvisioningStatus(ProvisioningStatus provisioningStatus ) {
         this.provisioningStatus = provisioningStatus;
     }
 

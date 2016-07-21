@@ -281,10 +281,10 @@ public class MegaportApiSession {
     public void modifyVxcOrCxc(VxcServiceModificationDto dto) throws Exception{
 
         Map<String,Object> fieldMap = new HashMap<>();
-        fieldMap.put("name", dto.getProductName());
-        fieldMap.put("aEndVlan", dto.getaEndVlan());
-        fieldMap.put("bEndVlan", dto.getbEndVlan());
-        fieldMap.put("rateLimit", dto.getRateLimit());
+        if (dto.getProductName() != null) fieldMap.put("name", dto.getProductName());
+        if (dto.getaEndVlan() != null) fieldMap.put("aEndVlan", dto.getaEndVlan());
+        if (dto.getbEndVlan() != null) fieldMap.put("bEndVlan", dto.getbEndVlan());
+        if (dto.getRateLimit() != null) fieldMap.put("rateLimit", dto.getRateLimit());
 
         String url = server + "/v2/product/vxc/" + dto.getProductUid();
         HttpResponse<JsonNode> response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();
@@ -296,11 +296,11 @@ public class MegaportApiSession {
     public void modifyIx(IxServiceModificationDto dto) throws Exception{
 
         Map<String,Object> fieldMap = new HashMap<>();
-        fieldMap.put("name", dto.getProductName());
-        fieldMap.put("rateLimit", dto.getRateLimit());
-        fieldMap.put("vlan", dto.getVlan());
-        fieldMap.put("macAddress", dto.getMacAddress());
-        fieldMap.put("asn", dto.getAsn());
+        if (dto.getProductName() != null) fieldMap.put("name", dto.getProductName());
+        if (dto.getRateLimit() != null) fieldMap.put("rateLimit", dto.getRateLimit());
+        if (dto.getVlan() != null) fieldMap.put("vlan", dto.getVlan());
+        if (dto.getMacAddress() != null) fieldMap.put("macAddress", dto.getMacAddress());
+        if (dto.getAsn() != null) fieldMap.put("asn", dto.getAsn());
 
         String url = server + "/v2/product/ix/" + dto.getProductUid();
         HttpResponse<JsonNode> response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();
@@ -314,19 +314,66 @@ public class MegaportApiSession {
         Map<String,Object> fieldMap = new HashMap<>();
         fieldMap.put("name", name);
 
-        String url = server + "/v2/product/" + productUid;
+            String url = server + "/v2/product/" + productUid;
         HttpResponse<JsonNode> response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();
         if (response.getStatus() != 200){
             throw handleError(response);
         }
     }
 
-    public TechnicalServiceDto findServiceDetail(String productUid) throws Exception{
+    public Object findServiceDetail(String productUid) throws Exception{
         String url = server + "/v2/product/" + productUid;
         HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
         if (response.getStatus() == 200){
             String json = response.getBody().toString();
-            return JsonConverter.fromJsonDataAsObject(json, TechnicalServiceDto.class);
+            HashMap<String, Object> map = JsonConverter.fromJsonDataAsMap(json);
+            String productType = (String) map.get("productType");
+            switch (productType.toLowerCase()) {
+                case "vxc":
+                    return JsonConverter.fromJsonDataAsObject(json, VxcServiceDto.class);
+
+                case "megaport":
+                    return JsonConverter.fromJsonDataAsObject(json, MegaportServiceDto.class);
+
+                case "ix":
+                    return JsonConverter.fromJsonDataAsObject(json, IxServiceDto.class);
+
+                default:
+                    throw new RuntimeException("Could not determine the product type from [" + productType + "]");
+            }
+        } else {
+            throw handleError(response);
+        }
+    }
+
+    public MegaportServiceDto findServiceDetailMegaport(String productUid) throws Exception{
+        String url = server + "/v2/product/" + productUid;
+        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        if (response.getStatus() == 200){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsObject(json, MegaportServiceDto.class);
+        } else {
+            throw handleError(response);
+        }
+    }
+
+    public VxcServiceDto findServiceDetailVxc(String productUid) throws Exception{
+        String url = server + "/v2/product/" + productUid;
+        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        if (response.getStatus() == 200){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsObject(json, VxcServiceDto.class);
+        } else {
+            throw handleError(response);
+        }
+    }
+
+    public IxServiceDto findServiceDetailIx(String productUid) throws Exception{
+        String url = server + "/v2/product/" + productUid;
+        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        if (response.getStatus() == 200){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsObject(json, IxServiceDto.class);
         } else {
             throw handleError(response);
         }
@@ -368,6 +415,96 @@ public class MegaportApiSession {
     }
 
     /**
+     * This feature is Experimental! You will be responsible for ALL charges resulting from using this code! For a post-paid service, check the actual speed for the specified number of hours,
+     * and set the speed to be a nominated margin (in Mbps) above the max speed (greater of in/out), and within the floor and ceiling speeds
+     * @param productUid
+     * @param margin
+     * @param measurementHours
+     * @param floor
+     * @param ceiling
+     * @return {@link GraphDto} of service usage
+     * @throws Exception
+     */
+    public void autoSpeedUpdate(String productUid, Integer measurementHours, Integer margin, Integer floor, Integer ceiling) throws Exception{
+
+        System.out.println("This feature is Experimental! You will be responsible for ALL charges resulting from using this code!");
+
+        Object serviceObject = findServiceDetail(productUid);
+
+        Boolean isPostPaid = false;
+        Boolean isVxcOrIx = false;
+        Boolean customerOwnsBothEnds = false;
+
+        VxcServiceDto vxcServiceDto = null;
+        IxServiceDto ixServiceDto = null;
+
+        if (serviceObject instanceof VxcServiceDto){
+            isVxcOrIx = true;
+            vxcServiceDto = (VxcServiceDto) serviceObject;
+            if (vxcServiceDto.getUsageAlgorithm().equals(UsageAlgorithm.TIME_AT_RATE)) isPostPaid = true;
+            if (vxcServiceDto.getaEnd().getOwnerUid().equals(vxcServiceDto.getbEnd().getOwnerUid())) customerOwnsBothEnds = true;
+        } else if (serviceObject instanceof IxServiceDto) {
+            isVxcOrIx = true;
+            ixServiceDto = (IxServiceDto) serviceObject;
+            if (ixServiceDto.getUsageAlgorithm().equals(UsageAlgorithm.TIME_AT_RATE)) isPostPaid = true;
+        }
+
+        if (isPostPaid && isVxcOrIx){
+
+            Date now = new Date();
+            Date hourAgo = new Date(now.getTime() - 1000 * 60 * 60 * measurementHours);
+
+            GraphDto serviceUsage = findServiceUsage(productUid, hourAgo, now);
+
+            Double maxIn = 1.0;
+            Double maxOut = 1.0;
+
+            for(Double in : serviceUsage.getIn_mbps()){
+                if (in > maxIn) maxIn = in;
+            }
+
+            for(Double out : serviceUsage.getOut_mbps()){
+                if (out > maxOut) maxOut = out;
+            }
+
+            Double max = maxIn;
+            if (max < maxOut) max = maxOut;
+
+            Double newSpeed;
+            if (max < floor){
+                newSpeed = floor.doubleValue();
+            } else if (max > ceiling) {
+                newSpeed = ceiling.doubleValue();
+            } else {
+                newSpeed = max + margin.doubleValue();
+            }
+
+            System.out.println("Recent speed maxes out at [" + max + "], so about to update the speed to [" + newSpeed + "] - you will be on the hook for any charges resulting from this!");
+
+            if (vxcServiceDto != null){
+                if (customerOwnsBothEnds) {
+                    VxcServiceModificationDto dto = new VxcServiceModificationDto();
+                    dto.setProductUid(productUid);
+                    dto.setRateLimit(newSpeed.intValue());
+                } else {
+                    throw new RuntimeException("You have to own both ends of a VXC to automate speed changes");
+                }
+            } else {
+                IxServiceModificationDto dto = new IxServiceModificationDto();
+                dto.setRateLimit(newSpeed.intValue());
+                dto.setProductUid(productUid);
+                modifyIx(dto);
+            }
+
+        } else {
+            throw new RuntimeException("This is only intended for post-paid VXC and IX services");
+        }
+
+
+
+    }
+
+    /**
      * Invoke a lifecycle action
      * @param productUid
      * @param action
@@ -375,7 +512,7 @@ public class MegaportApiSession {
      */
     public void lifecycle(String productUid, LifecycleAction action) throws Exception{
         String url = server + "/v2/product/" + productUid + "/action/" + action.toString();
-        HttpResponse<JsonNode> response = Unirest.put(url).header("X-Auth-Token", token).asJson();
+        HttpResponse<JsonNode> response = Unirest.post(url).header("X-Auth-Token", token).asJson();
         if (response.getStatus() != 200){
             throw handleError(response);
         }

@@ -19,11 +19,27 @@ public class ProductsTest {
 
     MegaportApiSession session;
 
+    MegaportServiceDto configuredPort = null;
+
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.LOCALHOST, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
+
+        List<MegaportServiceDto> ports = session.findPorts();
+
+        // look for a testing service that is not decommissioned
+
+        for (MegaportServiceDto port : ports){
+            if (port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
+                configuredPort = port;
+                break;
+            }
+        }
+
+        if (configuredPort == null) throw new RuntimeException("Not much point going on, since there are no configured ports to test...");
+
 
     }
 
@@ -40,7 +56,7 @@ public class ProductsTest {
     @Test
     public void testFindServiceDetail() throws Exception{
 
-        TechnicalServiceDto product = session.findServiceDetail("533d8ab9-2026-4617-bd19-cb9976417ba5");
+        Object product = session.findServiceDetail(configuredPort.getProductUid());
         assertTrue(product != null);
 
     }
@@ -48,7 +64,7 @@ public class ProductsTest {
     @Test
     public void testFindServiceLogs() throws Exception{
 
-        List<ActiveLogDto> serviceLogs = session.findServiceLogs("533d8ab9-2026-4617-bd19-cb9976417ba5");
+        List<ActiveLogDto> serviceLogs = session.findServiceLogs(configuredPort.getProductUid());
         assertTrue(serviceLogs != null);
 
     }
@@ -56,14 +72,14 @@ public class ProductsTest {
     @Test
     public void testFindUsageData() throws Exception{
 
-        GraphDto graphDto = session.findServiceUsage("533d8ab9-2026-4617-bd19-cb9976417ba5", null, null);
+        GraphDto graphDto = session.findServiceUsage(configuredPort.getProductUid(), null, null);
         assertTrue(graphDto != null);
 
         Date to = new Date();
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
         Date from = cal.getTime();
-        graphDto = session.findServiceUsage("533d8ab9-2026-4617-bd19-cb9976417ba5", from, to);
+        graphDto = session.findServiceUsage(configuredPort.getProductUid(), from, to);
         assertTrue(graphDto != null);
 
     }

@@ -46,6 +46,14 @@ public class JsonConverter {
 
     }
 
+    public static HashMap<String, Object> fromJsonDataAsMap(String jsonString) {
+
+        HashMap<String, Object> map = fromJson(jsonString);
+        Map<String,Object> item = (Map<String,Object>) map.get("data");
+
+        return fromJson(toJson(item));
+    }
+
     public static <T extends Object> T fromJsonDataAsObject(String jsonString, Class<T> typeReference) {
 
         HashMap<String, Object> map = fromJson(jsonString);

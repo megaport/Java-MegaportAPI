@@ -24,7 +24,7 @@ public class VxcOrdersTest {
     @Before
     public void init() throws Exception {
 
-        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.LOCALHOST, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
     }
@@ -49,7 +49,6 @@ public class VxcOrdersTest {
 
         // prices for this account will be $0
         String orderResponse = session.placeOrder(order);
-        assertTrue(orderResponse.contains("created"));
 
     }
 

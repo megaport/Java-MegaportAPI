@@ -11,6 +11,7 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VxcEndDto implements Serializable {
 
+    private String ownerUid;
     private String productUid;
     private String productName;
     private Integer locationId;
@@ -18,6 +19,14 @@ public class VxcEndDto implements Serializable {
     private String location;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer vlan;
+
+    public String getOwnerUid() {
+        return ownerUid;
+    }
+
+    public void setOwnerUid(String ownerUid) {
+        this.ownerUid = ownerUid;
+    }
 
     public String getProductUid() {
         return productUid;

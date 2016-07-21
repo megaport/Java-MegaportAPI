@@ -15,22 +15,17 @@ import static org.junit.Assert.assertTrue;
 public class ServiceLifecycleTest {
 
     MegaportApiSession session;
+    MegaportServiceDto configuredPort = null;
 
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.LOCALHOST, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
-
-    }
-
-    @Test
-    public void testCancel() throws Exception{
 
         List<MegaportServiceDto> ports = session.findPorts();
 
         // look for a testing service that is not decommissioned
-        MegaportServiceDto configuredPort = null;
         for (MegaportServiceDto port : ports){
             if (port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
                 configuredPort = port;
@@ -38,15 +33,20 @@ public class ServiceLifecycleTest {
             }
         }
 
+    }
+
+    @Test
+    public void testCancel() throws Exception{
+
         if (configuredPort != null) {
             session.lifecycle(configuredPort.getProductUid(), LifecycleAction.CANCEL);
 
-            TechnicalServiceDto product = session.findServiceDetail(configuredPort.getProductUid());
+            MegaportServiceDto product = (MegaportServiceDto) session.findServiceDetail(configuredPort.getProductUid());
             assertEquals(ProvisioningStatus.CANCELLED, product.getProvisioningStatus());
 
             session.lifecycle(configuredPort.getProductUid(), LifecycleAction.UN_CANCEL);
 
-            product = session.findServiceDetail(configuredPort.getProductUid());
+            product = (MegaportServiceDto) session.findServiceDetail(configuredPort.getProductUid());
             assertEquals(ProvisioningStatus.CONFIGURED, product.getProvisioningStatus());
         }
 

@@ -31,9 +31,27 @@ public class IxServiceDto implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String costCentre;
     private UsageAlgorithm usageAlgorithm;
+    private ProductType productType;
+    private ProvisioningStatus provisioningStatus;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String,Object> resources = new HashMap<>();
+
+    public ProductType getProductType() {
+        return productType;
+    }
+
+    public ProvisioningStatus getProvisioningStatus() {
+        return provisioningStatus;
+    }
+
+    public void setProvisioningStatus(ProvisioningStatus provisioningStatus) {
+        this.provisioningStatus = provisioningStatus;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
 
     public Integer getRateLimit() {
         return rateLimit;

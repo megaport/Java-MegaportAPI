@@ -19,7 +19,7 @@ public class VxcServiceDto implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String productUid;
     private String productName;
-    private String productType;
+    private ProductType productType;
     private Integer rateLimit;
     private VxcDistanceBand distanceBand;
     private ProvisioningStatus provisioningStatus;
@@ -87,11 +87,11 @@ public class VxcServiceDto implements Serializable {
         this.productName = productName;
     }
 
-    public String getProductType() {
+    public ProductType getProductType() {
         return productType;
     }
 
-    public void setProductType(String productType) {
+    public void setProductType(ProductType productType) {
         this.productType = productType;
     }
 

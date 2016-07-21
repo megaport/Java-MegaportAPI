@@ -19,7 +19,7 @@ public class ServiceModificationTest {
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.LOCALHOST, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
     }
@@ -41,8 +41,8 @@ public class ServiceModificationTest {
         if (configuredPort != null) {
             String productUid = configuredPort.getProductUid();
             session.modifyPort("New Name", productUid);
-            TechnicalServiceDto product = session.findServiceDetail(productUid);
-            assertEquals("New Name", product.getServiceName());
+            MegaportServiceDto product = session.findServiceDetailMegaport(productUid);
+            assertEquals("New Name", product.getProductName());
         }
     }
 
@@ -73,8 +73,8 @@ public class ServiceModificationTest {
             dto.setVlan(1234);
             dto.setRateLimit(1234);
             session.modifyIx(dto);
-            TechnicalServiceDto product = session.findServiceDetail(productUid);
-            assertEquals("New Name", product.getServiceName());
+            IxServiceDto product = session.findServiceDetailIx(productUid);
+            assertEquals("New Name", product.getProductName());
         }
     }
 
@@ -101,10 +101,9 @@ public class ServiceModificationTest {
             dto.setProductName("1234");
             dto.setRateLimit(1234);
             dto.setaEndVlan(1234);
-            dto.setbEndVlan(1234);
             session.modifyVxcOrCxc(dto);
-            TechnicalServiceDto product = session.findServiceDetail(productUid);
-            assertEquals("1234", product.getServiceName());
+            VxcServiceDto product = session.findServiceDetailVxc(productUid);
+            assertEquals("1234", product.getProductName());
         }
     }
 

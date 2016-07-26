@@ -13,11 +13,12 @@ public class SpeedChanger {
 
         if (args.length != 7){
             System.out.println("Usage is 'java -jar client-1.1.0.jar <environment> <apiKey> <productUid> <hours to check usage> <margin> <min speed> <max speed>'");
+            System.exit(1);
         }
 
-        String apiKey = args[0];
-        String productUid = args[1];
-        Environment environment = Environment.valueOf(args[2]);
+        Environment environment = Environment.valueOf(args[0]);
+        String apiKey = args[1];
+        String productUid = args[2];
         Integer hours = Integer.valueOf(args[3]);
         Integer margin = Integer.valueOf(args[4]);
         Integer min = Integer.valueOf(args[5]);

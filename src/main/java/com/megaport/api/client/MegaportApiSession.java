@@ -27,16 +27,16 @@ public class MegaportApiSession {
     {
         environments.put(Environment.PRODUCTION, "https://api.megaport.com");
         environments.put(Environment.TRAINING, "https://api-training.megaport.com");
-        environments.put(Environment.LOCALHOST, "http://localhost:8080");
-        //environments.put(Environment.STAGING, "https://api-staging.megaport.com");
+//        environments.put(Environment.LOCALHOST, "http://localhost:8080");
+//        environments.put(Environment.STAGING, "https://api-staging.megaport.com");
     }
 
     /**
      * Constructor for Megaport API session
-     * @param environment
-     * @param token
-     * @throws InvalidCredentialsException
-     * @throws UnirestException
+     * @param environment The environment to be targeted e.g. TRAINING
+     * @param token The token to use for secure auth
+     * @throws InvalidCredentialsException Reporting invalid credentials
+     * @throws UnirestException Report any REST specific exceptions
      */
     public MegaportApiSession(Environment environment, String token) throws InvalidCredentialsException, UnirestException{
         this.token = token;
@@ -46,12 +46,12 @@ public class MegaportApiSession {
 
     /**
      * Constructor for Megaport API session
-     * @param environment
-     * @param username
-     * @param password
-     * @throws InvalidCredentialsException
-     * @throws IOException
-     * @throws UnirestException
+     * @param environment The environment to be targeted e.g. TRAINING
+     * @param username The username to use for secure auth
+     * @param password The password to use for secure auth
+     * @throws InvalidCredentialsException Reporting invalid credentials
+     * @throws IOException Report any IO exceptions
+     * @throws UnirestException To report any REST specific exceptions
      */
     public MegaportApiSession(Environment environment, String username, String password) throws InvalidCredentialsException, IOException, UnirestException {
         this.server = environments.get(environment);
@@ -60,12 +60,12 @@ public class MegaportApiSession {
 
     /**
      * Use this only if you get instruction from Megaport support.
-     * @param server
-     * @param username
-     * @param password
-     * @throws InvalidCredentialsException
-     * @throws IOException
-     * @throws UnirestException
+     * @param server The server name of the environment to be targeted
+     * @param username The username to use for secure auth
+     * @param password The password to use for secure auth
+     * @throws InvalidCredentialsException Reporting invalid credentials
+     * @throws IOException Report any IO exceptions
+     * @throws UnirestException Report any REST specific exceptions
      */
     public MegaportApiSession(String server, String username, String password) throws InvalidCredentialsException, IOException, UnirestException {
         this.server = validateServer(server);
@@ -74,11 +74,11 @@ public class MegaportApiSession {
 
     /**
      * Use this only if you get instruction from Megaport support.
-     * @param server
-     * @param token
-     * @throws InvalidCredentialsException
-     * @throws IOException
-     * @throws UnirestException
+     * @param server The server name of the environment to be targeted
+     * @param token The token to use for secure auth
+     * @throws InvalidCredentialsException Reporting invalid credentials
+     * @throws IOException Report any IO exceptions
+     * @throws UnirestException Report any REST specific exceptions
      */
     public MegaportApiSession(String server, String token) throws InvalidCredentialsException, IOException, UnirestException {
         this.server = validateServer(server);
@@ -87,7 +87,7 @@ public class MegaportApiSession {
 
     /**
      * Validates token and server for session
-     * @return
+     * @return Boolean true if the server is validated, else false
      */
     public Boolean isValid(){
         return token != null && server != null;
@@ -95,10 +95,10 @@ public class MegaportApiSession {
 
     /**
      * Validate server details for session.
-     * @param server
+     * @param server The server name of the environment to be targeted
      * @return The validated server
-     * @throws UnreachableHostException
-     * @throws IOException
+     * @throws UnreachableHostException Reporting exception if host is incorrect
+     * @throws IOException Report any IO exceptions
      */
     private String validateServer(String server) throws UnreachableHostException, IOException {
 
@@ -130,11 +130,11 @@ public class MegaportApiSession {
 
     /**
      * Login method
-     * @param username
-     * @param password
-     * @param token
-     * @throws InvalidCredentialsException
-     * @throws UnirestException
+     * @param username The username to use for secure auth
+     * @param password The password to use for secure auth
+     * @param token The token to use for secure auth
+     * @throws InvalidCredentialsException Reporting invalid credentials
+     * @throws UnirestException Report any REST specific exceptions
      */
     private void login(String username, String password, String token) throws InvalidCredentialsException, UnirestException{
 
@@ -161,8 +161,8 @@ public class MegaportApiSession {
 
     /**
      * This will return the list of Ports owned by the logged-in user.
-     * @return {@link List} of {@link MegaportServiceDto}
-     * @throws Exception
+     * @return a list of Megaport services
+     * @throws Exception Report any exception finding ports
      */
     public List<MegaportServiceDto> findPorts() throws Exception{
 
@@ -179,8 +179,8 @@ public class MegaportApiSession {
 
     /**
      * This will return a list of Port services owned by other Megaport users; you can order a VXC to any of these ports.
-     * @return {@link List} of {@link PartnerPortDto}
-     * @throws Exception
+     * @return a list of partner Megaport services
+     * @throws Exception Report any exception finding partner ports
      */
     public List<PartnerPortDto> findPartnerPorts() throws Exception{
 
@@ -197,9 +197,9 @@ public class MegaportApiSession {
 
     /**
      * Given your Azure service key, obtained from Microsoft ExpressRoute, this end point will return the primary and secondary ExpressRoute ports.
-     * @param serviceKey
-     * @return {@link AzurePortsDto} of the primary and secondary ExpressRoute ports
-     * @throws Exception
+     * @param serviceKey Unique key from the Azure provider to provision a specific network design
+     * @return the primary and secondary ExpressRoute ports
+     * @throws Exception Report any exception finding Azure ports
      */
     public AzurePortsDto findAzurePorts(String serviceKey) throws Exception {
 
@@ -216,9 +216,9 @@ public class MegaportApiSession {
 
     /**
      * This invokes the validation of the order details provided
-     * @param megaportServiceDtos
-     * @return {@link List} of valid {@link ServiceLineItemDto}
-     * @throws Exception
+     * @param megaportServiceDtos a list of orders to be validated
+     * @return a list of service order details
+     * @throws Exception Report any exception validating the orders
      */
     public List<ServiceLineItemDto> validateOrder(List<MegaportServiceDto> megaportServiceDtos) throws Exception{
 
@@ -235,9 +235,9 @@ public class MegaportApiSession {
 
     /**
      * Place an order
-     * @param megaportServiceDtos
-     * @return Returns the response for placing an order
-     * @throws Exception
+     * @param megaportServiceDtos a list of Megaport service orders
+     * @return Returns a JSON String response when placing an order
+     * @throws Exception Report any exception when placing an order
      */
     public String placeOrder(List<MegaportServiceDto> megaportServiceDtos) throws Exception{
 
@@ -251,6 +251,11 @@ public class MegaportApiSession {
         }
     }
 
+    /**
+     * Find a list of port locations.
+     * @return a list of port locations
+     * @throws Exception Report any exception finding port locations
+     */
     public List<PortLocationDto> findPortLocations() throws Exception{
         String url = server + "/v2/locations";
         HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
@@ -264,8 +269,9 @@ public class MegaportApiSession {
 
     /**
      * Find a list of available IX services for a given location.
-     * @return
-     * @throws Exception
+     * @param locationId id of the location to search
+     * @return a list of IX locations
+     * @throws Exception Report any exception finding IX for a specific location
      */
     public List<IxDto> findIxForLocation(Integer locationId) throws Exception{
         String url = server + "/v2/product/ix/types";
@@ -278,6 +284,11 @@ public class MegaportApiSession {
         }
     }
 
+    /**
+     * Method to modify VSC or CXC service
+     * @param dto VXC service to modify
+     * @throws Exception Report any exception during service modification
+     */
     public void modifyVxcOrCxc(VxcServiceModificationDto dto) throws Exception{
 
         Map<String,Object> fieldMap = new HashMap<>();
@@ -293,6 +304,11 @@ public class MegaportApiSession {
         }
     }
 
+    /**
+     * Method to modify IX service
+     * @param dto IX service to modify
+     * @throws Exception Report any exception during service modification
+     */
     public void modifyIx(IxServiceModificationDto dto) throws Exception{
 
         Map<String,Object> fieldMap = new HashMap<>();
@@ -309,6 +325,12 @@ public class MegaportApiSession {
         }
     }
 
+    /**
+     * Method to modify service port
+     * @param name New name of port
+     * @param productUid Unique product id of existing port to be modified
+     * @throws Exception Report any exception during service port modification
+     */
     public void modifyPort(String name, String productUid) throws Exception{
 
         Map<String,Object> fieldMap = new HashMap<>();
@@ -392,11 +414,11 @@ public class MegaportApiSession {
 
     /**
      * Find a service usage
-     * @param productUid
-     * @param from
-     * @param to
+     * @param productUid Unique product id of existing service
+     * @param from Date from range
+     * @param to Date to range
      * @return {@link GraphDto} of service usage
-     * @throws Exception
+     * @throws Exception Report any exceptions from searching service usage
      */
     public GraphDto findServiceUsage(String productUid, Date from, Date to) throws Exception{
         String url = server + "/v2/graph/mbps";
@@ -415,15 +437,15 @@ public class MegaportApiSession {
     }
 
     /**
-     * This feature is Experimental! You will be responsible for ALL charges resulting from using this code! For a post-paid service, check the actual speed for the specified number of hours,
+     * This feature is Experimental! You will be responsible for ALL charges resulting from using this code!
+     * For a post-paid service, check the actual speed for the specified number of hours,
      * and set the speed to be a nominated margin (in Mbps) above the max speed (greater of in/out), and within the floor and ceiling speeds
-     * @param productUid
-     * @param margin
-     * @param measurementHours
-     * @param floor
-     * @param ceiling
-     * @return {@link GraphDto} of service usage
-     * @throws Exception
+     * @param productUid Unique product id of existing service
+     * @param margin margin in Mbps
+     * @param measurementHours Number of hours
+     * @param floor Floor speed
+     * @param ceiling Ceiling speed
+     * @throws Exception Report any exceptions doing auto speed update
      */
     public void autoSpeedUpdate(String productUid, Integer measurementHours, Integer margin, Integer floor, Integer ceiling) throws Exception{
 
@@ -506,9 +528,9 @@ public class MegaportApiSession {
 
     /**
      * Invoke a lifecycle action
-     * @param productUid
-     * @param action
-     * @throws Exception
+     * @param productUid Unique product id of existing service
+     * @param action the action to invoke
+     * @throws Exception Report any exceptions during lifecycle action
      */
     public void lifecycle(String productUid, LifecycleAction action) throws Exception{
         String url = server + "/v2/product/" + productUid + "/action/" + action.toString();

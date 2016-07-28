@@ -28,7 +28,7 @@ public class MegaportApiSession {
         environments.put(Environment.PRODUCTION, "https://api.megaport.com");
         environments.put(Environment.TRAINING, "https://api-training.megaport.com");
 //        environments.put(Environment.LOCALHOST, "http://localhost:8080");
-//        environments.put(Environment.STAGING, "https://api-staging.megaport.com");
+        environments.put(Environment.STAGING, "https://api-staging.megaport.com");
     }
 
     /**
@@ -352,6 +352,9 @@ public class MegaportApiSession {
             String productType = (String) map.get("productType");
             switch (productType.toLowerCase()) {
                 case "vxc":
+                    return JsonConverter.fromJsonDataAsObject(json, VxcServiceDto.class);
+
+                case "cxc":
                     return JsonConverter.fromJsonDataAsObject(json, VxcServiceDto.class);
 
                 case "megaport":

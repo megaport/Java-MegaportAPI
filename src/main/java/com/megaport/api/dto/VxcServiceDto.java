@@ -16,7 +16,6 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VxcServiceDto implements Serializable {
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String productUid;
     private String productName;
     private ProductType productType;
@@ -32,19 +31,13 @@ public class VxcServiceDto implements Serializable {
     private Map<String, Object> partnerConfigs = new HashMap<>();
 
     @JsonDeserialize(using = DateDeserializer.class)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date createDate;
 
     @JsonDeserialize(using = DateDeserializer.class)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date terminateDate;
 
-    @JsonDeserialize(using = DateDeserializer.class)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String costCentre;
 
-    @JsonDeserialize(using = DateDeserializer.class)
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String,Object> resources = new HashMap<>();
 
     public String getVxcApprovalUid() {

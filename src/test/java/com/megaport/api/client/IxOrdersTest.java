@@ -248,6 +248,26 @@ public class IxOrdersTest {
         return dto;
     }
 
+    private MegaportServiceDto createGoodIxSydneyLocation(){
+
+        MegaportServiceDto dto = new MegaportServiceDto();
+
+        dto.setProductUid(brisbanePortUid);
+        dto.setPortSpeed(1000);
+
+        IxServiceDto ixDto = new IxServiceDto();
+        ixDto.setProductName("My Sydney IX");
+        ixDto.setNetworkServiceType("Sydney IX");
+        ixDto.setAsn(12345L);
+        ixDto.setMacAddress("00:23:45:67:89:ab");
+        ixDto.setRateLimit(500);
+        ixDto.setVlan(102);
+
+        dto.getAssociatedIxs().add(ixDto);
+
+        return dto;
+    }
+
     private MegaportServiceDto createBadAsn(){
         MegaportServiceDto dto = createGoodIx();
         dto.getAssociatedIxs().get(0).setAsn(-1L);
@@ -273,7 +293,7 @@ public class IxOrdersTest {
     }
 
     private MegaportServiceDto createIxNullSpeed(){
-        MegaportServiceDto dto = createGoodIx();
+        MegaportServiceDto dto = createGoodIxSydneyLocation();
         dto.getAssociatedIxs().get(0).setRateLimit(null);
         return dto;
     }

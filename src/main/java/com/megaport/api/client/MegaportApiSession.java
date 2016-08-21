@@ -27,7 +27,7 @@ public class MegaportApiSession {
     {
         environments.put(Environment.PRODUCTION, "https://api.megaport.com");
         environments.put(Environment.TRAINING, "https://api-training.megaport.com");
-//        environments.put(Environment.LOCALHOST, "http://localhost:8080");
+        environments.put(Environment.LOCALHOST, "http://localhost:8080");
         environments.put(Environment.STAGING, "https://api-staging.megaport.com");
     }
 
@@ -154,7 +154,7 @@ public class MegaportApiSession {
             }
             this.token = (String) data.get("session");
         } else {
-            throw new InvalidCredentialsException("Login failed");
+            throw new InvalidCredentialsException("Login failed", 401, null);
         }
 
     }
@@ -560,17 +560,17 @@ public class MegaportApiSession {
      */
     private Exception handleError(HttpResponse<JsonNode> response) throws InvalidCredentialsException, BadRequestException{
         if (response.getStatus() == 401){
-            return new InvalidCredentialsException("Login failed - your session may have expired");
+            return new InvalidCredentialsException("Login failed - your session may have expired", 401, null);
         } else if (response.getStatus() == 403) {
             HashMap<String, Object> responseMap = JsonConverter.fromJson(response.getBody().toString());
             String message = (String) responseMap.get("message");
             if (message == null) {
-                return new BadRequestException(response.getBody().toString());
+                return new BadRequestException(response.getBody().toString(), 403, null);
             } else {
-                return new BadRequestException(message);
+                return new BadRequestException(message, 403, null);
             }
         } else if (response.getStatus() == 400) {
-            return new BadRequestException(response.getBody().toString());
+            return new BadRequestException(response.getBody().toString(), 400, null);
         } else {
             if (response.getBody() != null && response.getBody().toString() != null){
                 return new RuntimeException(response.getBody().toString());

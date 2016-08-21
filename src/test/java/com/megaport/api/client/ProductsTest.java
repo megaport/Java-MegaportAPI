@@ -21,6 +21,10 @@ public class ProductsTest {
 
     MegaportServiceDto configuredPort = null;
 
+    MegaportServiceDto livePort = null;
+
+    MegaportServiceDto deployablePort = null;
+
     @Before
     public void init() throws Exception{
 
@@ -32,15 +36,29 @@ public class ProductsTest {
         // look for a testing service that is not decommissioned
 
         for (MegaportServiceDto port : ports){
-            if (port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)
-                    || port.getProvisioningStatus().equals(ProvisioningStatus.LIVE)
-                    || port.getProvisioningStatus().equals(ProvisioningStatus.DEPLOYABLE)){
+            if (port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
                 configuredPort = port;
                 break;
             }
         }
 
-        if (configuredPort == null) throw new RuntimeException("Not much point going on, since there are no configured ports to test...");
+        for (MegaportServiceDto port : ports){
+            if (port.getProvisioningStatus().equals(ProvisioningStatus.DEPLOYABLE)){
+                deployablePort = port;
+                break;
+            }
+        }
+
+        for (MegaportServiceDto port : ports){
+            if (port.getProvisioningStatus().equals(ProvisioningStatus.LIVE)){
+                livePort = port;
+                break;
+            }
+        }
+
+        if (configuredPort == null ) throw new RuntimeException("Not much point going on, since there are no configured ports to test...");
+        if (livePort == null) throw new RuntimeException("Not much point going on, since there are no live ports to test...");
+        if (deployablePort == null) throw new RuntimeException("Not much point going on, since there are no deployable ports to test...");
 
 
     }
@@ -58,7 +76,7 @@ public class ProductsTest {
     @Test
     public void testFindServiceDetail() throws Exception{
 
-        Object product = session.findServiceDetail(configuredPort.getProductUid());
+        Object product = session.findServiceDetail(livePort.getProductUid());
         assertTrue(product != null);
 
     }

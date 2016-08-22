@@ -7,6 +7,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.megaport.api.dto.*;
 import com.megaport.api.exceptions.BadRequestException;
 import com.megaport.api.exceptions.InvalidCredentialsException;
+import com.megaport.api.exceptions.ServerErrorException;
 import com.megaport.api.exceptions.UnreachableHostException;
 import com.megaport.api.util.JsonConverter;
 
@@ -573,9 +574,9 @@ public class MegaportApiSession {
             return new BadRequestException(response.getBody().toString(), 400, null);
         } else {
             if (response.getBody() != null && response.getBody().toString() != null){
-                return new RuntimeException(response.getBody().toString());
+                return new ServerErrorException(response.getBody().toString(), response.getStatus(), null);
             } else {
-                return new RuntimeException("The request failed, please contact Megaport support.");
+                return new ServerErrorException("The request failed, please contact Megaport support.", 500, null);
             }
         }
     }

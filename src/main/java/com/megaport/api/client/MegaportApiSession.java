@@ -562,16 +562,14 @@ public class MegaportApiSession {
     private Exception handleError(HttpResponse<JsonNode> response) throws InvalidCredentialsException, BadRequestException{
         if (response.getStatus() == 401){
             return new InvalidCredentialsException("Login failed - your session may have expired", 401, null);
-        } else if (response.getStatus() == 403) {
+        } else if (response.getStatus() == 403 || response.getStatus() == 400) {
             HashMap<String, Object> responseMap = JsonConverter.fromJson(response.getBody().toString());
             String message = (String) responseMap.get("message");
             if (message == null) {
-                return new BadRequestException(response.getBody().toString(), 403, null);
+                return new BadRequestException(response.getBody().toString(), response.getStatus(), null);
             } else {
-                return new BadRequestException(message, 403, null);
+                return new BadRequestException(message, response.getStatus(), null);
             }
-        } else if (response.getStatus() == 400) {
-            return new BadRequestException(response.getBody().toString(), 400, null);
         } else {
             if (response.getBody() != null && response.getBody().toString() != null){
                 return new ServerErrorException(response.getBody().toString(), response.getStatus(), null);

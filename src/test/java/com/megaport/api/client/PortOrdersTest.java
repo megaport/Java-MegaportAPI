@@ -48,6 +48,8 @@ public class PortOrdersTest {
         // prices for this account will be $0
         String orderResponse = session.placeOrder(order);
 
+        System.out.println(orderResponse);
+
     }
 
     @Test

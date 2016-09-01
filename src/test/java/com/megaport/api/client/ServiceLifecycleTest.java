@@ -4,6 +4,7 @@ import com.megaport.api.dto.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -39,12 +40,12 @@ public class ServiceLifecycleTest {
     public void testCancel() throws Exception{
 
         if (configuredPort != null) {
-            session.lifecycle(configuredPort.getProductUid(), LifecycleAction.CANCEL);
+            session.lifecycle(configuredPort.getProductUid(), LifecycleAction.CANCEL, new Date());
 
             MegaportServiceDto product = (MegaportServiceDto) session.findServiceDetail(configuredPort.getProductUid());
             assertEquals(ProvisioningStatus.CANCELLED, product.getProvisioningStatus());
 
-            session.lifecycle(configuredPort.getProductUid(), LifecycleAction.UN_CANCEL);
+            session.lifecycle(configuredPort.getProductUid(), LifecycleAction.UN_CANCEL, null);
 
             product = (MegaportServiceDto) session.findServiceDetail(configuredPort.getProductUid());
             assertEquals(ProvisioningStatus.CONFIGURED, product.getProvisioningStatus());

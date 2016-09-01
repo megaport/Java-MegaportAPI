@@ -534,11 +534,18 @@ public class MegaportApiSession {
      * Invoke a lifecycle action
      * @param productUid Unique product id of existing service
      * @param action the action to invoke
+     * @param terminationDate only required for cancel action
      * @throws Exception Report any exceptions during lifecycle action
      */
-    public void lifecycle(String productUid, LifecycleAction action) throws Exception{
+    public void lifecycle(String productUid, LifecycleAction action, Date terminationDate) throws Exception{
         String url = server + "/v2/product/" + productUid + "/action/" + action.toString();
-        HttpResponse<JsonNode> response = Unirest.post(url).header("X-Auth-Token", token).asJson();
+        HttpResponse<JsonNode> response;
+
+        if (terminationDate == null) {
+            response = Unirest.post(url).header("X-Auth-Token", token).asJson();
+        } else {
+            response = Unirest.post(url).header("X-Auth-Token", token).field("terminationDate", terminationDate).asJson();
+        }
         if (response.getStatus() != 200){
             throw handleError(response);
         }
@@ -565,10 +572,11 @@ public class MegaportApiSession {
         } else if (response.getStatus() == 403 || response.getStatus() == 400) {
             HashMap<String, Object> responseMap = JsonConverter.fromJson(response.getBody().toString());
             String message = (String) responseMap.get("message");
+            String data = (String) responseMap.get("data");
             if (message == null) {
                 return new BadRequestException(response.getBody().toString(), response.getStatus(), null);
             } else {
-                return new BadRequestException(message, response.getStatus(), null);
+                return new BadRequestException(message + (data == null ? "" : " - " + data), response.getStatus(), null);
             }
         } else {
             if (response.getBody() != null && response.getBody().toString() != null){

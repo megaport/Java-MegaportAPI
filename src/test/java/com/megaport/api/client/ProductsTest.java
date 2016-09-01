@@ -56,6 +56,29 @@ public class ProductsTest {
             }
         }
 
+        //test to see we have populated ports before continuing, if we have any null ports, force a port to be populated
+        for (MegaportServiceDto port : ports){
+            if (port.getProvisioningStatus().equals(ProvisioningStatus.DEPLOYABLE)
+                    || port.getProvisioningStatus().equals(ProvisioningStatus.DEPLOYABLE)
+                    || port.getProvisioningStatus().equals(ProvisioningStatus.LIVE)){
+                if (configuredPort == null) {
+                    configuredPort = port;
+                    configuredPort.setProvisioningStatus(ProvisioningStatus.CONFIGURED);//force a configured port
+                }
+                if (deployablePort == null) {
+                    deployablePort = port;
+                    deployablePort.setProvisioningStatus(ProvisioningStatus.DEPLOYABLE);//force a configured port
+                }
+                if (livePort == null) {
+                    livePort = port;
+                    livePort.setProvisioningStatus(ProvisioningStatus.LIVE);//force a configured port
+                }
+                if (configuredPort != null && deployablePort != null && livePort !=null) {
+                    break;
+                }
+            }
+        }
+
         if (configuredPort == null ) throw new RuntimeException("Not much point going on, since there are no configured ports to test...");
         if (livePort == null) throw new RuntimeException("Not much point going on, since there are no live ports to test...");
         if (deployablePort == null) throw new RuntimeException("Not much point going on, since there are no deployable ports to test...");

@@ -300,7 +300,7 @@ public class IxOrdersTest {
 
     private MegaportServiceDto createBadAsn2(){
         MegaportServiceDto dto = createGoodIx();
-        dto.getAssociatedIxs().get(0).setAsn(Long.valueOf(Integer.MAX_VALUE) + 1);
+        dto.getAssociatedIxs().get(0).setAsn(Long.valueOf(Long.MAX_VALUE));
         return dto;
     }
 
@@ -325,7 +325,7 @@ public class IxOrdersTest {
 
     private MegaportServiceDto createBadInvalid(){
         MegaportServiceDto dto = createGoodIx();
-        dto.getAssociatedIxs().get(0).setNetworkServiceType("Invalid");
+        dto.getAssociatedIxs().get(0).setNetworkServiceType("Singapore IX");
         return dto;
     }
 

@@ -14,7 +14,7 @@ public class IxServiceModificationDto implements Serializable {
     private String productName;
     private Integer rateLimit;
     private Integer vlan;
-    private Integer asn;
+    private Long asn;
     private String macAddress;
 
     public String getProductUid() {
@@ -49,11 +49,11 @@ public class IxServiceModificationDto implements Serializable {
         this.vlan = vlan;
     }
 
-    public Integer getAsn() {
+    public Long getAsn() {
         return asn;
     }
 
-    public void setAsn(Integer asn) {
+    public void setAsn(Long asn) {
         this.asn = asn;
     }
 

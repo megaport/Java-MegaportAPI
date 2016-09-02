@@ -579,7 +579,7 @@ public class MegaportApiSession {
                 errorReponseMap = (HashMap<String, String>) ((List) tempData).get(0);
                 for(Map.Entry<String, String> entry : errorReponseMap.entrySet()) {
                     String value =  entry.getValue();
-                    data.append("--").append(value).append("\"");
+                    data.append("-").append(value).append("\"");
                 }
             } else {
               data.append(responseMap.get("data").toString());

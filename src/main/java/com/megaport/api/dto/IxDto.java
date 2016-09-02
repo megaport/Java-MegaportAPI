@@ -15,7 +15,7 @@ public class IxDto implements Serializable {
     private String network_region;
     private String group_metro;
     private String state;
-    private Integer asn;
+    private Long asn;
 
     public String getGroup_metro() {
         return group_metro;
@@ -81,11 +81,11 @@ public class IxDto implements Serializable {
         this.state = state;
     }
 
-    public Integer getAsn() {
+    public Long getAsn() {
         return asn;
     }
 
-    public void setAsn(Integer asn) {
+    public void setAsn(Long asn) {
         this.asn = asn;
     }
 }

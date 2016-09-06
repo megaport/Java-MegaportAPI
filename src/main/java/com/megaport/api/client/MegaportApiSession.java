@@ -544,7 +544,7 @@ public class MegaportApiSession {
         if (terminationDate == null) {
             response = Unirest.post(url).header("X-Auth-Token", token).asJson();
         } else {
-            response = Unirest.post(url).header("X-Auth-Token", token).field("terminationDate", terminationDate).asJson();
+            response = Unirest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").queryString("terminationDate", terminationDate.getTime()).asJson();
         }
         if (response.getStatus() != 200){
             throw handleError(response);

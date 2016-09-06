@@ -68,7 +68,7 @@ public class ServiceModificationTest {
             IxServiceModificationDto dto = new IxServiceModificationDto();
             dto.setProductUid(productUid);
             dto.setProductName("1234");
-            dto.setAsn(1234);
+            dto.setAsn(1234L);
             dto.setMacAddress("a0:00:00:00:00:00");
             dto.setVlan(1234);
             dto.setRateLimit(1234);

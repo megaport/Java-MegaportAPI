@@ -567,12 +567,24 @@ public class MegaportApiSession {
      * @throws BadRequestException
      */
     private Exception handleError(HttpResponse<JsonNode> response) throws InvalidCredentialsException, BadRequestException{
+        StringBuffer data = new StringBuffer();
+        HashMap<String, String> errorReponseMap;
         if (response.getStatus() == 401){
             return new InvalidCredentialsException("Login failed - your session may have expired", 401, null);
         } else if (response.getStatus() == 403 || response.getStatus() == 400) {
             HashMap<String, Object> responseMap = JsonConverter.fromJson(response.getBody().toString());
             String message = (String) responseMap.get("message");
-            String data = (String) responseMap.get("data");
+            Object tempData = (Object) responseMap.get("data");
+            if (tempData instanceof List && !(((List) tempData).isEmpty())) {
+                errorReponseMap = (HashMap<String, String>) ((List) tempData).get(0);
+                for(Map.Entry<String, String> entry : errorReponseMap.entrySet()) {
+                    String value =  entry.getValue();
+                    data.append("-").append(value).append("\"");
+                }
+            } else {
+              data.append(responseMap.get("data").toString());
+            }
+
             if (message == null) {
                 return new BadRequestException(response.getBody().toString(), response.getStatus(), null);
             } else {

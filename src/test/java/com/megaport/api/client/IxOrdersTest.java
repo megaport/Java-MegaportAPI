@@ -5,6 +5,7 @@ import com.megaport.api.exceptions.BadRequestException;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -300,7 +301,7 @@ public class IxOrdersTest {
 
     private MegaportServiceDto createBadAsn2(){
         MegaportServiceDto dto = createGoodIx();
-        dto.getAssociatedIxs().get(0).setAsn(Long.valueOf(Integer.MAX_VALUE) + 1);
+        dto.getAssociatedIxs().get(0).setAsn(Long.MAX_VALUE);
         return dto;
     }
 
@@ -325,7 +326,7 @@ public class IxOrdersTest {
 
     private MegaportServiceDto createBadInvalid(){
         MegaportServiceDto dto = createGoodIx();
-        dto.getAssociatedIxs().get(0).setNetworkServiceType("Invalid");
+        dto.getAssociatedIxs().get(0).setNetworkServiceType("Singapore IX");
         return dto;
     }
 

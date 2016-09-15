@@ -575,14 +575,16 @@ public class MegaportApiSession {
             HashMap<String, Object> responseMap = JsonConverter.fromJson(response.getBody().toString());
             String message = (String) responseMap.get("message");
             Object tempData = (Object) responseMap.get("data");
-            if (tempData instanceof List && !(((List) tempData).isEmpty())) {
+            if (tempData != null && tempData instanceof List && !(((List) tempData).isEmpty())) {
                 errorReponseMap = (HashMap<String, String>) ((List) tempData).get(0);
                 for(Map.Entry<String, String> entry : errorReponseMap.entrySet()) {
                     String value =  entry.getValue();
                     data.append("-").append(value).append("\"");
                 }
             } else {
-              data.append(responseMap.get("data").toString());
+                if (tempData != null) {
+                    data.append(responseMap.get("data").toString());
+                }
             }
 
             if (message == null) {

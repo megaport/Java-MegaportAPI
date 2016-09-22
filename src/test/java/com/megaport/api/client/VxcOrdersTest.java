@@ -168,6 +168,7 @@ public class VxcOrdersTest {
             List<ServiceLineItemDto> serviceLineItemDtos = session.validateOrder(order);
             assertEquals(1, serviceLineItemDtos.size());
         } catch (BadRequestException e) {
+            e.printStackTrace();
             fail();
         }
 

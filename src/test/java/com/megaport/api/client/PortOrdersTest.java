@@ -22,7 +22,7 @@ public class PortOrdersTest {
     @Before
     public void init() throws Exception {
 
-        session = new MegaportApiSession(Environment.TRAINING, "admin", "***REMOVED***");
+        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
     }

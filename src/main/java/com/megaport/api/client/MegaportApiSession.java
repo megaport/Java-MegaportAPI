@@ -5,11 +5,9 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.megaport.api.dto.*;
-import com.megaport.api.exceptions.BadRequestException;
-import com.megaport.api.exceptions.InvalidCredentialsException;
-import com.megaport.api.exceptions.ServerErrorException;
-import com.megaport.api.exceptions.UnreachableHostException;
+import com.megaport.api.exceptions.*;
 import com.megaport.api.util.JsonConverter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -24,6 +22,11 @@ public class MegaportApiSession {
     private final Map<Environment,String> environments = new HashMap<>();
     private String token = null;
     private String server = null;
+    private static final String NETWORK_ERROR = "NETWORK_ERROR";
+    private static final String SYSTEM_ERROR = "SYSTEM_ERROR";
+    private static final String VALIDATION_ERROR = "VALIDATION_ERROR";
+    private static final String MESSAGE = "message";
+    private static final String DATA = "data";
 
     {
         environments.put(Environment.PRODUCTION, "https://api.megaport.com");
@@ -573,8 +576,11 @@ public class MegaportApiSession {
             return new InvalidCredentialsException("Login failed - your session may have expired", 401, null);
         } else if (response.getStatus() == 403 || response.getStatus() == 400) {
             HashMap<String, Object> responseMap = JsonConverter.fromJson(response.getBody().toString());
-            String message = (String) responseMap.get("message");
-            Object tempData = (Object) responseMap.get("data");
+            String message = (String) responseMap.get(MESSAGE);
+            if (!StringUtils.isEmpty(message) && message.contains("Validation")) {
+                message = VALIDATION_ERROR;
+            }
+            Object tempData = (Object) responseMap.get(DATA);
             if (tempData != null && tempData instanceof List && !(((List) tempData).isEmpty())) {
                 errorReponseMap = (HashMap<String, String>) ((List) tempData).get(0);
                 for(Map.Entry<String, String> entry : errorReponseMap.entrySet()) {
@@ -583,7 +589,7 @@ public class MegaportApiSession {
                 }
             } else {
                 if (tempData != null) {
-                    data.append(responseMap.get("data").toString());
+                    data.append(responseMap.get(DATA).toString());
                 }
             }
 
@@ -593,8 +599,19 @@ public class MegaportApiSession {
                 return new BadRequestException(message + (data == null ? "" : " - " + data), response.getStatus(), null);
             }
         } else {
-            if (response.getBody() != null && response.getBody().toString() != null){
-                return new ServerErrorException(response.getBody().toString(), response.getStatus(), null);
+            if (response.getBody() != null && response.getBody().toString() != null) {
+                if (response.getBody().toString().contains("<html")) { //filter out PERL system failures ENG-1168
+                    HashMap<String, Object> responseMap = JsonConverter.fromJson(response.getBody().toString());
+                    responseMap.put(DATA, NETWORK_ERROR);
+                    responseMap.put(MESSAGE, NETWORK_ERROR);
+                    String networkReponse = JsonConverter.toJson(responseMap);
+                    return new NetworkErrorException(networkReponse, response.getStatus(), null);
+                } else {
+                    HashMap<String, Object> responseMap = JsonConverter.fromJson(response.getBody().toString());
+                    responseMap.put(DATA, SYSTEM_ERROR);
+                    String systemReponse = JsonConverter.toJson(responseMap);
+                    return new ServerErrorException(systemReponse, response.getStatus(), null);
+                }
             } else {
                 return new ServerErrorException("The request failed, please contact Megaport support.", 500, null);
             }

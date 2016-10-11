@@ -4,6 +4,7 @@ import com.megaport.api.dto.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +22,8 @@ public class ServiceLifecycleTest {
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
+//        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.LOCALHOST, "aw@sink.megaport.com", "p");
         assertTrue(session.isValid());
 
         List<MegaportServiceDto> ports = session.findPorts();
@@ -39,8 +41,12 @@ public class ServiceLifecycleTest {
     @Test
     public void testCancel() throws Exception{
 
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, 45);
+        Date teminationDate = cal.getTime();
+
         if (configuredPort != null) {
-            session.lifecycle(configuredPort.getProductUid(), LifecycleAction.CANCEL, new Date());
+            session.lifecycle(configuredPort.getProductUid(), LifecycleAction.CANCEL, teminationDate);
 
             MegaportServiceDto product = (MegaportServiceDto) session.findServiceDetail(configuredPort.getProductUid());
             assertEquals(ProvisioningStatus.CANCELLED, product.getProvisioningStatus());

@@ -22,8 +22,7 @@ public class ServiceLifecycleTest {
     @Before
     public void init() throws Exception{
 
-//        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
-        session = new MegaportApiSession(Environment.LOCALHOST, "aw@sink.megaport.com", "p");
+        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
         List<MegaportServiceDto> ports = session.findPorts();

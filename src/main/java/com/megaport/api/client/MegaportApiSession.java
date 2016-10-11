@@ -572,50 +572,70 @@ public class MegaportApiSession {
     private Exception handleError(HttpResponse<JsonNode> response) throws InvalidCredentialsException, BadRequestException{
         StringBuffer data = new StringBuffer();
         HashMap<String, String> errorReponseMap;
-        if (response.getStatus() == 401){
-            return new InvalidCredentialsException("Login failed - your session may have expired", 401, null);
-        } else if (response.getStatus() == 403 || response.getStatus() == 400) {
-            HashMap<String, Object> responseMap = JsonConverter.fromJson(response.getBody().toString());
-            String message = (String) responseMap.get(MESSAGE);
-            if (!StringUtils.isEmpty(message) && message.contains("Validation")) {
-                message = VALIDATION_ERROR;
-            }
-            Object tempData = (Object) responseMap.get(DATA);
-            if (tempData != null && tempData instanceof List && !(((List) tempData).isEmpty())) {
-                errorReponseMap = (HashMap<String, String>) ((List) tempData).get(0);
-                for(Map.Entry<String, String> entry : errorReponseMap.entrySet()) {
-                    String value =  entry.getValue();
-                    data.append("-").append(value).append("\"");
-                }
-            } else {
-                if (tempData != null) {
-                    data.append(responseMap.get(DATA).toString());
-                }
-            }
 
-            if (message == null) {
-                return new BadRequestException(response.getBody().toString(), response.getStatus(), null);
-            } else {
-                return new BadRequestException(message + (data == null ? "" : " - " + data), response.getStatus(), null);
-            }
-        } else {
-            if (response.getBody() != null && response.getBody().toString() != null) {
-                if (response.getBody().toString().contains("<html")) { //filter out PERL system failures ENG-1168
-                    HashMap<String, Object> responseMap = JsonConverter.fromJson(response.getBody().toString());
-                    responseMap.put(DATA, NETWORK_ERROR);
-                    responseMap.put(MESSAGE, NETWORK_ERROR);
-                    String networkReponse = JsonConverter.toJson(responseMap);
-                    return new NetworkErrorException(networkReponse, response.getStatus(), null);
-                } else {
-                    HashMap<String, Object> responseMap = JsonConverter.fromJson(response.getBody().toString());
-                    responseMap.put(DATA, SYSTEM_ERROR);
-                    String systemReponse = JsonConverter.toJson(responseMap);
-                    return new ServerErrorException(systemReponse, response.getStatus(), null);
-                }
-            } else {
-                return new ServerErrorException("The request failed, please contact Megaport support.", 500, null);
+        HashMap<String, Object> responseMap = new HashMap<>();
+        if (response.getBody() != null) {
+            try {
+                responseMap = JsonConverter.fromJson(response.getBody().toString());
+            } catch (Exception e) {
+                // no-op
             }
         }
+        String message = (String) responseMap.get(MESSAGE);
+
+        switch (response.getStatus()){
+
+            case 401:
+                return new InvalidCredentialsException("Login failed - your session may have expired", 401, null);
+
+            case 403:
+                if (StringUtils.isEmpty(message)) {
+                    message = "You don't have permission for this operation - do you own the service in question?";
+                }
+                return new UnauthorizedException(message, 403, null);
+
+            case 400:
+                if (!StringUtils.isEmpty(message) && message.contains("Validation")) {
+                    message = VALIDATION_ERROR;
+                }
+                Object tempData = responseMap.get(DATA);
+                if (tempData != null && tempData instanceof List && !(((List) tempData).isEmpty())) {
+                    errorReponseMap = (HashMap<String, String>) ((List) tempData).get(0);
+                    for(Map.Entry<String, String> entry : errorReponseMap.entrySet()) {
+                        String value =  entry.getValue();
+                        data.append("-").append(value).append("\"");
+                    }
+                } else {
+                    if (tempData != null) {
+                        data.append(responseMap.get(DATA).toString());
+                    }
+                }
+
+                if (message == null) {
+                    return new BadRequestException(response.getBody().toString(), response.getStatus(), null);
+                } else {
+                    return new BadRequestException(message + (data == null ? "" : " - " + data), response.getStatus(), null);
+                }
+
+            // general fault we don't really know about
+            default:
+                if (response.getBody() != null && response.getBody().toString() != null) {
+                    if (response.getBody().toString().contains("<html")) { //filter out PERL system failures ENG-1168
+                        responseMap.put(DATA, NETWORK_ERROR);
+                        responseMap.put(MESSAGE, NETWORK_ERROR);
+                        String networkReponse = JsonConverter.toJson(responseMap);
+                        return new NetworkErrorException(networkReponse, response.getStatus(), null);
+                    } else {
+                        responseMap.put(DATA, SYSTEM_ERROR);
+                        String systemReponse = JsonConverter.toJson(responseMap);
+                        return new ServerErrorException(systemReponse, response.getStatus(), null);
+                    }
+                } else {
+                    return new ServerErrorException("The request failed, please contact Megaport support.", 500, null);
+                }
+
+        }
+
     }
 
 }

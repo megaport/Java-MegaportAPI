@@ -617,7 +617,7 @@ public class MegaportApiSession {
                 } else {
                     // this is the usual case, but we need to filter out 'unusual' validation messages, and only pass on the usual suspects
                     String responseData = filter(data.toString());
-                    return new BadRequestException(message + (StringUtils.isEmpty(responseData) ? "" : " - " + responseData), 400, null);
+                    return new BadRequestException(message + (StringUtils.isEmpty(responseData) ? "" : " - " + responseData.replace(" API: ","")), 400, null);
                 }
 
             // general fault we don't really know about

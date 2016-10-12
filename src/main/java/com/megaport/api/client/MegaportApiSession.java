@@ -22,9 +22,9 @@ public class MegaportApiSession {
     private final Map<Environment,String> environments = new HashMap<>();
     private String token = null;
     private String server = null;
-    private static final String NETWORK_ERROR = "NETWORK_ERROR";
-    private static final String SYSTEM_ERROR = "SYSTEM_ERROR";
-    private static final String VALIDATION_ERROR = "VALIDATION_ERROR";
+    private static final String NETWORK_ERROR = "Network Error";
+    private static final String SYSTEM_ERROR = "System Error";
+    private static final String VALIDATION_ERROR = "Validation Error";
     private static final String MESSAGE = "message";
     private static final String DATA = "data";
 
@@ -570,18 +570,25 @@ public class MegaportApiSession {
      * @throws BadRequestException
      */
     private Exception handleError(HttpResponse<JsonNode> response) throws InvalidCredentialsException, BadRequestException{
-        StringBuffer data = new StringBuffer();
-        HashMap<String, String> errorReponseMap;
+
+        StringBuilder data = new StringBuilder();
 
         HashMap<String, Object> responseMap = new HashMap<>();
         if (response.getBody() != null) {
             try {
                 responseMap = JsonConverter.fromJson(response.getBody().toString());
             } catch (Exception e) {
-                // no-op
+                // if we can't convert this to JSON, then bad stuff has happened, and we can really ony return a 500
+                System.out.println(response.getBody().toString());
+                return new ServerErrorException(NETWORK_ERROR, 500, null);
             }
+        } else {
+            // null response, so 500 time again...
+            return new ServerErrorException(NETWORK_ERROR, 500, null);
         }
+
         String message = (String) responseMap.get(MESSAGE);
+        Object tempData = responseMap.get(DATA);
 
         switch (response.getStatus()){
 
@@ -589,18 +596,12 @@ public class MegaportApiSession {
                 return new InvalidCredentialsException("Login failed - your session may have expired", 401, null);
 
             case 403:
-                if (StringUtils.isEmpty(message)) {
-                    message = "You don't have permission for this operation - do you own the service in question?";
-                }
-                return new UnauthorizedException(message, 403, null);
+                return new UnauthorizedException("You don't have permission for this operation - do you own the service in question?", 403, null);
 
             case 400:
-                if (!StringUtils.isEmpty(message) && message.contains("Validation")) {
-                    message = VALIDATION_ERROR;
-                }
-                Object tempData = responseMap.get(DATA);
+
                 if (tempData != null && tempData instanceof List && !(((List) tempData).isEmpty())) {
-                    errorReponseMap = (HashMap<String, String>) ((List) tempData).get(0);
+                    HashMap<String, String> errorReponseMap = (HashMap<String, String>) ((List) tempData).get(0);
                     for(Map.Entry<String, String> entry : errorReponseMap.entrySet()) {
                         String value =  entry.getValue();
                         data.append("-").append(value).append("\"");
@@ -611,30 +612,25 @@ public class MegaportApiSession {
                     }
                 }
 
-                if (message == null) {
-                    return new BadRequestException(response.getBody().toString(), response.getStatus(), null);
+                if (StringUtils.isEmpty(message) || !message.contains("Validation")) {
+                    return new BadRequestException(NETWORK_ERROR, 500, null);
                 } else {
-                    return new BadRequestException(message + (data == null ? "" : " - " + data), response.getStatus(), null);
+                    // this is the usual case, but we need to filter out 'unusual' validation messages, and only pass on the usual suspects
+                    String responseData = filter(data.toString());
+                    return new BadRequestException(message + (StringUtils.isEmpty(responseData) ? "" : " - " + responseData), 400, null);
                 }
 
             // general fault we don't really know about
             default:
-                if (response.getBody() != null && response.getBody().toString() != null) {
-                    if (response.getBody().toString().contains("<html")) { //filter out PERL system failures ENG-1168
-                        responseMap.put(DATA, NETWORK_ERROR);
-                        responseMap.put(MESSAGE, NETWORK_ERROR);
-                        String networkReponse = JsonConverter.toJson(responseMap);
-                        return new NetworkErrorException(networkReponse, response.getStatus(), null);
-                    } else {
-                        responseMap.put(DATA, SYSTEM_ERROR);
-                        String systemReponse = JsonConverter.toJson(responseMap);
-                        return new ServerErrorException(systemReponse, response.getStatus(), null);
-                    }
-                } else {
-                    return new ServerErrorException("The request failed, please contact Megaport support.", 500, null);
-                }
+                return new ServerErrorException(SYSTEM_ERROR, 500, null);
 
         }
+
+    }
+
+    private String filter(String data) {
+
+        return data;
 
     }
 

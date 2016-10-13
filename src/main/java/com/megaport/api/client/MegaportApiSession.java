@@ -628,9 +628,43 @@ public class MegaportApiSession {
 
     }
 
+    /**
+     * The idea here is to only allow user-friendly messages though, and mask unknown messages...
+     * The following are 3 months worth of production validation failures
+     *
+     "API: Error provisioning IX service",
+     "API: Error provisioning MEGAPORT service",
+     "API: Error provisioning VXC service",
+     "API: Service object validation failed for VXC",
+     "AWS requires an ASN",
+     "DB execute failed ERROR:  MAC address already on this VPLS\n(INSERT INTO n_vpls_interface (interface_id, vpls_id, mac_address, vlan, rate_limit_mbps) VALUES (?, ?, ?, ?, ?) RETURNING id)\n\n",
+     "Duplicate IP Network",
+     "Failed to create new VPLSInterface",
+     "Interface 10971 already has Auckland IX, and only one is permitted"
+     "Invalid Amazon IP address",
+     "Invalid ASN",
+     "Invalid AWS account number 459329291",
+     "Invalid customer IP address",
+     "Invalid service_key length '6543'",
+     "Invalid subnet mask",
+     "Invalid virtual interface type",
+     "IP addresses must be in the same network",
+     "Missing AWS object",
+     "Missing Azure object",
+     "Prefix (10.0.1.0/24) must be a publicly routable network",
+     "Prefix (203.56.233.124/32) must be a /31 or shorter",
+     "Prefix list must contain the point-to-point subnet",
+     "VLAN 4001 not available on MEGAPORT service 5088",
+     "VXC goes to an Azure port that is already taken",
+     "VXC VLAN doesn't match Azure service_key",
+     * @param data
+     * @return
+     */
     private String filter(String data) {
 
-        return data;
+        if (data.contains("DB execute failed ERROR")){
+            return "There was a problem validating this order";
+        } else return data;
 
     }
 

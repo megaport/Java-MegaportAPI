@@ -8,6 +8,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Created by adam.wells on 17/06/2016.
@@ -104,6 +105,40 @@ public class ServiceModificationTest {
             session.modifyVxcOrCxc(dto);
             VxcServiceDto product = session.findServiceDetailVxc(productUid);
             assertEquals("1234", product.getProductName());
+        }
+    }
+
+    @Test
+    public void testChangeVxcServiceBad() throws Exception{
+
+        List<MegaportServiceDto> ports = session.findPorts();
+
+        // look for a testing service that is not decommissioned
+        String productUid = null;
+        for (MegaportServiceDto port : ports){
+            if (port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
+                if (port.getAssociatedVxcs().size() > 0){
+                    for (VxcServiceDto vxc : port.getAssociatedVxcs()){
+                        productUid = vxc.getProductUid();
+                    }
+                }
+            }
+        }
+
+        if (productUid != null) {
+            VxcServiceModificationDto dto = new VxcServiceModificationDto();
+            dto.setProductUid(productUid);
+            dto.setProductName("1234");
+            dto.setRateLimit(-1);
+            dto.setaEndVlan(111111);
+
+            try {
+                session.modifyVxcOrCxc(dto);
+                fail();
+            } catch (Exception e){
+                // expect failure with good message
+                System.out.println(e);
+            }
         }
     }
 

@@ -612,7 +612,7 @@ public class MegaportApiSession {
                     }
                 }
 
-                if (StringUtils.isEmpty(message) || !message.contains("Validation")) {
+                if (StringUtils.isEmpty(message)) {
                     return new BadRequestException(NETWORK_ERROR, 500, null);
                 } else {
                     // this is the usual case, but we need to filter out 'unusual' validation messages, and only pass on the usual suspects

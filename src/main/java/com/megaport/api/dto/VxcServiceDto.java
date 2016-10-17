@@ -24,11 +24,11 @@ public class VxcServiceDto implements Serializable {
     private ProvisioningStatus provisioningStatus;
     private VxcEndDto aEnd;
     private VxcEndDto bEnd;
-    private VxcApprovalStatus vxcApprovalStatus;
-    private String vxcApprovalMessage;
-    private String vxcApprovalUid;
     private UsageAlgorithm usageAlgorithm;
     private Map<String, Object> partnerConfigs = new HashMap<>();
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private VxcApproval vxcApproval;
 
     @JsonDeserialize(using = DateDeserializer.class)
     private Date createDate;
@@ -40,29 +40,14 @@ public class VxcServiceDto implements Serializable {
 
     private Map<String,Object> resources = new HashMap<>();
 
-    public String getVxcApprovalUid() {
-        return vxcApprovalUid;
+    public VxcApproval getVxcApproval() {
+        return vxcApproval;
     }
 
-    public void setVxcApprovalUid(String vxcApprovalUid) {
-        this.vxcApprovalUid = vxcApprovalUid;
+    public void setVxcApproval(VxcApproval vxcApproval) {
+        this.vxcApproval = vxcApproval;
     }
 
-    public VxcApprovalStatus getVxcApprovalStatus() {
-        return vxcApprovalStatus;
-    }
-
-    public void setVxcApprovalStatus(VxcApprovalStatus vxcApprovalStatus) {
-        this.vxcApprovalStatus = vxcApprovalStatus;
-    }
-
-    public String getVxcApprovalMessage() {
-        return vxcApprovalMessage;
-    }
-
-    public void setVxcApprovalMessage(String vxcApprovalMessage) {
-        this.vxcApprovalMessage = vxcApprovalMessage;
-    }
 
     public String getProductUid() {
         return productUid;

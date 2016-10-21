@@ -28,6 +28,7 @@ public class MegaportServiceDto implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String costCentre;
     private Boolean vxcpermitted;
+    private Boolean vxcAutoApproval = false;
     private Integer term;
     private ProductType productType;
 
@@ -154,6 +155,14 @@ public class MegaportServiceDto implements Serializable {
 
     public void setAssociatedIxs( ArrayList<IxServiceDto> associatedIxs ) {
         if ( associatedIxs != null ) this.associatedIxs = associatedIxs;
+    }
+
+    public Boolean getVxcAutoApproval() {
+        return vxcAutoApproval;
+    }
+
+    public void setVxcAutoApproval(Boolean vxcAutoApproval) {
+        this.vxcAutoApproval = vxcAutoApproval;
     }
 
     public Map<String, Object> getResources() {

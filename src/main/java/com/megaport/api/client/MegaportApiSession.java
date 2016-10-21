@@ -598,6 +598,12 @@ public class MegaportApiSession {
             case 403:
                 return new UnauthorizedException("You don't have permission for this operation - do you own the service in question?", 403, null);
 
+            case 404:
+                return new ServiceUnavailableException("API Server is not available", 503, null);
+
+            case 503:
+                return new ServiceUnavailableException("API Server is not available", 503, null);
+
             case 400:
 
                 if (tempData != null && tempData instanceof List && !(((List) tempData).isEmpty())) {

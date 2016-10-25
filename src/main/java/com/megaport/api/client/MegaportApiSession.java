@@ -143,10 +143,14 @@ public class MegaportApiSession {
     private void login(String username, String password, String token) throws InvalidCredentialsException, UnirestException{
 
         HttpResponse<JsonNode> response;
-        if (token == null){
-            response = Unirest.post(server + "/v2/login").field("username", username).field("password",password).asJson();
-        } else {
-            response = Unirest.post(server + "/v2/login/" + token).asJson();
+        try {
+            if (token == null) {
+                response = Unirest.post(server + "/v2/login").field("username", username).field("password", password).asJson();
+            } else {
+                response = Unirest.post(server + "/v2/login/" + token).asJson();
+            }
+        } catch (UnirestException e){
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
 
         if (response.getStatus() == 200){
@@ -171,7 +175,12 @@ public class MegaportApiSession {
     public List<MegaportServiceDto> findPorts() throws Exception{
 
         String url = server + "/v2/products";
-        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() == 200){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsList(json, MegaportServiceDto.class);
@@ -189,7 +198,12 @@ public class MegaportApiSession {
     public List<PartnerPortDto> findPartnerPorts() throws Exception{
 
         String url = server + "/v2/dropdowns/partner/megaports";
-        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() == 200){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsList(json, PartnerPortDto.class);
@@ -208,7 +222,12 @@ public class MegaportApiSession {
     public AzurePortsDto findAzurePorts(String serviceKey) throws Exception {
 
         String url = server + "/v2/secure/azure/" + serviceKey;
-        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() == 200){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsObject(json, AzurePortsDto.class);
@@ -227,7 +246,12 @@ public class MegaportApiSession {
     public List<ServiceLineItemDto> validateOrder(List<MegaportServiceDto> megaportServiceDtos) throws Exception{
 
         String url = server + "/v2/networkdesign/validate";
-        HttpResponse<JsonNode> response = Unirest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(megaportServiceDtos)).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(megaportServiceDtos)).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() == 200){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsList(json, ServiceLineItemDto.class);
@@ -246,7 +270,12 @@ public class MegaportApiSession {
     public String placeOrder(List<MegaportServiceDto> megaportServiceDtos) throws Exception{
 
         String url = server + "/v2/networkdesign/buy";
-        HttpResponse<JsonNode> response = Unirest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(megaportServiceDtos)).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(megaportServiceDtos)).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() == 200){
             String json = response.getBody().toString();
             return JsonConverter.fromJson(json).get("data").toString();
@@ -262,7 +291,12 @@ public class MegaportApiSession {
      */
     public List<PortLocationDto> findPortLocations() throws Exception{
         String url = server + "/v2/locations";
-        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() == 200){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsList(json, PortLocationDto.class);
@@ -279,7 +313,12 @@ public class MegaportApiSession {
      */
     public List<IxDto> findIxForLocation(Integer locationId) throws Exception{
         String url = server + "/v2/product/ix/types";
-        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).queryString("locationId", locationId).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).queryString("locationId", locationId).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() == 200){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsList(json, IxDto.class);
@@ -302,7 +341,12 @@ public class MegaportApiSession {
         if (dto.getRateLimit() != null) fieldMap.put("rateLimit", dto.getRateLimit());
 
         String url = server + "/v2/product/vxc/" + dto.getProductUid();
-        HttpResponse<JsonNode> response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() != 200){
             throw handleError(response);
         }
@@ -323,7 +367,12 @@ public class MegaportApiSession {
         if (dto.getAsn() != null) fieldMap.put("asn", dto.getAsn());
 
         String url = server + "/v2/product/ix/" + dto.getProductUid();
-        HttpResponse<JsonNode> response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() != 200){
             throw handleError(response);
         }
@@ -341,7 +390,12 @@ public class MegaportApiSession {
         fieldMap.put("name", name);
 
             String url = server + "/v2/product/" + productUid;
-        HttpResponse<JsonNode> response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() != 200){
             throw handleError(response);
         }
@@ -349,7 +403,12 @@ public class MegaportApiSession {
 
     public Object findServiceDetail(String productUid) throws Exception{
         String url = server + "/v2/product/" + productUid;
-        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() == 200){
             String json = response.getBody().toString();
             HashMap<String, Object> map = JsonConverter.fromJsonDataAsMap(json);
@@ -377,7 +436,12 @@ public class MegaportApiSession {
 
     public MegaportServiceDto findServiceDetailMegaport(String productUid) throws Exception{
         String url = server + "/v2/product/" + productUid;
-        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() == 200){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsObject(json, MegaportServiceDto.class);
@@ -388,7 +452,12 @@ public class MegaportApiSession {
 
     public VxcServiceDto findServiceDetailVxc(String productUid) throws Exception{
         String url = server + "/v2/product/" + productUid;
-        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() == 200){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsObject(json, VxcServiceDto.class);
@@ -399,7 +468,12 @@ public class MegaportApiSession {
 
     public IxServiceDto findServiceDetailIx(String productUid) throws Exception{
         String url = server + "/v2/product/" + productUid;
-        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() == 200){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsObject(json, IxServiceDto.class);
@@ -410,7 +484,12 @@ public class MegaportApiSession {
 
     public List<ActiveLogDto> findServiceLogs(String productUid) throws Exception{
         String url = server + "/v2/product/" + productUid + "/logs";
-        HttpResponse<JsonNode> response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
         if (response.getStatus() == 200){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsList(json, ActiveLogDto.class);
@@ -430,10 +509,14 @@ public class MegaportApiSession {
     public GraphDto findServiceUsage(String productUid, Date from, Date to) throws Exception{
         String url = server + "/v2/graph/mbps";
         HttpResponse<JsonNode> response;
-        if (from != null && to != null){
-            response = Unirest.get(url).header("X-Auth-Token", token).queryString("productIdOrUid", productUid).queryString("from", from.getTime()).queryString("to", to.getTime()).asJson();
-        } else {
-            response = Unirest.get(url).header("X-Auth-Token", token).queryString("productIdOrUid", productUid).asJson();
+        try {
+            if (from != null && to != null){
+                response = Unirest.get(url).header("X-Auth-Token", token).queryString("productIdOrUid", productUid).queryString("from", from.getTime()).queryString("to", to.getTime()).asJson();
+            } else {
+                response = Unirest.get(url).header("X-Auth-Token", token).queryString("productIdOrUid", productUid).asJson();
+            }
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
         if (response.getStatus() == 200){
             String json = response.getBody().toString();
@@ -544,10 +627,14 @@ public class MegaportApiSession {
         String url = server + "/v2/product/" + productUid + "/action/" + action.toString();
         HttpResponse<JsonNode> response;
 
-        if (terminationDate == null) {
-            response = Unirest.post(url).header("X-Auth-Token", token).asJson();
-        } else {
-            response = Unirest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").queryString("terminationDate", terminationDate.getTime()).asJson();
+        try {
+            if (terminationDate == null) {
+                response = Unirest.post(url).header("X-Auth-Token", token).asJson();
+            } else {
+                response = Unirest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").queryString("terminationDate", terminationDate.getTime()).asJson();
+            }
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
         if (response.getStatus() != 200){
             throw handleError(response);

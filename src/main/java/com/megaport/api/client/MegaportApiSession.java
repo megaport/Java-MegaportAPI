@@ -306,6 +306,21 @@ public class MegaportApiSession {
     }
 
     /**
+     * Simulate APIserver being unavailable. The load balancer should return 404 in this case...
+     * @throws Exception Report any exception finding port locations
+     */
+    public void simulateServiceUnavailable() throws Exception{
+        String url = server + "/doesnotexist";
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
+        throw handleError(response);
+    }
+
+    /**
      * Find a list of available IX services for a given location.
      * @param locationId id of the location to search
      * @return a list of IX locations

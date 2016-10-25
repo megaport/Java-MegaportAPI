@@ -4,6 +4,7 @@ import com.megaport.api.dto.Environment;
 import com.megaport.api.dto.MegaportServiceDto;
 import com.megaport.api.dto.TechnicalServiceDto;
 import com.megaport.api.exceptions.InvalidCredentialsException;
+import com.megaport.api.exceptions.ServiceUnavailableException;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -22,14 +23,6 @@ public class MegaportApiSessionTest {
         MegaportApiSession session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
-        //session = new MegaportApiSession(Environment.STAGING, "api.test", "s0me-s3cret#");
-        //assertTrue(session.isValid());
-
-//        String goodToken = session.getToken();
-
-//        session = new MegaportApiSession(Environment.STAGING, goodToken);
-//        assertTrue(session.isValid());
-
         session = new MegaportApiSession("https://api-training.megaport.com", "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
@@ -46,13 +39,6 @@ public class MegaportApiSessionTest {
     @Test
     public void testFailValidation() throws Exception{
 
-//        try {
-//            MegaportApiSession session = new MegaportApiSession(Environment.STAGING, "api.test", "bad-password");
-//            fail();
-//        } catch (InvalidCredentialsException e){
-//            // expect to be here bad password
-//        }
-
         try {
             MegaportApiSession session = new MegaportApiSession("https://api-training.megaport.com", "api.test", "bad-password");
             fail();
@@ -60,17 +46,23 @@ public class MegaportApiSessionTest {
             // expect to be here bad password
         }
 
-//        try {
-//            MegaportApiSession session = new MegaportApiSession(Environment.STAGING, "bad-token");
-//            fail();
-//        } catch (InvalidCredentialsException e){
-//            // expect to be here bad password
-//        }
-
         try {
             MegaportApiSession session = new MegaportApiSession("https://api-training.megaport.com", "bad-token");
             fail();
         } catch (InvalidCredentialsException e){
+            // expect to be here bad password
+        }
+
+    }
+
+    @Test
+    public void testServiceUnavailable() throws Exception{
+
+        try {
+            MegaportApiSession session = new MegaportApiSession("https://api-training.megaport.com", "api.test", "s0me-s3cret#");
+            session.simulateServiceUnavailable();
+            fail();
+        } catch (ServiceUnavailableException e){
             // expect to be here bad password
         }
 

@@ -33,6 +33,7 @@ public class MegaportApiSession {
         environments.put(Environment.TRAINING, "https://api-training.megaport.com");
         environments.put(Environment.LOCALHOST, "http://localhost:8080");
         environments.put(Environment.STAGING, "https://api-staging.megaport.com");
+        environments.put(Environment.QA, "https://api-qa.megaport.com");
     }
 
     /**

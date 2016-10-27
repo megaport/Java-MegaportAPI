@@ -22,7 +22,7 @@ public class ServiceLifecycleTest {
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.QA, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
         List<MegaportServiceDto> ports = session.findPorts();
@@ -53,7 +53,7 @@ public class ServiceLifecycleTest {
             session.lifecycle(configuredPort.getProductUid(), LifecycleAction.UN_CANCEL, null);
 
             product = (MegaportServiceDto) session.findServiceDetail(configuredPort.getProductUid());
-            assertEquals(ProvisioningStatus.CONFIGURED, product.getProvisioningStatus());
+            assertTrue(ProvisioningStatus.CONFIGURED.equals(product.getProvisioningStatus()) || ProvisioningStatus.LIVE.equals(product.getProvisioningStatus()));
         }
 
     }

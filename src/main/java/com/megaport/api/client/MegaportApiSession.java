@@ -417,6 +417,26 @@ public class MegaportApiSession {
         }
     }
 
+    /**
+     * Method to modify service port attributes
+     * @param fieldMap New name of port
+     * @param productUid Unique product id of existing port to be modified
+     * @throws Exception Report any exception during service port modification
+     */
+    public void modifyPort(Map<String,Object> fieldMap, String productUid) throws Exception{
+
+        String url = server + "/v2/product/" + productUid;
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
+        if (response.getStatus() != 200){
+            throw handleError(response);
+        }
+    }
+
     public Object findServiceDetail(String productUid) throws Exception{
         String url = server + "/v2/product/" + productUid;
         HttpResponse<JsonNode> response = null;

@@ -4,7 +4,9 @@ import com.megaport.api.dto.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -20,7 +22,7 @@ public class ServiceModificationTest {
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.QA, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
     }
@@ -44,6 +46,35 @@ public class ServiceModificationTest {
             session.modifyPort("New Name", productUid);
             MegaportServiceDto product = session.findServiceDetailMegaport(productUid);
             assertEquals("New Name", product.getProductName());
+        }
+    }
+
+    @Test
+    public void testChangeServiceVisibility() throws Exception{
+
+        List<MegaportServiceDto> ports = session.findPorts();
+
+        // look for a testing service that is not decommissioned
+        MegaportServiceDto configuredPort = null;
+        for (MegaportServiceDto port : ports){
+            if (port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED) || port.getProvisioningStatus().equals(ProvisioningStatus.LIVE)){
+                configuredPort = port;
+                break;
+            }
+        }
+
+        if (configuredPort != null) {
+
+            Map<String,Object> fieldMap = new HashMap<>();
+
+            fieldMap.put("name", "New Name");
+            fieldMap.put("marketplaceVisibility", false);
+
+            String productUid = configuredPort.getProductUid();
+            session.modifyPort(fieldMap, productUid);
+            MegaportServiceDto product = session.findServiceDetailMegaport(productUid);
+            assertEquals("New Name", product.getProductName());
+            assertEquals(false, product.getMarketplaceVisibility());
         }
     }
 

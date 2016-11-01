@@ -29,6 +29,7 @@ public class MegaportServiceDto implements Serializable {
     private String costCentre;
     private Boolean vxcpermitted;
     private Boolean vxcAutoApproval = false;
+    private Boolean marketplaceVisibility = true;
     private Integer term;
     private ProductType productType;
 
@@ -95,6 +96,14 @@ public class MegaportServiceDto implements Serializable {
 
     public void setPortSpeed( Integer portSpeed ) {
         this.portSpeed = portSpeed;
+    }
+
+    public Boolean getMarketplaceVisibility() {
+        return marketplaceVisibility;
+    }
+
+    public void setMarketplaceVisibility(Boolean marketplaceVisibility) {
+        this.marketplaceVisibility = marketplaceVisibility;
     }
 
     public Date getTerminateDate() {

@@ -24,7 +24,7 @@ public class VxcOrdersTest {
     @Before
     public void init() throws Exception {
 
-        session = new MegaportApiSession(Environment.QA, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.STAGING, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
     }

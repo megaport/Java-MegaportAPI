@@ -4,9 +4,7 @@ import com.megaport.api.dto.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -22,7 +20,7 @@ public class ServiceModificationTest {
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.TRAINING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.STAGING, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
     }
@@ -115,17 +113,23 @@ public class ServiceModificationTest {
 
         List<MegaportServiceDto> ports = session.findPorts();
 
+        Set<MegaportServiceDto> liveOrConfigured = new HashSet<>();
+        for (MegaportServiceDto port : ports){
+            if (port.getProvisioningStatus().equals(ProvisioningStatus.LIVE) || port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
+                liveOrConfigured.add(port);
+            }
+        }
+
         // look for a testing service that is not decommissioned
         String productUid = null;
         for (MegaportServiceDto port : ports){
-            if (port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
-                if (port.getAssociatedVxcs().size() > 0){
-                    for (VxcServiceDto vxc : port.getAssociatedVxcs()){
-                        productUid = vxc.getProductUid();
-                    }
-                }
+            Integer id = new Random().nextInt(liveOrConfigured.size() -1);
+            MegaportServiceDto random = ports.get(id);
+            if (random.getAssociatedVxcs().size() > 0){
+                productUid = random.getAssociatedVxcs().get(0).getProductUid();
             }
         }
+
 
         if (productUid != null) {
             VxcServiceModificationDto dto = new VxcServiceModificationDto();

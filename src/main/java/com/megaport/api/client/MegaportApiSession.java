@@ -4,6 +4,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.GetRequest;
 import com.megaport.api.dto.*;
 import com.megaport.api.exceptions.*;
 import com.megaport.api.util.JsonConverter;
@@ -176,17 +177,19 @@ public class MegaportApiSession {
     public List<MegaportServiceDto> findPorts() throws Exception{
 
         String url = server + "/v2/products";
-        HttpResponse<JsonNode> response = null;
+        HttpResponse<JsonNode> responseJson = null;
         try {
-            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+            GetRequest response = Unirest.get(url).header("X-Auth-Token", token);
+            responseJson = response.asJson();
         } catch (UnirestException e) {
+            e.printStackTrace();
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
-            String json = response.getBody().toString();
+        if (responseJson.getStatus() >= 200 && responseJson.getStatus() < 400){
+            String json = responseJson.getBody().toString();
             return JsonConverter.fromJsonDataAsList(json, MegaportServiceDto.class);
         } else {
-            throw handleError(response);
+            throw handleError(responseJson);
         }
 
     }
@@ -344,7 +347,7 @@ public class MegaportApiSession {
     }
 
     /**
-     * Method to modify VSC or CXC service
+     * Method to modify VXC or CXC service
      * @param dto VXC service to modify
      * @throws Exception Report any exception during service modification
      */
@@ -357,6 +360,28 @@ public class MegaportApiSession {
         if (dto.getRateLimit() != null) fieldMap.put("rateLimit", dto.getRateLimit());
 
         String url = server + "/v2/product/vxc/" + dto.getProductUid();
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
+        if (response.getStatus() != 200){
+            throw handleError(response);
+        }
+    }
+
+    /**
+     * Method to approve VXC
+     * @throws Exception Report any exception during service modification
+     */
+    public void approveVxc(String vxcOrderUid, Boolean isApproved, Integer bEndVlan) throws Exception{
+
+        Map<String,Object> fieldMap = new HashMap<>();
+        fieldMap.put("isApproved", isApproved);
+        fieldMap.put("vlan", bEndVlan);
+
+        String url = server + "/v2/order/vxc/" + vxcOrderUid;
         HttpResponse<JsonNode> response = null;
         try {
             response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();

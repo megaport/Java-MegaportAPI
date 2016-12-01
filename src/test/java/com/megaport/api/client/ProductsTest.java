@@ -25,6 +25,8 @@ public class ProductsTest {
 
     MegaportServiceDto deployablePort = null;
 
+    String pendingVxcOrderUid = null;
+
     @Before
     public void init() throws Exception{
 
@@ -75,6 +77,13 @@ public class ProductsTest {
                 }
                 if (configuredPort != null && deployablePort != null && livePort !=null) {
                     break;
+                }
+                for(VxcServiceDto vxcServiceDto : port.getAssociatedVxcs()){
+                    if (vxcServiceDto.getVxcApproval() != null && vxcServiceDto.getVxcApproval().getStatus() != null){
+                        if (vxcServiceDto.getVxcApproval().getStatus().equals(VxcApprovalStatus.PENDING_INTERNAL)){
+                            pendingVxcOrderUid = vxcServiceDto.getVxcApproval().getUid();
+                        }
+                    }
                 }
             }
         }
@@ -135,6 +144,13 @@ public class ProductsTest {
         // since this is hitting the training system, there will be a variable number of services, but never 0
         assertTrue(ports.size() > 0);
 
+    }
+
+    @Test
+    public void testVxcApproval() throws Exception {
+        if (pendingVxcOrderUid != null){
+            session.approveVxc(pendingVxcOrderUid, true, 1234);
+        }
     }
 
 }

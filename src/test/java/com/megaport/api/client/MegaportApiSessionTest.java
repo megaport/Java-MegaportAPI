@@ -23,15 +23,15 @@ public class MegaportApiSessionTest {
         MegaportApiSession session = new MegaportApiSession(Environment.STAGING, "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
-        session = new MegaportApiSession("https://api-training.megaport.com", "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession("https://api-staging.megaport.com", "api.test", "s0me-s3cret#");
         assertTrue(session.isValid());
 
         goodToken = session.getToken();
 
-        session = new MegaportApiSession("https://api-training.megaport.com", goodToken);
+        session = new MegaportApiSession("https://api-staging.megaport.com", goodToken);
         assertTrue(session.isValid());
 
-        session = new MegaportApiSession("https://api-training.megaport.com:443", goodToken);
+        session = new MegaportApiSession("https://api-staging.megaport.com:443", goodToken);
         assertTrue(session.isValid());
 
     }
@@ -40,14 +40,14 @@ public class MegaportApiSessionTest {
     public void testFailValidation() throws Exception{
 
         try {
-            MegaportApiSession session = new MegaportApiSession("https://api-training.megaport.com", "api.test", "bad-password");
+            MegaportApiSession session = new MegaportApiSession("https://api-staging.megaport.com", "api.test", "bad-password");
             fail();
         } catch (InvalidCredentialsException e){
             // expect to be here bad password
         }
 
         try {
-            MegaportApiSession session = new MegaportApiSession("https://api-training.megaport.com", "bad-token");
+            MegaportApiSession session = new MegaportApiSession("https://api-staging.megaport.com", "bad-token");
             fail();
         } catch (InvalidCredentialsException e){
             // expect to be here bad password
@@ -59,7 +59,7 @@ public class MegaportApiSessionTest {
     public void testServiceUnavailable() throws Exception{
 
         try {
-            MegaportApiSession session = new MegaportApiSession("https://api-training.megaport.com", "api.test", "s0me-s3cret#");
+            MegaportApiSession session = new MegaportApiSession("https://api-staging.megaport.com", "api.test", "s0me-s3cret#");
             session.simulateServiceUnavailable();
             fail();
         } catch (ServiceUnavailableException e){
@@ -73,7 +73,7 @@ public class MegaportApiSessionTest {
 
         MegaportApiSession session = null;
         try {
-            session = new MegaportApiSession("htps://api-training.megaport.com", "api.test", "s0me-s3cret#");
+            session = new MegaportApiSession("htps://api-staging.megaport.com", "api.test", "s0me-s3cret#");
             fail();
         } catch (Exception e) {
             assertEquals(e.getClass().getName(), "java.net.UnknownHostException");

@@ -559,6 +559,38 @@ public class MegaportApiSession {
         }
     }
 
+    public List<CompanyDto> findPartnerCustomers() throws Exception{
+        String url = server + "/v2/partner/customers";
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
+        if (response.getStatus() == 200){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsList(json, CompanyDto.class);
+        } else {
+            throw handleError(response);
+        }
+    }
+
+    public List<MegaportServiceDto> findPartnerCustomersProducts() throws Exception{
+        String url = server + "/v2/partner/customers/products";
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
+        if (response.getStatus() == 200){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsList(json, MegaportServiceDto.class);
+        } else {
+            throw handleError(response);
+        }
+    }
+
     /**
      * Find a service usage
      * @param productUid Unique product id of existing service

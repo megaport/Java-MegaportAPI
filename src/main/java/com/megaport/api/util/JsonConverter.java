@@ -18,7 +18,7 @@ public class JsonConverter {
 
     private static JsonFactory factory = new JsonFactory();
     private static ObjectMapper mapper = new ObjectMapper(factory);
-    private static TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {};
+    public static TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {};
 
     public static HashMap<String, Object> fromJson(String jsonString) {
 
@@ -43,6 +43,17 @@ public class JsonConverter {
         }
 
         return result;
+
+    }
+
+    public static List<Map<String,Object>> fromJsonDataAsList(String jsonString) {
+
+        HashMap<String, Object> map = fromJson(jsonString);
+        if (!map.get("data").equals("[]")){
+            return (List<Map<String,Object>>) map.get("data");
+        } else {
+            return new ArrayList<>();
+        }
 
     }
 

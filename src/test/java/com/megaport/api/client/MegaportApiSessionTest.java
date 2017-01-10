@@ -1,14 +1,17 @@
 package com.megaport.api.client;
 
+import com.megaport.api.dto.CompanyDto;
 import com.megaport.api.dto.Environment;
 import com.megaport.api.dto.MegaportServiceDto;
 import com.megaport.api.dto.TechnicalServiceDto;
 import com.megaport.api.exceptions.InvalidCredentialsException;
 import com.megaport.api.exceptions.ServiceUnavailableException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -86,6 +89,19 @@ public class MegaportApiSessionTest {
         } catch (Exception e) {
             assertEquals(e.getClass().getName(), "java.net.UnknownHostException");
         }
+
+    }
+
+    @Ignore
+    @Test
+    public void testPartnerCustomers() throws Exception{
+
+        MegaportApiSession session = new MegaportApiSession("https://api-staging.megaport.com", "");
+        List<CompanyDto> partnerCustomers = session.findPartnerCustomers();
+        assertTrue(partnerCustomers.size() > 0);
+
+        List<MegaportServiceDto> partnerCustomersProducts = session.findPartnerCustomersProducts();
+        assertTrue(partnerCustomersProducts.size() > 0);
 
     }
 

@@ -184,10 +184,6 @@ public class MegaportServiceDto implements Serializable {
         return associatedIxs;
     }
 
-    public void setAssociatedIxs( ArrayList<IxServiceDto> associatedIxs ) {
-        if ( associatedIxs != null ) this.associatedIxs = associatedIxs;
-    }
-
     public Boolean getVxcAutoApproval() {
         return vxcAutoApproval;
     }

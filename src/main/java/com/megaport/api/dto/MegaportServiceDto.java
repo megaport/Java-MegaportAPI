@@ -17,6 +17,8 @@ public class MegaportServiceDto implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String productUid;
     private String productName;
+    private String companyUid;
+    private String companyName;
     private ProvisioningStatus provisioningStatus;
     @JsonDeserialize(using = DateDeserializer.class)
     private Date createDate;
@@ -154,7 +156,27 @@ public class MegaportServiceDto implements Serializable {
         if ( associatedVxcs != null ) this.associatedVxcs = associatedVxcs;
     }
 
-    public void addAssociatedVxcs( Set<VxcServiceDto> associatedVxcs ) {
+    public String getCompanyUid() {
+        return companyUid;
+    }
+
+    public void setCompanyUid(String companyUid) {
+        this.companyUid = companyUid;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public void setAssociatedIxs(List<IxServiceDto> associatedIxs) {
+        this.associatedIxs = associatedIxs;
+    }
+
+    public void addAssociatedVxcs(Set<VxcServiceDto> associatedVxcs ) {
         if ( associatedVxcs != null ) this.associatedVxcs.addAll(associatedVxcs);
     }
 

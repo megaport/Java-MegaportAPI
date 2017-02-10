@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by leo.na on 16/03/2015.
@@ -19,6 +21,7 @@ public class VxcEndDto implements Serializable {
     private String location;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer vlan;
+    private Map<String, Object> partnerConfig = new HashMap<>();
 
     public String getOwnerUid() {
         return ownerUid;
@@ -50,6 +53,14 @@ public class VxcEndDto implements Serializable {
 
     public void setLocationId(Integer locationId) {
         this.locationId = locationId;
+    }
+
+    public Map<String, Object> getPartnerConfig() {
+        return partnerConfig;
+    }
+
+    public void setPartnerConfig(Map<String, Object> partnerConfig) {
+        this.partnerConfig = partnerConfig;
     }
 
     public String getLocation() {

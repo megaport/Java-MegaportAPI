@@ -32,6 +32,7 @@ public class MegaportServiceDto implements Serializable {
     private Boolean vxcpermitted;
     private Boolean vxcAutoApproval = false;
     private Boolean marketplaceVisibility = true;
+    private Boolean virtual = false;
     private Integer term;
     private ProductType productType;
 
@@ -58,6 +59,14 @@ public class MegaportServiceDto implements Serializable {
 
     public void setProductName( String productName ) {
         this.productName = productName;
+    }
+
+    public Boolean getVirtual() {
+        return virtual;
+    }
+
+    public void setVirtual(Boolean virtual) {
+        this.virtual = virtual;
     }
 
     public ProvisioningStatus getProvisioningStatus() {

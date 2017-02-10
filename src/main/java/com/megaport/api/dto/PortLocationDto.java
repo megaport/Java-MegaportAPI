@@ -18,6 +18,7 @@ public class PortLocationDto implements Serializable {
     private String metro;
     private String name;
     private Integer id;
+    private Boolean sdrcAvailable = false;
 
     public String getMarket() {
         return market;
@@ -57,6 +58,14 @@ public class PortLocationDto implements Serializable {
 
     public void setCampus(String campus) {
         this.campus = campus;
+    }
+
+    public Boolean getSdrcAvailable() {
+        return sdrcAvailable;
+    }
+
+    public void setSdrcAvailable(Boolean sdrcAvailable) {
+        this.sdrcAvailable = sdrcAvailable;
     }
 
     public String getMetro() {

@@ -33,7 +33,7 @@ public class ServiceModificationTest {
         // look for a testing service that is not decommissioned
         MegaportServiceDto configuredPort = null;
         for (MegaportServiceDto port : ports){
-            if (port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
+            if (port != null && port.getProvisioningStatus() != null && port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
                 configuredPort = port;
                 break;
             }
@@ -84,7 +84,7 @@ public class ServiceModificationTest {
         // look for a testing service that is not decommissioned
         String productUid = null;
         for (MegaportServiceDto port : ports){
-            if (port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
+            if (port != null && port.getProvisioningStatus() != null && port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
                 if (port.getAssociatedIxs().size() > 0){
                     for (IxServiceDto ix : port.getAssociatedIxs()){
                         productUid = ix.getProductUid();
@@ -115,14 +115,14 @@ public class ServiceModificationTest {
 
         Set<MegaportServiceDto> liveOrConfigured = new HashSet<>();
         for (MegaportServiceDto port : ports){
-            if (port.getProvisioningStatus().equals(ProvisioningStatus.LIVE) || port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
+            if (port != null && port.getProvisioningStatus() != null && port.getProvisioningStatus().equals(ProvisioningStatus.LIVE) || port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
                 liveOrConfigured.add(port);
             }
         }
 
         // look for a testing service that is not decommissioned
         String productUid = null;
-        for (MegaportServiceDto port : ports){
+        for (MegaportServiceDto port : liveOrConfigured){
             Integer id = new Random().nextInt(liveOrConfigured.size() -1);
             MegaportServiceDto random = ports.get(id);
             if (random.getAssociatedVxcs().size() > 0){
@@ -151,7 +151,7 @@ public class ServiceModificationTest {
         // look for a testing service that is not decommissioned
         String productUid = null;
         for (MegaportServiceDto port : ports){
-            if (port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
+            if (port != null && port.getProvisioningStatus() != null && port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
                 if (port.getAssociatedVxcs().size() > 0){
                     for (VxcServiceDto vxc : port.getAssociatedVxcs()){
                         productUid = vxc.getProductUid();

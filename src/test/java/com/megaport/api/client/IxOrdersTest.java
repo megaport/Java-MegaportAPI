@@ -127,14 +127,13 @@ public class IxOrdersTest {
     @Test
     public void testCreateIxNullSpeed() throws Exception {
 
-        // null speed will just use the Port speed
         List<MegaportServiceDto> order = new ArrayList<>();
         order.add(createIxNullSpeed());
 
         try {
             session.validateOrder(order);
-        } catch (BadRequestException e) {
             fail();
+        } catch (BadRequestException e) {
         }
 
     }

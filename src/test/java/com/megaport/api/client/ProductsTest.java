@@ -38,7 +38,7 @@ public class ProductsTest {
         // look for a testing service that is not decommissioned
 
         for (MegaportServiceDto port : ports){
-            if (port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
+            if (port != null && port.getProvisioningStatus() != null && port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
                 configuredPort = port;
                 break;
             }

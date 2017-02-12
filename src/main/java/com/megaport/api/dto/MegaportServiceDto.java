@@ -20,7 +20,7 @@ public class MegaportServiceDto implements Serializable {
     private String companyUid;
     private String companyName;
     private ProvisioningStatus provisioningStatus;
-    @JsonDeserialize(using = DateDeserializer.class)
+//    @JsonDeserialize(using = DateDeserializer.class)
     private Date createDate;
     private Integer portSpeed;
     @JsonDeserialize(using = DateDeserializer.class)

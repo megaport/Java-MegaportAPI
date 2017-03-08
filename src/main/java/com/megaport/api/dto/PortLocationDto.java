@@ -19,6 +19,7 @@ public class PortLocationDto implements Serializable {
     private String name;
     private Integer id;
     private Boolean sdrcAvailable = false;
+    private Boolean vRouterAvailable = false;
 
     public String getMarket() {
         return market;
@@ -90,5 +91,13 @@ public class PortLocationDto implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Boolean getvRouterAvailable() {
+        return vRouterAvailable;
+    }
+
+    public void setvRouterAvailable(Boolean vRouterAvailable) {
+        this.vRouterAvailable = vRouterAvailable;
     }
 }

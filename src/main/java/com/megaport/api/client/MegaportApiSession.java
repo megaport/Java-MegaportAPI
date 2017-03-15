@@ -34,6 +34,10 @@ public class MegaportApiSession {
         environments.put(Environment.TRAINING, "https://api-training.megaport.com");
         environments.put(Environment.LOCALHOST, "http://localhost:8080");
         environments.put(Environment.STAGING, "https://api-staging.megaport.com");
+        environments.put(Environment.KENOBI, "https://api-kenobi.megaport.com");
+        environments.put(Environment.YODA, "https://api-yoda.megaport.com");
+        environments.put(Environment.SKYWALKER, "https://api-skywalker.megaport.com");
+        environments.put(Environment.JABBA, "https://api-jabba.megaport.com");
         environments.put(Environment.QA, "https://api-qa.megaport.com");
     }
 
@@ -47,6 +51,21 @@ public class MegaportApiSession {
     public MegaportApiSession(Environment environment, String token) throws InvalidCredentialsException, UnirestException{
         this.token = token;
         this.server = environments.get(environment);
+        Unirest.setTimeouts(10000, 60000);
+        login(null, null, token);
+    }
+
+    /**
+     * Constructor for Megaport API session
+     * @param environment The environment to be targeted e.g. TRAINING
+     * @param token The token to use for secure auth
+     * @throws InvalidCredentialsException Reporting invalid credentials
+     * @throws UnirestException Report any REST specific exceptions
+     */
+    public MegaportApiSession(Environment environment, String token, Long timeout) throws InvalidCredentialsException, UnirestException{
+        this.token = token;
+        this.server = environments.get(environment);
+        Unirest.setTimeouts(10000, timeout == null ? 60000 : timeout);
         login(null, null, token);
     }
 
@@ -61,6 +80,22 @@ public class MegaportApiSession {
      */
     public MegaportApiSession(Environment environment, String username, String password) throws InvalidCredentialsException, IOException, UnirestException {
         this.server = environments.get(environment);
+        Unirest.setTimeouts(10000, 60000);
+        login(username, password, null);
+    }
+
+    /**
+     * Constructor for Megaport API session
+     * @param environment The environment to be targeted e.g. TRAINING
+     * @param username The username to use for secure auth
+     * @param password The password to use for secure auth
+     * @throws InvalidCredentialsException Reporting invalid credentials
+     * @throws IOException Report any IO exceptions
+     * @throws UnirestException To report any REST specific exceptions
+     */
+    public MegaportApiSession(Environment environment, String username, String password, Long timeout) throws InvalidCredentialsException, IOException, UnirestException {
+        this.server = environments.get(environment);
+        Unirest.setTimeouts(10000, timeout == null ? 60000 : timeout);
         login(username, password, null);
     }
 
@@ -75,7 +110,37 @@ public class MegaportApiSession {
      */
     public MegaportApiSession(String server, String username, String password) throws InvalidCredentialsException, IOException, UnirestException {
         this.server = validateServer(server);
+        Unirest.setTimeouts(10000, 60000);
         login(username, password, null);
+    }
+
+    /**
+     * Use this only if you get instruction from Megaport support.
+     * @param server The server name of the environment to be targeted
+     * @param username The username to use for secure auth
+     * @param password The password to use for secure auth
+     * @throws InvalidCredentialsException Reporting invalid credentials
+     * @throws IOException Report any IO exceptions
+     * @throws UnirestException Report any REST specific exceptions
+     */
+    public MegaportApiSession(String server, String username, String password, Long timeout) throws InvalidCredentialsException, IOException, UnirestException {
+        this.server = validateServer(server);
+        Unirest.setTimeouts(10000, timeout == null ? 60000 : timeout);
+        login(username, password, null);
+    }
+
+    /**
+     * Use this only if you get instruction from Megaport support.
+     * @param server The server name of the environment to be targeted
+     * @param token The token to use for secure auth
+     * @throws InvalidCredentialsException Reporting invalid credentials
+     * @throws IOException Report any IO exceptions
+     * @throws UnirestException Report any REST specific exceptions
+     */
+    public MegaportApiSession(String server, String token, Long timeout) throws InvalidCredentialsException, IOException, UnirestException {
+        this.server = validateServer(server);
+        Unirest.setTimeouts(10000, timeout == null ? 60000 : timeout);
+        login(null, null, token);
     }
 
     /**
@@ -88,6 +153,7 @@ public class MegaportApiSession {
      */
     public MegaportApiSession(String server, String token) throws InvalidCredentialsException, IOException, UnirestException {
         this.server = validateServer(server);
+        Unirest.setTimeouts(10000, 60000);
         login(null, null, token);
     }
 
@@ -276,8 +342,10 @@ public class MegaportApiSession {
         String url = server + "/v2/networkdesign/buy";
         HttpResponse<JsonNode> response = null;
         try {
+            Unirest.setTimeouts(0,0);
             response = Unirest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(megaportServiceDtos)).asJson();
         } catch (UnirestException e) {
+            e.printStackTrace();
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
         if (response.getStatus() == 200){

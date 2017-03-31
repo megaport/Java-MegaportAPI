@@ -29,7 +29,7 @@ public class MegaportServiceDto implements Serializable {
     private Integer locationId;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String costCentre;
-    private Boolean vxcpermitted;
+    private Boolean vxcpermitted = true;
     private Boolean vxcAutoApproval = false;
     private Boolean marketplaceVisibility = true;
     private Boolean virtual = false;

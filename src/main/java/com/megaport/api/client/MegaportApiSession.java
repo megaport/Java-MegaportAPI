@@ -308,6 +308,30 @@ public class MegaportApiSession {
     }
 
     /**
+     * Given your Oracle service key, obtained from Microsoft ExpressRoute, this end point will return the primary and secondary ExpressRoute ports.
+     * @param oracleCircuitId Unique key from the Azure provider to provision a specific network design
+     * @return the primary and secondary ExpressRoute ports
+     * @throws Exception Report any exception finding Azure ports
+     */
+    public CspPortsDto findOraclePorts(String oracleCircuitId) throws Exception {
+
+        String url = server + "/v2/secure/oracle/" + oracleCircuitId;
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
+        if (response.getStatus() == 200){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsObject(json, CspPortsDto.class);
+        } else {
+            throw handleError(response);
+        }
+
+    }
+
+    /**
      * This invokes the validation of the order details provided
      * @param megaportServiceDtos a list of orders to be validated
      * @return a list of service order details

@@ -4,6 +4,7 @@ import com.megaport.api.dto.*;
 import com.megaport.api.exceptions.BadRequestException;
 import com.megaport.api.util.JsonConverter;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class PortOrdersTest {
     }
 
     @Test
+    @Ignore
     public void testVRouterToVRouter() throws Exception {
 
         List<MegaportServiceDto> order = new ArrayList<>();
@@ -102,6 +104,7 @@ public class PortOrdersTest {
 
 
     @Test
+    @Ignore
     public void testOrderVRouterUpgrade() throws Exception {
 
         List<MegaportServiceDto> order = new ArrayList<>();

@@ -126,7 +126,10 @@ public class ServiceModificationTest {
             Integer id = new Random().nextInt(liveOrConfigured.size() -1);
             MegaportServiceDto random = ports.get(id);
             if (random.getAssociatedVxcs().size() > 0){
-                productUid = random.getAssociatedVxcs().get(0).getProductUid();
+                if (random.getAssociatedVxcs().get(0).getProvisioningStatus() != ProvisioningStatus.DECOMMISSIONED) {
+                    productUid = random.getAssociatedVxcs().get(0).getProductUid();
+                    break;
+                }
             }
         }
 

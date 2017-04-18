@@ -26,9 +26,9 @@ public class PortOrdersTest {
     public void init() throws Exception {
 
         
-//        session = new MegaportApiSession(Environment.STAGING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.STAGING, "api.test", "s0me-s3cret#");
 //        session = new MegaportApiSession(Environment.STAGING, "");
-        session = new MegaportApiSession("https://api-kenobi.megaport.com", "");
+//        session = new MegaportApiSession("https://api-kenobi.megaport.com", "");
 //        session = new MegaportApiSession(Environment.LOCALHOST, "");
         assertTrue(session.isValid());
 

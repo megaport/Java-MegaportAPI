@@ -4,6 +4,7 @@ import com.megaport.api.dto.AzurePortsDto;
 import com.megaport.api.dto.CspPortsDto;
 import com.megaport.api.dto.Environment;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -24,6 +25,7 @@ public class OracleTest {
     }
 
     @Test
+    @Ignore
     public void testFindOraclePorts() throws Exception{
 
         CspPortsDto ports = session.findOraclePorts("ocid1.virtualcircuit.oc1.phx.aaaaaaaajq5twtkob6slb3qxbmdfidnvnbiw2kgmqld3ifj4cpgr5uwe45ka");

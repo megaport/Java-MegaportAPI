@@ -33,7 +33,7 @@ public class IxOrdersTest {
     public void testFindAvailableIxByLocation() throws Exception{
 
         List<IxDto> ixForLocation = session.findIxForLocation(3);
-        assertEquals(5, ixForLocation.size());
+        assertEquals(16, ixForLocation.size());
 
     }
 

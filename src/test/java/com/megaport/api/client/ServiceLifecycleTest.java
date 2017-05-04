@@ -44,7 +44,7 @@ public class ServiceLifecycleTest {
         cal.add(Calendar.DATE, 45);
         Date teminationDate = cal.getTime();
 
-        if (configuredPort != null) {
+        if (configuredPort != null && configuredPort.getProvisioningStatus() != ProvisioningStatus.FAILED) {
             session.lifecycle(configuredPort.getProductUid(), LifecycleAction.CANCEL, teminationDate);
 
             MegaportServiceDto product = (MegaportServiceDto) session.findServiceDetail(configuredPort.getProductUid());

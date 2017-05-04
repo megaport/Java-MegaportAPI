@@ -33,6 +33,9 @@ public class IxServiceDto implements Serializable {
     @JsonDeserialize(using = DateDeserializer.class)
     private Date terminateDate;
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonDeserialize(using = DateDeserializer.class)
+    private Date liveDate;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String costCentre;
     private UsageAlgorithm usageAlgorithm;
     private ProductType productType;
@@ -93,6 +96,13 @@ public class IxServiceDto implements Serializable {
         return macAddress;
     }
 
+    public Date getLiveDate() {
+        return liveDate;
+    }
+
+    public void setLiveDate(Date liveDate) {
+        this.liveDate = liveDate;
+    }
 
     public void setMacAddress(String macAddress) {
         this.macAddress = macAddress;

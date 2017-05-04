@@ -33,6 +33,10 @@ public class VxcServiceDto implements Serializable {
     @JsonDeserialize(using = DateDeserializer.class)
     private Date createDate;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonDeserialize(using = DateDeserializer.class)
+    private Date liveDate;
+
     @JsonDeserialize(using = DateDeserializer.class)
     private Date terminateDate;
 
@@ -63,6 +67,14 @@ public class VxcServiceDto implements Serializable {
 
     public void setProductName( String productName ) {
         this.productName = productName;
+    }
+
+    public Date getLiveDate() {
+        return liveDate;
+    }
+
+    public void setLiveDate(Date liveDate) {
+        this.liveDate = liveDate;
     }
 
     public ProductType getProductType() {

@@ -20,8 +20,14 @@ public class MegaportServiceDto implements Serializable {
     private String companyUid;
     private String companyName;
     private ProvisioningStatus provisioningStatus;
-//    @JsonDeserialize(using = DateDeserializer.class)
+
+    @JsonDeserialize(using = DateDeserializer.class)
     private Date createDate;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonDeserialize(using = DateDeserializer.class)
+    private Date liveDate;
+
     private Integer portSpeed;
     @JsonDeserialize(using = DateDeserializer.class)
     private Date terminateDate;
@@ -67,6 +73,14 @@ public class MegaportServiceDto implements Serializable {
 
     public void setVirtual(Boolean virtual) {
         this.virtual = virtual;
+    }
+
+    public Date getLiveDate() {
+        return liveDate;
+    }
+
+    public void setLiveDate(Date liveDate) {
+        this.liveDate = liveDate;
     }
 
     public ProvisioningStatus getProvisioningStatus() {

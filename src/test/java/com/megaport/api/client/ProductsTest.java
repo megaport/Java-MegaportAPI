@@ -3,6 +3,7 @@ package com.megaport.api.client;
 import com.megaport.api.dto.*;
 import com.megaport.api.exceptions.InvalidCredentialsException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Calendar;
@@ -30,7 +31,8 @@ public class ProductsTest {
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.STAGING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123");
+
         assertTrue(session.isValid());
 
         List<MegaportServiceDto> ports = session.findPorts();
@@ -122,6 +124,7 @@ public class ProductsTest {
     }
 
     @Test
+    @Ignore
     public void testFindUsageData() throws Exception{
 
         GraphDto graphDto = session.findServiceUsage(configuredPort.getProductUid(), null, null);

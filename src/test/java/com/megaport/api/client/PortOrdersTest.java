@@ -26,11 +26,7 @@ public class PortOrdersTest {
     @Before
     public void init() throws Exception {
 
-        
-        session = new MegaportApiSession(Environment.STAGING, "api.test", "s0me-s3cret#");
-//        session = new MegaportApiSession(Environment.STAGING, "");
-//        session = new MegaportApiSession("https://api-kenobi.megaport.com", "");
-//        session = new MegaportApiSession(Environment.LOCALHOST, "");
+        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123");
         assertTrue(session.isValid());
 
     }
@@ -66,6 +62,47 @@ public class PortOrdersTest {
         VxcEndDto endB = new VxcEndDto();
         endB.setProductUid("e5de5e25-05b9-4e7d-9c9a-b99fdad85ae6");
         endB.setPartnerConfig(getVRouterConfig(13, "192.0.2.2/30", 42234, "192.0.2.2", "192.0.2.1", "192.0.2.2"));
+
+        // now wrap it up...
+        vxcDto.setaEnd(endA);
+        vxcDto.setbEnd(endB);
+        dto.getAssociatedVxcs().add(vxcDto);
+
+        return dto;
+    }
+
+    @Test
+    @Ignore
+    public void testVRouterToL2Port() throws Exception {
+
+        List<MegaportServiceDto> order = new ArrayList<>();
+        order.add(createVRouterToPort());
+
+        String orderResponse = session.placeOrder(order);
+
+        System.out.println(orderResponse);
+
+    }
+
+
+
+    private MegaportServiceDto createVRouterToPort() {
+
+        MegaportServiceDto dto = new MegaportServiceDto();
+
+        dto.setProductUid("97c3ffee-0668-4362-b540-cda64d27dad9"); // existing VRouter, owned by test account, this is the A End
+
+
+        // the child VXC connects the vRouter with another vRouter
+        VxcServiceDto vxcDto = new VxcServiceDto();
+        vxcDto.setProductName("VXC between VRouter and layer2 ports");
+        vxcDto.setRateLimit(150);
+
+        VxcEndDto endA = new VxcEndDto();
+        endA.setPartnerConfig(getVRouterConfig(10, "192.0.2.1/30", 42234, "192.0.2.1", "192.0.2.2", "192.0.2.1"));
+
+        VxcEndDto endB = new VxcEndDto();
+        endB.setProductUid("6afff5db-1f00-4110-9eae-4866ef85bdd5"); //  this is an existing L2 port
 
         // now wrap it up...
         vxcDto.setaEnd(endA);
@@ -111,8 +148,31 @@ public class PortOrdersTest {
         order.add(createVRouterUpgrade());
 
         String orderResponse = session.placeOrder(order);
+        HashMap<String, Object> result = JsonConverter.fromJson(orderResponse);
+
+        // expecting two services here
+        int firstIndex = orderResponse.indexOf("technicalServiceUid=") + "technicalServiceUid=".length();
+        int secondIndex = orderResponse.indexOf("vxcJTechnicalServiceUid=", firstIndex +1) + "vxcJTechnicalServiceUid=".length();
+        String firstService = orderResponse.substring(firstIndex, firstIndex + 36);
+        String secondService = orderResponse.substring(secondIndex, secondIndex + 36);
 
         System.out.println(orderResponse);
+
+        session.lifecycle(firstService, LifecycleAction.CANCEL_NOW, null);
+
+        List<MegaportServiceDto> ports = session.findPorts();
+        Boolean foundIt = false;
+        for (MegaportServiceDto dto : ports){
+            if (dto.getProductUid().equals(firstService)){
+                assertEquals(ProvisioningStatus.DECOMMISSIONED, dto.getProvisioningStatus());
+                for (VxcServiceDto vxc : dto.getAssociatedVxcs()){
+                    assertTrue(vxc.getProductUid().equals(secondService));
+                    assertEquals(ProvisioningStatus.DECOMMISSIONED, vxc.getProvisioningStatus());
+                }
+                foundIt = true;
+            }
+        }
+        assertEquals(true, foundIt);
 
     }
 
@@ -249,6 +309,20 @@ public class PortOrdersTest {
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+    public void testIssue() throws Exception {
+        MegaportServiceDto ms = new MegaportServiceDto();
+        ms.setLocationId(66);  // determined above
+        ms.setProductType(ProductType.MEGAPORT);
+        ms.setTerm(1);
+        ms.setProductName("My Test Port");
+        ms.setPortSpeed(1000);
+        ms.setProvisioningStatus(ProvisioningStatus.DESIGN);
+        List<MegaportServiceDto> msl = new ArrayList<>();
+        msl.add(ms);
+        List<ServiceLineItemDto> sli = session.validateOrder(msl);
     }
 
     private MegaportServiceDto createGoodPort() {

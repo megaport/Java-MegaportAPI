@@ -19,7 +19,7 @@ public class OracleTest {
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.STAGING, "api.test", "s0me-s3cret#", null);
+        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123", null);
         assertTrue(session.isValid());
 
     }

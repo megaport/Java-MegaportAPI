@@ -20,7 +20,7 @@ public class ServiceModificationTest {
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.STAGING, "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123");
         assertTrue(session.isValid());
 
     }

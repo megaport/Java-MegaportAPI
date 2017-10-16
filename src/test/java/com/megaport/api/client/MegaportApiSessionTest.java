@@ -23,10 +23,10 @@ public class MegaportApiSessionTest {
     @Test
     public void testCreateSession() throws Exception{
         String goodToken;
-        MegaportApiSession session = new MegaportApiSession(Environment.STAGING, "api.test", "s0me-s3cret#");
+        MegaportApiSession session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123");
         assertTrue(session.isValid());
 
-        session = new MegaportApiSession("https://api-staging.megaport.com", "api.test", "s0me-s3cret#");
+        session = new MegaportApiSession("https://api-staging.megaport.com", "api.test", "Abc123");
         assertTrue(session.isValid());
 
         goodToken = session.getToken();
@@ -62,7 +62,7 @@ public class MegaportApiSessionTest {
     public void testServiceUnavailable() throws Exception{
 
         try {
-            MegaportApiSession session = new MegaportApiSession("https://api-staging.megaport.com", "api.test", "s0me-s3cret#");
+            MegaportApiSession session = new MegaportApiSession("https://api-staging.megaport.com", "api.test", "Abc123");
             session.simulateServiceUnavailable();
             fail();
         } catch (ServiceUnavailableException e){
@@ -76,7 +76,7 @@ public class MegaportApiSessionTest {
 
         MegaportApiSession session = null;
         try {
-            session = new MegaportApiSession("htps://api-staging.megaport.com", "api.test", "s0me-s3cret#");
+            session = new MegaportApiSession("htps://api-staging.megaport.com", "api.test", "Abc123");
             fail();
         } catch (Exception e) {
             assertEquals(e.getClass().getName(), "java.net.UnknownHostException");
@@ -84,7 +84,7 @@ public class MegaportApiSessionTest {
         }
 
         try {
-            session = new MegaportApiSession("https://api-raining.megaport.com", "api.test", "s0me-s3cret#");
+            session = new MegaportApiSession("https://api-raining.megaport.com", "api.test", "Abc123");
             fail();
         } catch (Exception e) {
             assertEquals(e.getClass().getName(), "java.net.UnknownHostException");

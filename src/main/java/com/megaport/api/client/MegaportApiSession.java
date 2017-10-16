@@ -879,9 +879,14 @@ public class MegaportApiSession {
             case 400:
 
                 if (tempData != null && tempData instanceof List && !(((List) tempData).isEmpty())) {
-                    HashMap<String, String> errorReponseMap = (HashMap<String, String>) ((List) tempData).get(0);
-                    for(Map.Entry<String, String> entry : errorReponseMap.entrySet()) {
-                        String value =  entry.getValue();
+                    HashMap<String, Object> errorReponseMap = (HashMap<String, Object>) ((List) tempData).get(0);
+                    for(Map.Entry<String, Object> entry : errorReponseMap.entrySet()) {
+                        String value;
+                        if (entry.getValue() instanceof String) {
+                            value =  (String) entry.getValue();
+                        } else {
+                            value = JsonConverter.toJson(entry.getValue());
+                        }
                         data.append(" ").append(value).append("\n");
                     }
                 } else {

@@ -308,6 +308,30 @@ public class MegaportApiSession {
     }
 
     /**
+     * Given your Google pairing key, this end point will return the valid Google.
+     * @param serviceKey Unique key from the Google, in the form {uuid}/{part2}/{part3}, eg 00028caf-7b17-45f1-a43c-1a9cf2f32e75/us-west1/zone1
+     * @return list of permitted bandwidths, and ports
+     * @throws Exception Report any exception finding Google CGI ports
+     */
+    public GooglePortsDto findGooglePorts(String serviceKey) throws Exception {
+
+        String url = server + "/v2/secure/google/" + serviceKey;
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
+        if (response.getStatus() == 200){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsObject(json, GooglePortsDto.class);
+        } else {
+            throw handleError(response);
+        }
+
+    }
+
+    /**
      * Given your Oracle service key, obtained from Microsoft ExpressRoute, this end point will return the primary and secondary ExpressRoute ports.
      * @param oracleCircuitId Unique key from the Azure provider to provision a specific network design
      * @return the primary and secondary ExpressRoute ports

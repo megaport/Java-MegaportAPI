@@ -845,7 +845,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() != 200){
+        if (response.getStatus() >= 400){
             throw handleError(response);
         }
     }

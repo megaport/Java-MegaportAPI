@@ -274,7 +274,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsList(json, PartnerPortDto.class);
         } else {
@@ -298,7 +298,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsObject(json, AzurePortsDto.class);
         } else {
@@ -322,7 +322,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsObject(json, GooglePortsDto.class);
         } else {
@@ -346,7 +346,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsObject(json, CspPortsDto.class);
         } else {
@@ -370,7 +370,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsList(json, ServiceLineItemDto.class);
         } else {
@@ -396,7 +396,7 @@ public class MegaportApiSession {
             e.printStackTrace();
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJson(json).get("data").toString();
         } else {
@@ -417,7 +417,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsList(json, PortLocationDto.class);
         } else {
@@ -454,7 +454,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsList(json, IxDto.class);
         } else {
@@ -482,7 +482,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() != 200){
+        if (response.getStatus() >= 400){
             throw handleError(response);
         }
     }
@@ -504,7 +504,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() != 200){
+        if (response.getStatus() >= 400){
             throw handleError(response);
         }
     }
@@ -530,7 +530,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() != 200){
+        if (response.getStatus() >= 400){
             throw handleError(response);
         }
     }
@@ -553,7 +553,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() != 200){
+        if (response.getStatus() >= 400){
             throw handleError(response);
         }
     }
@@ -573,7 +573,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() != 200){
+        if (response.getStatus() >= 400){
             throw handleError(response);
         }
     }
@@ -586,7 +586,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             HashMap<String, Object> map = JsonConverter.fromJsonDataAsMap(json);
             String productType = (String) map.get("productType");
@@ -619,7 +619,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsObject(json, MegaportServiceDto.class);
         } else {
@@ -635,7 +635,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsObject(json, VxcServiceDto.class);
         } else {
@@ -651,7 +651,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsObject(json, IxServiceDto.class);
         } else {
@@ -667,7 +667,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsList(json, ActiveLogDto.class);
         } else {
@@ -683,7 +683,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsList(json, CompanyDto.class);
         } else {
@@ -699,7 +699,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsList(json, MegaportServiceDto.class);
         } else {
@@ -727,7 +727,7 @@ public class MegaportApiSession {
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);
         }
-        if (response.getStatus() == 200){
+        if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsObject(json, GraphDto.class);
         } else {

@@ -566,7 +566,7 @@ public class MegaportApiSession {
      */
     public void modifyPort(Map<String,Object> fieldMap, String productUid) throws Exception{
 
-        String url = server + "/v2/product/" + productUid;
+        String url = server + "/v2/product/megaport/" + productUid;
         HttpResponse<JsonNode> response = null;
         try {
             response = Unirest.put(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(fieldMap)).asJson();

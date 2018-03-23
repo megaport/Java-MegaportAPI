@@ -5,6 +5,7 @@ import com.megaport.api.exceptions.BadRequestException;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,19 @@ public class VxcOrdersTest {
         assertTrue(session.isValid());
 
     }
+
+    //https://api.megaport.com/v2//pricebook/vxc?aLocationId=47&speed=100&bLocationId=37&connectType=AWS
+    @Test
+    public void testVxcPrice() throws Exception {
+
+        PriceDto vxcPrice = session.findVxcPrice(47,37, 100, "DEFAULT");
+
+        System.out.println(vxcPrice.toString());
+
+        assertEquals(new BigDecimal(142.244558), vxcPrice.getMonthlyRate());
+
+    }
+
 
     @Test
     public void testValidateVxcOrder() throws Exception {

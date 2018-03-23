@@ -850,6 +850,112 @@ public class MegaportApiSession {
         }
     }
 
+
+
+    /**
+     *
+     * @param locationId
+     * @param speed
+     * @param term
+     * @param virtual - If false, this means a regular layer 2 physical port, if true this means a virtual router port or MCR
+     * @return PriceDto
+     * @throws Exception
+     * //https://api.megaport.com/v2//pricebook/megaport?locationId=163&speed=10000&term=1&buyoutPort=&productUid=226cdf40-2e4d-11e8-b2c8-29215dd8231a&virtual=
+     */
+    public PriceDto findMegaportPrice(Integer locationId, Integer speed, Integer term, Boolean virtual) throws Exception{
+        String url = server + "/v2/pricebook/megaport";
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url)
+                                .header("X-Auth-Token", token)
+                                .queryString("locationId", locationId)
+                                .queryString("speed", speed)
+                                .queryString("virtual", virtual)
+                                .queryString("term", term).asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
+        if (response.getStatus() < 400){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsObject(json, PriceDto.class);
+        } else {
+            throw handleError(response);
+        }
+    }
+
+
+    /**
+     * @param aLocationId
+     * @param bLocationId
+     * @param speed
+     * @param connectType - DEFAULT for point to point VXC to own port, or another customer's port. For Cloud Service Providers choose one of:
+         AMSIX
+         AZURE
+         VROUTER
+         GOOGLE
+         WEBAIR
+         AWS
+         ORACLE
+         SFDC
+         ALIBABA
+     *
+     * @return
+     * @throws Exception
+     * //https://api.megaport.com/v2//pricebook/vxc?aLocationId=47&speed=100&bLocationId=37&connectType=AWS&buyoutPort=&productUid=40262000-2e4d-11e8-b2c8-29215dd8231a
+     */
+    public PriceDto findVxcPrice(Integer aLocationId, Integer bLocationId, Integer speed, String connectType) throws Exception{
+        String url = server + "/v2/pricebook/vxc";
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url)
+                                .header("X-Auth-Token", token)
+                                .queryString("aLocationId", aLocationId)
+                                .queryString("bLocationId", bLocationId)
+                                .queryString("speed", speed)
+                                .queryString("connectType", connectType)
+                                .asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
+        if (response.getStatus() < 400){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsObject(json, PriceDto.class);
+        } else {
+            throw handleError(response);
+        }
+    }
+
+    /**
+     * @param portLocationId
+     * @param speed
+     * @param ixType - The name of the IX. These can be found from calling findIxForLocation()
+     * @return PriceDto
+     * @throws Exception
+     * //https://api.megaport.com/v2//pricebook/ix?ixType=Ashburn%20IX&portLocationId=90&speed=100
+     */
+    public PriceDto findIxPrice(Integer portLocationId, String ixType, Integer speed) throws Exception{
+        String url = server + "/v2/pricebook/ix";
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url)
+                                .header("X-Auth-Token", token)
+                                .queryString("portLocationId", portLocationId)
+                                .queryString("speed", speed)
+                                .queryString("ixType", ixType)
+                                .asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
+        if (response.getStatus() < 400){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsObject(json, PriceDto.class);
+        } else {
+            throw handleError(response);
+        }
+    }
+
+
+
     /**
      * Get a token for the session
      * @return The session token

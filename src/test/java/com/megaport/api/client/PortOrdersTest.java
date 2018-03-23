@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -215,7 +216,7 @@ public class PortOrdersTest {
     public void testValidatePort() throws Exception {
 
         List<MegaportServiceDto> order = new ArrayList<>();
-        order.add(createGoodPort());
+        order.add(createGoodPort(false, 3, 10000));
 
         // prices for this account will be $0
         List<ServiceLineItemDto> serviceLineItemDtos = session.validateOrder(order);
@@ -224,10 +225,44 @@ public class PortOrdersTest {
     }
 
     @Test
+    public void testValidateMcr() throws Exception {
+
+        List<MegaportServiceDto> order = new ArrayList<>();
+        order.add(createGoodPort(true, 140, 1000));
+
+        // prices for this account will be $0
+        List<ServiceLineItemDto> serviceLineItemDtos = session.validateOrder(order);
+        assertEquals(1, serviceLineItemDtos.size());
+
+    }
+
+    @Test
+    public void testPortPrice() throws Exception {
+
+        PriceDto megaportPrice = session.findMegaportPrice(163, 10000, 1, false);
+
+        System.out.println(megaportPrice.toString());
+
+        assertEquals(new BigDecimal(500), megaportPrice.getMonthlyRate());
+
+    }
+
+    @Test
+    public void testMCRPrice() throws Exception {
+
+        PriceDto mcrPrice = session.findMegaportPrice(140, 5000, 1, true);
+
+        System.out.println(mcrPrice.toString());
+
+        assertEquals(new BigDecimal(1000), mcrPrice.getMonthlyRate());
+
+    }
+
+    @Test
     public void testOrderPort() throws Exception {
 
         List<MegaportServiceDto> order = new ArrayList<>();
-        order.add(createGoodPort());
+        order.add(createGoodPort(false, 3, 10000));
 
         // prices for this account will be $0
         String orderResponse = session.placeOrder(order);
@@ -325,17 +360,18 @@ public class PortOrdersTest {
         List<ServiceLineItemDto> sli = session.validateOrder(msl);
     }
 
-    private MegaportServiceDto createGoodPort() {
+    private MegaportServiceDto createGoodPort(Boolean virtual, Integer locationId, Integer speed) {
 
 
         MegaportServiceDto dto = new MegaportServiceDto();
 
-        dto.setLocationId(3);
+        dto.setLocationId(locationId);
         dto.setTerm(24);
         dto.setProductType(ProductType.MEGAPORT);
         dto.setProductName("My New Port");
         dto.setProvisioningStatus(ProvisioningStatus.DESIGN);
-        dto.setPortSpeed(10000);
+        dto.setPortSpeed(speed);
+        dto.setVirtual(virtual);
 
         return dto;
     }

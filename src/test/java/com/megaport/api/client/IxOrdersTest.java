@@ -5,6 +5,7 @@ import com.megaport.api.exceptions.BadRequestException;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,19 @@ public class IxOrdersTest {
         assertEquals(14, ixForLocation.size());
 
     }
+
+    //https://api.megaport.com/v2//pricebook/ix?ixType=Ashburn%20IX&portLocationId=90&speed=100
+    @Test
+    public void testIxPrice() throws Exception {
+
+        PriceDto vxcPrice = session.findIxPrice(90,"Ashburn IX", 100);
+
+        System.out.println(vxcPrice.toString());
+
+        assertEquals(new BigDecimal("116.706"), vxcPrice.getMonthlyRate());
+
+    }
+
 
 //    @Test
 //    public void testValidateIxOrder() throws Exception {

@@ -488,8 +488,11 @@ public class MegaportApiSession {
     }
 
     /**
-     * Method to approve VXC
-     * @throws Exception Report any exception during service modification
+     *
+     * @param vxcOrderUid
+     * @param isApproved
+     * @param bEndVlan
+     * @throws Exception
      */
     public void approveVxc(String vxcOrderUid, Boolean isApproved, Integer bEndVlan) throws Exception{
 
@@ -852,15 +855,16 @@ public class MegaportApiSession {
 
 
 
+    //https://api.megaport.com/v2//pricebook/megaport?locationId=163&speed=10000&term=1&buyoutPort=&productUid=226cdf40-2e4d-11e8-b2c8-29215dd8231a&virtual=
+
     /**
      *
      * @param locationId
      * @param speed
      * @param term
-     * @param virtual - If false, this means a regular layer 2 physical port, if true this means a virtual router port or MCR
-     * @return PriceDto
+     * @param virtual
+     * @return
      * @throws Exception
-     * //https://api.megaport.com/v2//pricebook/megaport?locationId=163&speed=10000&term=1&buyoutPort=&productUid=226cdf40-2e4d-11e8-b2c8-29215dd8231a&virtual=
      */
     public PriceDto findMegaportPrice(Integer locationId, Integer speed, Integer term, Boolean virtual) throws Exception{
         String url = server + "/v2/pricebook/megaport";
@@ -885,6 +889,7 @@ public class MegaportApiSession {
 
 
     /**
+     *
      * @param aLocationId
      * @param bLocationId
      * @param speed
@@ -898,10 +903,8 @@ public class MegaportApiSession {
          ORACLE
          SFDC
          ALIBABA
-     *
      * @return
      * @throws Exception
-     * //https://api.megaport.com/v2//pricebook/vxc?aLocationId=47&speed=100&bLocationId=37&connectType=AWS&buyoutPort=&productUid=40262000-2e4d-11e8-b2c8-29215dd8231a
      */
     public PriceDto findVxcPrice(Integer aLocationId, Integer bLocationId, Integer speed, String connectType) throws Exception{
         String url = server + "/v2/pricebook/vxc";
@@ -925,13 +928,13 @@ public class MegaportApiSession {
         }
     }
 
+    //https://api.megaport.com/v2//pricebook/ix?ixType=Ashburn%20IX&portLocationId=90&speed=100
     /**
      * @param portLocationId
      * @param speed
      * @param ixType - The name of the IX. These can be found from calling findIxForLocation()
      * @return PriceDto
      * @throws Exception
-     * //https://api.megaport.com/v2//pricebook/ix?ixType=Ashburn%20IX&portLocationId=90&speed=100
      */
     public PriceDto findIxPrice(Integer portLocationId, String ixType, Integer speed) throws Exception{
         String url = server + "/v2/pricebook/ix";

@@ -248,6 +248,17 @@ public class PortOrdersTest {
     }
 
     @Test
+    public void testVlanValidation() throws Exception {
+
+        List<Integer> vlans = session.validateVlan("d185d0b7-3e99-4071-8e00-5e096396b1f5", 3334);
+
+        System.out.println(vlans.toString());
+
+        assertTrue(vlans.size() > 0);
+
+    }
+
+    @Test
     public void testMCRPrice() throws Exception {
 
         PriceDto mcrPrice = session.findMegaportPrice(140, 5000, 1, true);

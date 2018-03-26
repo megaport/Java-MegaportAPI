@@ -46,6 +46,21 @@ public class JsonConverter {
 
     }
 
+    public static <T extends Object> List<T> fromJsonDataAsSimpleList(String jsonString, Class<T> typeReference) {
+
+        List<T> result = new ArrayList<>();
+
+        HashMap<String, Object> map = fromJson(jsonString);
+        if (!map.get("data").equals("[]")){
+            result = (List<T>) map.get("data");
+        }
+
+        return result;
+
+    }
+
+
+
     public static List<Map<String,Object>> fromJsonDataAsList(String jsonString) {
 
         HashMap<String, Object> map = fromJson(jsonString);

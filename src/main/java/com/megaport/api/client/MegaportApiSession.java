@@ -957,6 +957,34 @@ public class MegaportApiSession {
         }
     }
 
+    /**
+     *
+     * The purpose of this method is to check for the availability of Vlans on a given port.  If the vlan you ask for is available, then it is returned to you in a list of one element.  If the vlan is not available, then a list of 3-5 other available vlans is provided. If a port has been set to untagged, then no vlans are available on it.
+     *
+     * @param productUid
+     * @param vlan
+     * @return a list of available Vlans
+     * @throws Exception
+     */
+    public List<Integer> validateVlan(String productUid, Integer vlan) throws Exception{
+        String url = server + "/v2/product/port/" + productUid + "/vlan";
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url)
+                                .header("X-Auth-Token", token)
+                                .queryString("vlan", vlan)
+                                .asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
+        if (response.getStatus() < 400){
+            String json = response.getBody().toString();
+            return JsonConverter.fromJsonDataAsSimpleList(json, Integer.class);
+        } else {
+            throw handleError(response);
+        }
+    }
+
 
 
     /**

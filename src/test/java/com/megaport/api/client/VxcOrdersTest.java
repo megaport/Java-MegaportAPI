@@ -25,7 +25,7 @@ public class VxcOrdersTest {
     @Before
     public void init() throws Exception {
 
-        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123");
+        session = new MegaportApiSession(Environment.LOCALHOST, "api.test", "Abc123");
         assertTrue(session.isValid());
 
     }
@@ -39,6 +39,30 @@ public class VxcOrdersTest {
         System.out.println(vxcPrice.toString());
 
         assertEquals(new BigDecimal("142.244558"), vxcPrice.getMonthlyRate());
+
+    }
+
+    @Test
+    public void testVxcPrice2() throws Exception {
+
+        PriceDto vxcPrice = session.findVxcPrice(140,140, 10000, "DEFAULT");
+
+        System.out.println(vxcPrice.toString());
+
+        assertEquals(new BigDecimal("200"), vxcPrice.getMonthlyRate());
+
+    }
+
+    @Test
+    public void testVxcPrice3() throws Exception {
+
+        MegaportApiSession testSession = new MegaportApiSession(Environment.LOCALHOST, "5555e6cd-ae58-ac20-90b4-1de713c8a62d");
+
+        PriceDto vxcPrice = testSession.findVxcPrice(140,140, 10000, "DEFAULT");
+
+        System.out.println(vxcPrice.toString());
+
+        assertEquals(new BigDecimal("200"), vxcPrice.getMonthlyRate());
 
     }
 

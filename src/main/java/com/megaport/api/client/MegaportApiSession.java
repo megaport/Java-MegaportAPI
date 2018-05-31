@@ -11,6 +11,8 @@ import com.megaport.api.util.JsonConverter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -952,6 +954,41 @@ public class MegaportApiSession {
         if (response.getStatus() < 400){
             String json = response.getBody().toString();
             return JsonConverter.fromJsonDataAsObject(json, PriceDto.class);
+        } else {
+            throw handleError(response);
+        }
+    }
+
+    /**
+     * The purpose of this method is to estimate the charges for the given year / month, including the effect of a speed change.
+     *
+     * @param productUid
+     * @param year
+     * @param month
+     * @param newSpeed
+     * @return
+     * @throws Exception
+     */
+    public PriceCheckDto speedChangePriceCheck(String productUid, Integer year, Integer month, Integer newSpeed) throws Exception{
+        String url = server + "/v2/product/" + productUid + "/rating/" + year + "/" + month;
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.get(url)
+                                .header("X-Auth-Token", token)
+                                .queryString("speed", newSpeed)
+                                .asJson();
+        } catch (UnirestException e) {
+            throw new ServiceUnavailableException("API Server is not available", 503, null);
+        }
+        if (response.getStatus() < 400){
+            String json = response.getBody().toString();
+            HashMap<String, Object> dataMap = JsonConverter.fromJsonDataAsMap(json);
+            PriceCheckDto dto = new PriceCheckDto();
+            dto.setCurrency(dataMap.get("currency").toString());
+            dto.setDelta(new BigDecimal(dataMap.get("delta").toString()));
+            dto.setTotal(new BigDecimal(dataMap.get("total").toString()));
+            dto.setLongTermMonthly(new BigDecimal(dataMap.get("longTermMonthly").toString()));
+            return dto;
         } else {
             throw handleError(response);
         }

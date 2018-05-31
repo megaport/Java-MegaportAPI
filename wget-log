@@ -1,0 +1,6 @@
+--2018-04-26 08:09:25--  https://api-staging.megaport.com/v2/pricebook/vxc?aLocationId=140
+Resolving api-staging.megaport.com (api-staging.megaport.com)... 13.55.77.64
+Connecting to api-staging.megaport.com (api-staging.megaport.com)|13.55.77.64|:443... connected.
+HTTP request sent, awaiting response... 400 
+2018-04-26 08:09:25 ERROR 400: (no description).
+

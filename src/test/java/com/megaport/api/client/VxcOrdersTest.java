@@ -25,7 +25,7 @@ public class VxcOrdersTest {
     @Before
     public void init() throws Exception {
 
-        session = new MegaportApiSession(Environment.LOCALHOST, "api.test", "Abc123");
+        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123");
         assertTrue(session.isValid());
 
     }
@@ -56,7 +56,7 @@ public class VxcOrdersTest {
     @Test
     public void testVxcPrice3() throws Exception {
 
-        MegaportApiSession testSession = new MegaportApiSession(Environment.LOCALHOST, "5555e6cd-ae58-ac20-90b4-1de713c8a62d");
+        MegaportApiSession testSession = new MegaportApiSession(Environment.STAGING, "5555e6cd-ae58-ac20-90b4-1de713c8a62d");
 
         PriceDto vxcPrice = testSession.findVxcPrice(140,140, 10000, "DEFAULT");
 

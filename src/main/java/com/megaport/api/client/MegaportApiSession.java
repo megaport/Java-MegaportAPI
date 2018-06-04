@@ -988,6 +988,14 @@ public class MegaportApiSession {
             dto.setDelta(new BigDecimal(dataMap.get("delta").toString()));
             dto.setTotal(new BigDecimal(dataMap.get("total").toString()));
             dto.setLongTermMonthly(new BigDecimal(dataMap.get("longTermMonthly").toString()));
+
+            String forceProductChange = (String) dataMap.get("forceProductChange");
+            if (forceProductChange == null) {
+                dto.setForceProductChange(null);
+            } else {
+                dto.setForceProductChange(ForceProductChange.valueOf(forceProductChange));
+            }
+
             return dto;
         } else {
             throw handleError(response);

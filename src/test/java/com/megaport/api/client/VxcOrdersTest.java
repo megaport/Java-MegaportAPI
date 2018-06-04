@@ -3,6 +3,7 @@ package com.megaport.api.client;
 import com.megaport.api.dto.*;
 import com.megaport.api.exceptions.BadRequestException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -54,9 +55,10 @@ public class VxcOrdersTest {
     }
 
     @Test
+    @Ignore
     public void testVxcPrice3() throws Exception {
 
-        MegaportApiSession testSession = new MegaportApiSession(Environment.STAGING, "1937e6cd-4e58-4c20-90ba-18e712c8062d");
+        MegaportApiSession testSession = new MegaportApiSession(Environment.STAGING, "5555e6cd-ae58-ac20-90b4-1de713c8a62d");
 
         PriceDto vxcPrice = testSession.findVxcPrice(140,140, 10000, "DEFAULT");
 

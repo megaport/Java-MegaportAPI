@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.TimeZone;
 
 /**
  * Created by adam on 23/12/2013.

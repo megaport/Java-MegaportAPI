@@ -5,9 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**
- * Created by adam on 23/12/2013.
- */
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class PriceDto implements Serializable {
 

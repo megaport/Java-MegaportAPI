@@ -977,7 +977,7 @@ public class MegaportApiSession {
         try {
             response = Unirest.get(url)
                                 .header("X-Auth-Token", token)
-                                .queryString("speed", newSpeed)
+                                .queryString("newSpeed", newSpeed)
                                 .asJson();
         } catch (UnirestException e) {
             throw new ServiceUnavailableException("API Server is not available", 503, null);

@@ -12,10 +12,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by adam.wells on 17/06/2016.
@@ -24,7 +26,7 @@ public class MegaportApiSession {
 
     private final Map<Environment,String> environments = new HashMap<>();
     private String token = null;
-    private String server = null;
+    private String server;
     private static final String NETWORK_ERROR = "Network Error";
     private static final String SYSTEM_ERROR = "System Error";
     private static final String VALIDATION_ERROR = "Validation Error";
@@ -988,6 +990,14 @@ public class MegaportApiSession {
             dto.setDelta(new BigDecimal(dataMap.get("delta").toString()));
             dto.setTotal(new BigDecimal(dataMap.get("total").toString()));
             dto.setLongTermMonthly(new BigDecimal(dataMap.get("longTermMonthly").toString()));
+
+            String forceProductChange = (String) dataMap.get("forceProductChange");
+            if (forceProductChange == null) {
+                dto.setForceProductChange(null);
+            } else {
+                dto.setForceProductChange(ForceProductChange.valueOf(forceProductChange));
+            }
+
             return dto;
         } else {
             throw handleError(response);

@@ -224,14 +224,12 @@ public class PortOrdersTest {
 
     }
 
-    @Ignore
     @Test
     public void testValidateMcr() throws Exception {
 
         List<MegaportServiceDto> order = new ArrayList<>();
-        order.add(createGoodPort(true, 140, 1000));
+        order.add(createGoodMcr(140, 1000));
 
-        // prices for this account will be $0
         List<ServiceLineItemDto> serviceLineItemDtos = session.validateOrder(order);
         assertEquals(1, serviceLineItemDtos.size());
 
@@ -384,6 +382,26 @@ public class PortOrdersTest {
         dto.setProvisioningStatus(ProvisioningStatus.DESIGN);
         dto.setPortSpeed(speed);
         dto.setVirtual(virtual);
+
+        return dto;
+    }
+
+    private MegaportServiceDto createGoodMcr(Integer locationId, Integer speed) {
+
+
+        MegaportServiceDto dto = new MegaportServiceDto();
+
+        dto.setLocationId(locationId);
+        dto.setTerm(1);
+        dto.setProductType(ProductType.MEGAPORT);
+        dto.setProductName("My New Port");
+        dto.setProvisioningStatus(ProvisioningStatus.DESIGN);
+        dto.setPortSpeed(speed);
+        dto.setVirtual(true);
+
+        ConfigDto config = new ConfigDto();
+        config.setMcrAsn(1234567L);
+        dto.setConfig(config);
 
         return dto;
     }

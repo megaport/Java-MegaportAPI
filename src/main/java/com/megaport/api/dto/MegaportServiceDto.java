@@ -42,6 +42,8 @@ public class MegaportServiceDto implements Serializable {
     private Integer term;
     private ProductType productType;
 
+    private ConfigDto config;
+
     private List<VxcServiceDto> associatedVxcs = new ArrayList<>();
     private List<IxServiceDto> associatedIxs  = new ArrayList<>();
 
@@ -217,6 +219,14 @@ public class MegaportServiceDto implements Serializable {
 
     public Map<String, Object> getResources() {
         return resources;
+    }
+
+    public ConfigDto getConfig() {
+        return config;
+    }
+
+    public void setConfig(ConfigDto config) {
+        this.config = config;
     }
 
     public void setResources(Map<String, Object> resources) {

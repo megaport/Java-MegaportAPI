@@ -18,6 +18,8 @@ public enum VxcDistanceBand {
     METRO("metro"),
     INTRA_STATE("intra_state"),
     INTERCAP("intercap"),
+    ZONE("zone"),
+    INTERZONE("interzone"),
     INTERNATIONAL("international");
 
     private static final Map<String, VxcDistanceBand> lookup = new HashMap<>();

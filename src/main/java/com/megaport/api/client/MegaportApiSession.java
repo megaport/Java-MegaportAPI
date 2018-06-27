@@ -42,6 +42,7 @@ public class MegaportApiSession {
         environments.put(Environment.YODA, "https://api-yoda.megaport.com");
         environments.put(Environment.SKYWALKER, "https://api-skywalker.megaport.com");
         environments.put(Environment.JABBA, "https://api-jabba.megaport.com");
+        environments.put(Environment.UAT, "https://api-uat.megaport.com");
         environments.put(Environment.QA, "https://api-qa.megaport.com");
     }
 

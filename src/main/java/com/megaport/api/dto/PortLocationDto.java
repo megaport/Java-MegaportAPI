@@ -18,8 +18,15 @@ public class PortLocationDto implements Serializable {
     private String metro;
     private String name;
     private Integer id;
+    @Deprecated // look in this.products for MCR == true
     private Boolean sdrcAvailable = false;
+    @Deprecated // look in this.products for MCR == true
     private Boolean vRouterAvailable = false;
+    private AvailableProductDto products;
+
+    public PortLocationDto(AvailableProductDto products) {
+        this.products = products;
+    }
 
     public String getMarket() {
         return market;
@@ -61,6 +68,7 @@ public class PortLocationDto implements Serializable {
         this.campus = campus;
     }
 
+    @Deprecated // look in this.products for MCR == true
     public Boolean getSdrcAvailable() {
         return sdrcAvailable;
     }
@@ -93,6 +101,7 @@ public class PortLocationDto implements Serializable {
         this.id = id;
     }
 
+    @Deprecated // look in this.products for MCR == true
     public Boolean getvRouterAvailable() {
         return vRouterAvailable;
     }

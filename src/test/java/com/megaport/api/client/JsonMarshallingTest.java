@@ -1,6 +1,7 @@
 package com.megaport.api.client;
 
 import com.megaport.api.dto.MegaportServiceDto;
+import com.megaport.api.dto.PortLocationDto;
 import com.megaport.api.dto.VxcServiceDto;
 import com.megaport.api.util.JsonConverter;
 import org.junit.Test;
@@ -11,6 +12,44 @@ import static junit.framework.TestCase.assertTrue;
  * Created by awells on 10/2/17.
  */
 public class JsonMarshallingTest {
+
+    @Test
+    public void testmarshallLocation(){
+        String json = "{\n" +
+                "      \"country\": \"Bulgaria\",\n" +
+                "      \"liveDate\": 1500940800000,\n" +
+                "      \"siteCode\": \"sof-tc1\",\n" +
+                "      \"networkRegion\": \"MP1\",\n" +
+                "      \"address\": {\n" +
+                "        \"country\": \"Bulgaria\",\n" +
+                "        \"city\": \"Sofia\",\n" +
+                "        \"street\": \"10 5030 St\",\n" +
+                "        \"postcode\": \"1592\",\n" +
+                "        \"suburb\": null,\n" +
+                "        \"state\": null\n" +
+                "      },\n" +
+                "      \"campus\": \"campus_deprecated\",\n" +
+                "      \"latitude\": 42.66905,\n" +
+                "      \"products\": {\n" +
+                "        \"megaport\": [\n" +
+                "          1,\n" +
+                "          10\n" +
+                "        ],\n" +
+                "        \"mcr\": false\n" +
+                "      },\n" +
+                "      \"market\": \"BG\",\n" +
+                "      \"metro\": \"Sofia\",\n" +
+                "      \"name\": \"3DC\\/Telecity Sofia\",\n" +
+                "      \"vRouterAvailable\": false,\n" +
+                "      \"id\": 137,\n" +
+                "      \"status\": \"Active\",\n" +
+                "      \"longitude\": 23.394033\n" +
+                "    }";
+
+        PortLocationDto dto = JsonConverter.fromJson(json, PortLocationDto.class);
+        assertTrue(dto != null);
+
+    }
 
     @Test
     public void testMarshallingVXCServiceDto(){

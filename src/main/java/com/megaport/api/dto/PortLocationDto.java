@@ -24,7 +24,11 @@ public class PortLocationDto implements Serializable {
     private Boolean vRouterAvailable = false;
     private AvailableProductDto products;
 
-    public PortLocationDto(AvailableProductDto products) {
+    public AvailableProductDto getProducts() {
+        return products;
+    }
+
+    public void setProducts(AvailableProductDto products) {
         this.products = products;
     }
 

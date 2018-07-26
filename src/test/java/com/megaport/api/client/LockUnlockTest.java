@@ -1,9 +1,8 @@
 package com.megaport.api.client;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.megaport.api.dto.Environment;
 import com.megaport.api.dto.LockStatus;
@@ -31,20 +30,27 @@ public class LockUnlockTest {
 			Assert.assertTrue(ports.size() > 0);
 			final String productUid = ports.get(0).getProductUid();
 			session.lockOrUnlock(productUid, LockStatus.LOCKED);
-			ports = session.findPorts().stream()
-					.filter(it -> it.getProductUid().equals(productUid))
-					.collect(Collectors.toList());
-			Assert.assertTrue(ports.get(0).isLocked());
+			ports = session.findPorts();
+			MegaportServiceDto port = findPort(ports, productUid);
+			Assert.assertTrue(port.isLocked());
 
 			session.lockOrUnlock(productUid, LockStatus.UNLOCKED);
-			ports = session.findPorts().stream()
-					.filter(it -> it.getProductUid().equals(productUid))
-					.collect(Collectors.toList());
-			Assert.assertFalse(ports.get(0).isLocked());
+			ports = session.findPorts();
+			port = findPort(ports, productUid);
+			Assert.assertFalse(port.isLocked());
 		}
 		catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
+	}
+
+	private MegaportServiceDto findPort(List<MegaportServiceDto> ports, String withId) {
+		for (MegaportServiceDto port : ports) {
+			if (port.getProductUid().equals(withId)) {
+				return port;
+			}
+		}
+		return null;
 	}
 
 }

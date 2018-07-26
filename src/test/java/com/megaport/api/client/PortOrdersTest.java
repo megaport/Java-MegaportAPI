@@ -3,6 +3,7 @@ package com.megaport.api.client;
 import com.megaport.api.dto.*;
 import com.megaport.api.exceptions.BadRequestException;
 import com.megaport.api.util.JsonConverter;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -278,8 +279,8 @@ public class PortOrdersTest {
         String orderResponse = session.placeOrder(order);
 
         System.out.println(orderResponse);
-
     }
+
 
     @Test
     public void testValidatePortOrderMissingSpeed() throws Exception {

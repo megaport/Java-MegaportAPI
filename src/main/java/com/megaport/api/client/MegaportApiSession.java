@@ -33,6 +33,7 @@ public class MegaportApiSession {
 	private static final String MESSAGE = "message";
 	private static final String DATA = "data";
 
+
 	{
 		environments.put(Environment.PRODUCTION, "https://api.megaport.com");
 		environments.put(Environment.TRAINING, "https://api-training.megaport.com");
@@ -316,6 +317,29 @@ public class MegaportApiSession {
 		if (response.getStatus() < 400) {
 			String json = response.getBody().toString();
 			return JsonConverter.fromJsonDataAsObject(json, AzurePortsDto.class);
+		} else {
+			throw handleError(response);
+		}
+	}
+
+	/**
+	 * Given your Nutanix service key this method will return available ports.
+	 *
+	 * @param serviceKey Your Nutanix API key.
+	 * @return Available Nutanix Ports.
+	 * @throws Exception
+	 */
+	public NutanixPortsDto findNutanixPorts(String serviceKey) throws Exception {
+		String url = server + "/v2/secure/nutanix/" + serviceKey;
+		HttpResponse<JsonNode> response = null;
+		try {
+			response = Unirest.get(url).header("X-Auth-Token", token).asJson();
+		} catch (UnirestException e) {
+			throw new ServiceUnavailableException("API Server is not available", 503, null);
+		}
+		if (response.getStatus() < 400) {
+			String json = response.getBody().toString();
+			return JsonConverter.fromJsonDataAsObject(json, NutanixPortsDto.class);
 		} else {
 			throw handleError(response);
 		}

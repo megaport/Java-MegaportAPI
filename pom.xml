@@ -6,7 +6,7 @@
 
     <groupId>com.megaport.api</groupId>
     <artifactId>client</artifactId>
-    <version>1.4.21</version>
+    <version>1.4.22</version>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>

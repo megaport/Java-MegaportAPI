@@ -6,6 +6,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
 import com.megaport.api.dto.*;
+import com.megaport.api.dto.notifications.NotificationPreferencesDto;
 import com.megaport.api.exceptions.*;
 import com.megaport.api.util.JsonConverter;
 import org.apache.commons.lang3.StringUtils;
@@ -1097,6 +1098,43 @@ public class MegaportApiSession {
 		}
 	}
 
+	public NotificationPreferencesDto getNotificationPreferences() throws Exception {
+		String url = server + "/v2/notificationPreferences";
+		HttpResponse<JsonNode> response = null;
+		try {
+			response = Unirest.get(url)
+					.header("X-Auth-Token", token)
+					.asJson();
+		} catch (UnirestException e) {
+			throw new ServiceUnavailableException("API Server is not available", 503, null);
+		}
+		if (response.getStatus() < 400) {
+			String json = response.getBody().toString();
+			return JsonConverter.fromJsonDataAsObject(json, NotificationPreferencesDto.class);
+		} else {
+			throw handleError(response);
+		}
+	}
+
+	public NotificationPreferencesDto putNotificationPreferences(NotificationPreferencesDto prefs) throws Exception {
+		String url = server + "/v2/notificationPreferences";
+		HttpResponse<JsonNode> response = null;
+		try {
+			response = Unirest.put(url)
+					.header("X-Auth-Token", token)
+					.header("Content-Type", "application/json")
+					.body(JsonConverter.toJson(prefs))
+					.asJson();
+		} catch (UnirestException e) {
+			throw new ServiceUnavailableException("API Server is not available", 503, null);
+		}
+		if (response.getStatus() < 400) {
+			String json = response.getBody().toString();
+			return JsonConverter.fromJsonDataAsObject(json, NotificationPreferencesDto.class);
+		} else {
+			throw handleError(response);
+		}
+	}
 
 	/**
 	 * Get a token for the session

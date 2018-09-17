@@ -93,7 +93,7 @@ public class JsonConverter {
         try {
             return mapper.readValue(jsonString, typeReference);
         } catch (IOException e) {
-            return null;
+            throw new RuntimeException(e);
         }
 
     }
@@ -103,7 +103,7 @@ public class JsonConverter {
         try {
             return mapper.writeValueAsString(object);
         } catch (IOException e) {
-            return null;
+            throw new RuntimeException(e);
         }
 
     }
@@ -117,7 +117,7 @@ public class JsonConverter {
         try {
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (IOException e) {
-            return null;
+            throw new RuntimeException(e);
         }
 
     }

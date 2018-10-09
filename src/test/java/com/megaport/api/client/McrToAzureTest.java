@@ -113,7 +113,7 @@ public class McrToAzureTest {
         Map<String,Object> peer = new HashMap<>();
         peer.put("type", "private");
         standardAzurePartnerConfig.put("peers", Collections.singletonList(peer));
-        
+
         endB.setPartnerConfig(standardAzurePartnerConfig);
 
         vxcDto.setaEnd(endA);

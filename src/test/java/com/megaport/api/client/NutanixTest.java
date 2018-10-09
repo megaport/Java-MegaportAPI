@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class NutanixTest {
 
@@ -16,13 +17,14 @@ public class NutanixTest {
 	public void init() throws Exception{
 
 		session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123", null);
+		System.out.println("## Environment: " + Environment.STAGING);
 		assertTrue(session.isValid());
 
 	}
 
 	@Test
 	public void testOrderVxcToNutanix() throws Exception{
-		NutanixPortsDto nutanixPorts = session.findNutanixPorts("76025b4f-3a27-48da-a8bd-880a5e05c886");
+		NutanixPortsDto nutanixPorts = session.findNutanixPorts(UUID.randomUUID().toString());
 		assertNotNull(nutanixPorts);
 		System.out.println(">> Nutanix Ports: " + nutanixPorts);
 

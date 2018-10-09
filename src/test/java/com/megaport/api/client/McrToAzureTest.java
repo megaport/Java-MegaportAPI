@@ -24,8 +24,8 @@ public class McrToAzureTest {
 
     @Test
     public void testOrderMcrToAzure() throws Exception{
-
-        AzurePortsDto ports = session.findAzurePorts("197d927b-90bc-4b1b-bffd-fca17a7ec735");
+        
+        AzurePortsDto ports = session.findAzurePorts("03b95a76-a689-4e32-b761-fd1b90be634c");
         assertTrue(ports != null);
         System.out.println(">> Azure ports: " + ports);
 
@@ -82,8 +82,8 @@ public class McrToAzureTest {
 
         MegaportServiceDto dto = new MegaportServiceDto();
 
-        // existing MCR service owned by Megaport Lab account
-        dto.setProductUid("b17ed7a5-bc3e-42df-9d2e-044dbc324a0f");
+        // existing MCR service
+        dto.setProductUid("6464879b-8eb8-404f-9650-bbdf21307d4c");
 
         VxcServiceDto vxcDto = new VxcServiceDto();
         vxcDto.setProductType(ProductType.VXC);

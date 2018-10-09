@@ -5,6 +5,7 @@ import com.megaport.api.dto.Environment;
 import com.megaport.api.dto.MegaportServiceDto;
 import com.megaport.api.dto.PartnerPortDto;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -28,13 +29,12 @@ public class AzureTest {
 
     @Test
     public void testFindExpressRoutePorts() throws Exception{
-
-        AzurePortsDto ports = session.findAzurePorts("19da14bf-6ba5-40bc-bf09-a974f4a06f6b");
+        AzurePortsDto ports = session.findAzurePorts("197d927b-90bc-4b1b-bffd-fca17a7ec735");
         assertTrue(ports != null);
-
     }
 
     @Test
+    @Ignore
     public void testOrderAzure() throws Exception {
         String order = "[\n" +
                 "  {\n" +

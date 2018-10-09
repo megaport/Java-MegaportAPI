@@ -76,8 +76,8 @@ public class McrToAwsTest {
 
         MegaportServiceDto dto = new MegaportServiceDto();
 
-        // existing MCR service owned by Megaport Lab account
-        dto.setProductUid("b17ed7a5-bc3e-42df-9d2e-044dbc324a0f");
+        // existing MCR service
+        dto.setProductUid("3af1e873-d71d-4e55-932a-d3f3dfff7391");
 
         VxcServiceDto vxcDto = new VxcServiceDto();
         vxcDto.setProductType(ProductType.VXC);

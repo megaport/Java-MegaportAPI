@@ -9,7 +9,8 @@ public class NutanixPortsDto {
 
 	private Integer bandwidth;
 	private String resource_type;
-	private String service_key;
+	private String serviceKey;
+
 	private List<NutanixPortDto> megaports;
 
 	public Integer getBandwidth() {
@@ -28,12 +29,12 @@ public class NutanixPortsDto {
 		this.resource_type = resource_type;
 	}
 
-	public String getService_key() {
-		return service_key;
+	public String getServiceKey() {
+		return serviceKey;
 	}
 
-	public void setService_key(String service_key) {
-		this.service_key = service_key;
+	public void setServiceKey(String service_key) {
+		this.serviceKey = service_key;
 	}
 
 	public List<NutanixPortDto> getMegaports() {
@@ -44,4 +45,13 @@ public class NutanixPortsDto {
 		this.megaports = megaports;
 	}
 
+	@Override
+	public String toString() {
+		return "NutanixPortsDto{" +
+				"bandwidth=" + bandwidth +
+				", resource_type='" + resource_type + '\'' +
+				", serviceKey='" + serviceKey + '\'' +
+				", megaports=" + megaports +
+				'}';
+	}
 }

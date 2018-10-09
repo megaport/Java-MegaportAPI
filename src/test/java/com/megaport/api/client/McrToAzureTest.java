@@ -27,12 +27,11 @@ public class McrToAzureTest {
 
         AzurePortsDto ports = session.findAzurePorts("197d927b-90bc-4b1b-bffd-fca17a7ec735");
         assertTrue(ports != null);
-        System.out.println(">> Azure ports: " + ports);
 
         MegaportServiceDto goodVxc = createGoodVxc(ports);
         String order = session.placeOrder(Collections.singletonList(goodVxc));
 
-        System.out.println(">> MCR to Azure order: " +order);
+        System.out.println(order);
 
     }
 
@@ -103,17 +102,14 @@ public class McrToAzureTest {
         VxcEndDto endB = new VxcEndDto();
         endB.setVlan(null);
         endB.setProductUid(portsDto.getMegaports().get(0).getProductUid());
-
         Map<String,Object> standardAzurePartnerConfig = new HashMap<>();
         standardAzurePartnerConfig.put("connectType", "AZURE");
         standardAzurePartnerConfig.put("serviceKey", portsDto.getService_key());
         standardAzurePartnerConfig.put("bVlan", portsDto.getVlan());
         standardAzurePartnerConfig.put("maxRateLimit", portsDto.getBandwidth());
-
         Map<String,Object> peer = new HashMap<>();
         peer.put("type", "private");
         standardAzurePartnerConfig.put("peers", Collections.singletonList(peer));
-
         endB.setPartnerConfig(standardAzurePartnerConfig);
 
         vxcDto.setaEnd(endA);

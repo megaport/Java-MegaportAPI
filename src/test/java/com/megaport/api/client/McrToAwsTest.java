@@ -26,10 +26,9 @@ public class McrToAwsTest {
     public void testOrderMcrToAws() throws Exception{
 
         MegaportServiceDto goodVxc = createGoodVxc();
-
         String order = session.placeOrder(Collections.singletonList(goodVxc));
 
-        System.out.println(">> MCR to AWS order: " + order);
+        System.out.println(order);
 
     }
 

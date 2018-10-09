@@ -78,4 +78,17 @@ public class NutanixPortDto {
 		this.country = country;
 	}
 
+	@Override
+	public String toString() {
+		return "NutanixPortDto{" +
+				"productUid='" + productUid + '\'' +
+				", vxc=" + vxc +
+				", locationId=" + locationId +
+				", name='" + name + '\'' +
+				", description='" + description + '\'' +
+				", portSpeed=" + portSpeed +
+				", state='" + state + '\'' +
+				", country='" + country + '\'' +
+				'}';
+	}
 }

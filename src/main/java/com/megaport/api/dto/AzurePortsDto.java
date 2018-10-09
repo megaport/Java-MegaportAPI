@@ -56,4 +56,15 @@ public class AzurePortsDto implements Serializable {
     public void setMegaports(List<AzurePortDto> megaports) {
         this.megaports = megaports;
     }
+
+    @Override
+    public String toString() {
+        return "AzurePortsDto{" +
+                "bandwidth=" + bandwidth +
+                ", resource_type='" + resource_type + '\'' +
+                ", service_key='" + service_key + '\'' +
+                ", vlan=" + vlan +
+                ", megaports=" + megaports +
+                '}';
+    }
 }

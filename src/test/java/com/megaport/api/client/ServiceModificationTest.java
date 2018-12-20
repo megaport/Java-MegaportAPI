@@ -6,9 +6,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Created by adam.wells on 17/06/2016.
@@ -143,6 +141,7 @@ public class ServiceModificationTest {
             session.modifyVxcOrCxc(dto);
             VxcServiceDto product = session.findServiceDetailVxc(productUid);
             assertEquals("1234", product.getProductName());
+            assertFalse(product.isLocked());
         }
     }
 

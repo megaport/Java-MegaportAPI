@@ -34,7 +34,7 @@ public class IxOrdersTest {
     public void testFindAvailableIxByLocation() throws Exception{
 
         List<IxDto> ixForLocation = session.findIxForLocation(3);
-        assertEquals(18, ixForLocation.size());
+        assertEquals(19, ixForLocation.size());
 
     }
 
@@ -46,7 +46,7 @@ public class IxOrdersTest {
 
         System.out.println(vxcPrice.toString());
 
-        assertEquals(new BigDecimal("160"), vxcPrice.getMonthlyRate());
+        assertEquals(new BigDecimal("162.4"), vxcPrice.getMonthlyRate());
 
     }
 

@@ -2,6 +2,7 @@ package com.megaport.api.client;
 
 import com.megaport.api.dto.*;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -23,6 +24,7 @@ public class McrToAzureTest {
     }
 
     @Test
+    @Ignore
     public void testOrderMcrToAzure() throws Exception{
         
         AzurePortsDto ports = session.findAzurePorts("03b95a76-a689-4e32-b761-fd1b90be634c");

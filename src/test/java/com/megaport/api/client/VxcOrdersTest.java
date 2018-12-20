@@ -39,7 +39,7 @@ public class VxcOrdersTest {
 
         System.out.println(vxcPrice.toString());
 
-        assertEquals(new BigDecimal("1482.9"), vxcPrice.getMonthlyRate());
+        assertEquals(new BigDecimal("1484.7"), vxcPrice.getMonthlyRate());
 
     }
 

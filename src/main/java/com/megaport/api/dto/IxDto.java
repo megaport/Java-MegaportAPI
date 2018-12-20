@@ -12,10 +12,12 @@ public class IxDto implements Serializable {
     private IpAddressDto primaryipv4;
     private IpAddressDto secondaryipv4;
     private String name;
+    private String description;
     private String network_region;
     private String group_metro;
     private String state;
     private Long asn;
+    private boolean ecix;
 
     public String getGroup_metro() {
         return group_metro;
@@ -55,6 +57,22 @@ public class IxDto implements Serializable {
 
     public void setSecondaryipv4(IpAddressDto secondaryipv4) {
         this.secondaryipv4 = secondaryipv4;
+    }
+
+    public boolean isEcix() {
+        return ecix;
+    }
+
+    public void setEcix(boolean ecix) {
+        this.ecix = ecix;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getName() {

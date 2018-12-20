@@ -41,6 +41,7 @@ public class VxcServiceDto implements Serializable {
     private Date terminateDate;
 
     private String costCentre;
+    private boolean locked;
 
     private Map<String,Object> resources = new HashMap<>();
 
@@ -171,6 +172,14 @@ public class VxcServiceDto implements Serializable {
 
     public void setResources(Map<String, Object> resources) {
         this.resources = resources;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
     @Override

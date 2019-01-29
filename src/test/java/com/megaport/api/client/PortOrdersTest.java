@@ -226,6 +226,28 @@ public class PortOrdersTest {
     }
 
     @Test
+    public void testValidateLag() throws Exception {
+
+        List<MegaportServiceDto> order = new ArrayList<>();
+        order.add(createGoodLag(false, 3, 10000, 7));
+
+        List<ServiceLineItemDto> serviceLineItemDtos = session.validateOrder(order);
+        assertEquals(1, serviceLineItemDtos.size());
+
+    }
+
+    @Test
+    public void testValidatePortInExistingLag() throws Exception {
+
+        List<MegaportServiceDto> order = new ArrayList<>();
+        order.add(createGoodPortInLag(false, 3, 10000, 1227));
+
+        List<ServiceLineItemDto> serviceLineItemDtos = session.validateOrder(order);
+        assertEquals(1, serviceLineItemDtos.size());
+
+    }
+
+    @Test
     public void testValidateMcr() throws Exception {
 
         List<MegaportServiceDto> order = new ArrayList<>();
@@ -281,6 +303,27 @@ public class PortOrdersTest {
         System.out.println(orderResponse);
     }
 
+    @Test
+    public void testOrderLag() throws Exception {
+
+        List<MegaportServiceDto> order = new ArrayList<>();
+        order.add(createGoodLag(false, 3, 10000, 3));
+
+        String orderResponse = session.placeOrder(order);
+
+        System.out.println(orderResponse);
+    }
+
+    @Test
+    public void testOrderPortInExistingLag() throws Exception {
+
+        List<MegaportServiceDto> order = new ArrayList<>();
+        order.add(createGoodPortInLag(false, 3, 10000, 5044));
+
+        String orderResponse = session.placeOrder(order);
+
+        System.out.println(orderResponse);
+    }
 
     @Test
     public void testValidatePortOrderMissingSpeed() throws Exception {
@@ -384,6 +427,18 @@ public class PortOrdersTest {
         dto.setPortSpeed(speed);
         dto.setVirtual(virtual);
 
+        return dto;
+    }
+
+    private MegaportServiceDto createGoodLag(Boolean virtual, Integer locationId, Integer speed, Integer lagPortCount) {
+        MegaportServiceDto dto = createGoodPort(virtual, locationId, speed);
+        dto.setLagPortCount(lagPortCount);
+        return dto;
+    }
+
+    private MegaportServiceDto createGoodPortInLag(Boolean virtual, Integer locationId, Integer speed, Integer lagId) {
+        MegaportServiceDto dto = createGoodPort(virtual, locationId, speed);
+        dto.setLagId(lagId);
         return dto;
     }
 

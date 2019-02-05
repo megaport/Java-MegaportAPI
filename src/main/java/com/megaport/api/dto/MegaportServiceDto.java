@@ -56,7 +56,7 @@ public class MegaportServiceDto implements Serializable {
 
 	private Integer lagPortCount;
 
-	private Integer lagId;
+	private Integer lagAggregationId;
 
 	public String getProductUid() {
 		return productUid;
@@ -250,12 +250,12 @@ public class MegaportServiceDto implements Serializable {
 		this.lagPortCount = lagPortCount;
 	}
 
-	public Integer getLagId() {
-		return lagId;
+	public Integer getLagAggregationId() {
+		return lagAggregationId;
 	}
 
-	public void setLagId(Integer lagId) {
-		this.lagId = lagId;
+	public void setLagAggregationId(Integer lagAggregationId) {
+		this.lagAggregationId = lagAggregationId;
 	}
 
 	@Override

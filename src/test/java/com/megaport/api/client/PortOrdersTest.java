@@ -3,7 +3,6 @@ package com.megaport.api.client;
 import com.megaport.api.dto.*;
 import com.megaport.api.exceptions.BadRequestException;
 import com.megaport.api.util.JsonConverter;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -326,6 +325,13 @@ public class PortOrdersTest {
     }
 
     @Test
+    public void testOrderPortsInExistingLag() throws Exception {
+        List<MegaportServiceDto> order = new ArrayList<>(createGoodPortsInLag(false, 3, 10000, 5044, 3));
+        String orderResponse = session.placeOrder(order);
+        System.out.println(orderResponse);
+    }
+
+    @Test
     public void testValidatePortOrderMissingSpeed() throws Exception {
 
         List<MegaportServiceDto> order = new ArrayList<>();
@@ -438,8 +444,16 @@ public class PortOrdersTest {
 
     private MegaportServiceDto createGoodPortInLag(Boolean virtual, Integer locationId, Integer speed, Integer lagId) {
         MegaportServiceDto dto = createGoodPort(virtual, locationId, speed);
-        dto.setLagId(lagId);
+        dto.setLagAggregationId(lagId);
         return dto;
+    }
+
+    private List<MegaportServiceDto> createGoodPortsInLag(Boolean virtual, Integer locationId, Integer speed, Integer lagId, Integer newPortCount) {
+        List<MegaportServiceDto> ports = new ArrayList<>();
+        for(int i = 0; i < newPortCount; i++) {
+            ports.add(createGoodPortInLag(virtual, locationId, speed, lagId));
+        }
+        return ports;
     }
 
     private MegaportServiceDto createGoodMcr(Integer locationId, Integer speed) {

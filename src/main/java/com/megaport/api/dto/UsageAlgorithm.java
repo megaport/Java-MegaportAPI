@@ -12,6 +12,7 @@ public enum UsageAlgorithm {
 	POST_PAID_HOURLY_SPEED, // used for long haul VXC
 	POST_PAID_HOURLY_SPEED_MCR,
 	POST_PAID_HOURLY_SPEED_METRO_VXC,
+	POST_PAID_HOURLY_SPEED_METRO_IX,
 	POST_PAID_HOURLY_SPEED_LONG_HAUL_VXC,
 	NOT_POST_PAID // ie pre-paid, used for Ports, and legacy metro VXCs etc
 

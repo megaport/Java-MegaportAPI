@@ -73,4 +73,17 @@ public class ServiceLineItemDto {
     public void setMetro(String metro) {
         this.metro = metro;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceLineItemDto{" +
+                "price=" + price +
+                ", serviceName='" + serviceName + '\'' +
+                ", productType='" + productType + '\'' +
+                ", productUid='" + productUid + '\'' +
+                ", error='" + error + '\'' +
+                ", market='" + market + '\'' +
+                ", metro='" + metro + '\'' +
+                '}';
+    }
 }

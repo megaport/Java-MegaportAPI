@@ -54,6 +54,12 @@ public class MegaportServiceDto implements Serializable {
 	private final List<Integer> validTerms = Arrays.asList(1, 12, 24, 36, 48, 60);
 	private boolean locked;
 
+	private Integer lagPortCount;
+
+	private Integer aggregationId;
+
+	private Boolean lagPrimary;
+
 	public String getProductUid() {
 		return productUid;
 	}
@@ -237,6 +243,26 @@ public class MegaportServiceDto implements Serializable {
 	public boolean isLocked() { return locked; }
 
 	public void setLocked(boolean locked) { this.locked = locked; }
+
+	public Integer getLagPortCount() {
+		return lagPortCount;
+	}
+
+	public void setLagPortCount(Integer lagPortCount) {
+		this.lagPortCount = lagPortCount;
+	}
+
+	public Integer getAggregationId() {
+		return aggregationId;
+	}
+
+	public void setAggregationId(Integer aggregationId) {
+		this.aggregationId = aggregationId;
+	}
+
+	public Boolean getLagPrimary() {
+		return lagPrimary;
+	}
 
 	@Override
 	public boolean equals(Object o) {

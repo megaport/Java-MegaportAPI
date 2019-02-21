@@ -20,16 +20,6 @@ public class ConfigDto {
         this.mcrAsn = mcrAsn;
     }
 
-    boolean isValid() {
-        return (mcrAsn != null) && (mcrAsn >= 0L && mcrAsn <= 4294967295L);
-    }
-
-    public String validate() {
-        if (!isValid()) {
-            return "Wrong asn number: " + mcrAsn;
-        }
-        return "";
-    }
 
     @Override
     public String toString() {

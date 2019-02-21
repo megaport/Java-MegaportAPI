@@ -404,6 +404,7 @@ public class MegaportApiSession {
 	public List<ServiceLineItemDto> validateOrder(List<MegaportServiceDto> megaportServiceDtos) throws Exception {
 
 		String url = server + "/v2/networkdesign/validate";
+		System.out.println("POST " + url + " body: " + JsonConverter.toJson(megaportServiceDtos));
 		HttpResponse<JsonNode> response = null;
 		try {
 			response = Unirest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(megaportServiceDtos)).asJson();
@@ -412,6 +413,7 @@ public class MegaportApiSession {
 		}
 		if (response.getStatus() < 400) {
 			String json = response.getBody().toString();
+			System.out.println("HTTP Response: " + json);
 			return JsonConverter.fromJsonDataAsList(json, ServiceLineItemDto.class);
 		} else {
 			throw handleError(response);
@@ -431,7 +433,9 @@ public class MegaportApiSession {
 		HttpResponse<JsonNode> response = null;
 		try {
 			Unirest.setTimeouts(0, 0);
-			response = Unirest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(JsonConverter.toJson(megaportServiceDtos)).asJson();
+			String jsonBody = JsonConverter.toJson(megaportServiceDtos);
+			System.out.println("POST " + url +", body: " + jsonBody);
+			response = Unirest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(jsonBody).asJson();
 		} catch (UnirestException e) {
 			e.printStackTrace();
 			throw new ServiceUnavailableException("API Server is not available", 503, null);
@@ -1168,7 +1172,7 @@ public class MegaportApiSession {
 			// null response, so 500 time again...
 			return new ServerErrorException(NETWORK_ERROR, 500, null);
 		}
-
+		System.out.println("HTTP Response: " + responseMap);
 		String message = (String) responseMap.get(MESSAGE);
 		Object tempData = responseMap.get(DATA);
 

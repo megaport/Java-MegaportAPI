@@ -25,7 +25,7 @@ public class PortOrdersTest {
     @Before
     public void init() throws Exception {
 
-        session = new MegaportApiSession(Environment.UAT, "api.test", "Abc123");
+        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123");
         assertTrue(session.isValid());
 
     }

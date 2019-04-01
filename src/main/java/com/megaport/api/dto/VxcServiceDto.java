@@ -25,6 +25,7 @@ public class VxcServiceDto implements Serializable {
     private VxcEndDto aEnd;
     private VxcEndDto bEnd;
     private UsageAlgorithm usageAlgorithm;
+    private String serviceKey;
     private Map<String, Object> partnerConfigs = new HashMap<>();
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -53,6 +54,13 @@ public class VxcServiceDto implements Serializable {
         this.vxcApproval = vxcApproval;
     }
 
+    public String getServiceKey() {
+        return serviceKey;
+    }
+
+    public void setServiceKey(String serviceKey) {
+        this.serviceKey = serviceKey;
+    }
 
     public String getProductUid() {
         return productUid;

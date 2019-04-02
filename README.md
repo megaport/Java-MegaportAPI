@@ -41,3 +41,5 @@ Here is how to get a list of your services:
 Please look at the test cases for examples of how to exercise the API provided in this library.
 
 Full details of this API are provided at dev.megaport.com.
+
+Megaport developers - to publish this to Maven Central, run git push github master, then run the Jenkins job

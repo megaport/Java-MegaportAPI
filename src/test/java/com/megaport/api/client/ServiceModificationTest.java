@@ -97,7 +97,6 @@ public class ServiceModificationTest {
             dto.setProductUid(productUid);
             dto.setProductName("1234");
             dto.setAsn(1234L);
-            dto.setMacAddress("00-26-DD-14-C4-EE");
             dto.setVlan(1234);
             dto.setRateLimit(1234);
             session.modifyIx(dto);

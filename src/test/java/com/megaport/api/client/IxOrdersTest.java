@@ -46,7 +46,7 @@ public class IxOrdersTest {
 
         System.out.println(vxcPrice.toString());
 
-        assertEquals(new BigDecimal("162"), vxcPrice.getMonthlyRate());
+        assertEquals(new BigDecimal("162.4"), vxcPrice.getMonthlyRate());
 
     }
 

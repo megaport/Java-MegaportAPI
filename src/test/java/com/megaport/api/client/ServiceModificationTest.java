@@ -83,7 +83,7 @@ public class ServiceModificationTest {
         // look for a testing service that is not decommissioned
         String productUid = null;
         for (MegaportServiceDto port : ports){
-            if (port != null && port.getProvisioningStatus() != null && port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
+            if (port != null && port.getProvisioningStatus() != null && port.getProvisioningStatus().equals(ProvisioningStatus.LIVE)){
                 if (port.getAssociatedIxs().size() > 0){
                     Collections.shuffle(port.getAssociatedIxs());
                     for (IxServiceDto ix : port.getAssociatedIxs()){

@@ -1140,6 +1140,127 @@ public class MegaportApiSession {
 		}
 	}
 
+	public ServiceKeyDto createServiceKey(ServiceKeyDto serviceKeyDto) throws Exception {
+		String url = server + "/v2/service/key";
+		HttpResponse<JsonNode> response = null;
+		try {
+			response = Unirest.post(url)
+					.header("X-Auth-Token", token)
+					.header("Content-Type", "application/json")
+					.body(JsonConverter.toJson(serviceKeyDto))
+					.asJson();
+		} catch (UnirestException e) {
+			throw new ServiceUnavailableException("API Server is not available", 503, null);
+		}
+		if (response.getStatus() < 400) {
+			String json = response.getBody().toString();
+			return JsonConverter.fromJsonDataAsObject(json, ServiceKeyDto.class);
+		} else {
+			throw handleError(response);
+		}
+	}
+
+	public ServiceKeyDto editServiceKey(ServiceKeyDto serviceKeyDto) throws Exception {
+		String url = server + "/v2/service/key";
+		HttpResponse<JsonNode> response = null;
+		try {
+			response = Unirest.put(url)
+					.header("X-Auth-Token", token)
+					.header("Content-Type", "application/json")
+					.body(JsonConverter.toJson(serviceKeyDto))
+					.asJson();
+		} catch (UnirestException e) {
+			throw new ServiceUnavailableException("API Server is not available", 503, null);
+		}
+		if (response.getStatus() < 400) {
+			String json = response.getBody().toString();
+			return JsonConverter.fromJsonDataAsObject(json, ServiceKeyDto.class);
+		} else {
+			throw handleError(response);
+		}
+	}
+
+	public List<ServiceKeyDto> findServiceKeyByPort(String megaportServiceUid) throws Exception {
+		String url = server + "/v2/service/key";
+		HttpResponse<JsonNode> response = null;
+		try {
+			response = Unirest.get(url)
+					.header("X-Auth-Token", token)
+					.header("Content-Type", "application/json")
+					.queryString("productIdOrUid", megaportServiceUid)
+					.asJson();
+		} catch (UnirestException e) {
+			throw new ServiceUnavailableException("API Server is not available", 503, null);
+		}
+		if (response.getStatus() < 400) {
+			String json = response.getBody().toString();
+			return JsonConverter.fromJsonDataAsList(json, ServiceKeyDto.class);
+		} else {
+			throw handleError(response);
+		}
+	}
+
+	public ServiceKeyDto findServiceKeyByKey(String key) throws Exception {
+		String url = server + "/v2/service/key";
+		HttpResponse<JsonNode> response = null;
+		try {
+			response = Unirest.get(url)
+					.header("X-Auth-Token", token)
+					.header("Content-Type", "application/json")
+					.queryString("key", key)
+					.asJson();
+		} catch (UnirestException e) {
+			throw new ServiceUnavailableException("API Server is not available", 503, null);
+		}
+		if (response.getStatus() < 400) {
+			String json = response.getBody().toString();
+			return JsonConverter.fromJsonDataAsObject(json, ServiceKeyDto.class);
+		} else {
+			throw handleError(response);
+		}
+	}
+
+	public List<ServiceKeyDto> findServiceKeyByCompany(Integer companyId) throws Exception {
+		String url = server + "/v2/service/key";
+		HttpResponse<JsonNode> response = null;
+		try {
+			response = Unirest.get(url)
+					.header("X-Auth-Token", token)
+					.header("Content-Type", "application/json")
+					.queryString("companyIdOrUid", companyId)
+					.asJson();
+		} catch (UnirestException e) {
+			throw new ServiceUnavailableException("API Server is not available", 503, null);
+		}
+		if (response.getStatus() < 400) {
+			String json = response.getBody().toString();
+			return JsonConverter.fromJsonDataAsList(json, ServiceKeyDto.class);
+		} else {
+			throw handleError(response);
+		}
+	}
+
+	public Boolean validateServiceKey(String key) throws Exception {
+		String url = server + "/v2/service/key/validate";
+		HttpResponse<JsonNode> response = null;
+		try {
+			response = Unirest.get(url)
+					.header("X-Auth-Token", token)
+					.header("Content-Type", "application/json")
+					.queryString("key", key)
+					.asJson();
+		} catch (UnirestException e) {
+			throw new ServiceUnavailableException("API Server is not available", 503, null);
+		}
+		if (response.getStatus() < 400) {
+			String json = response.getBody().toString();
+			Map<String,Object> responseMap = JsonConverter.fromJson(json);
+			return (Boolean) responseMap.get("data");
+		} else {
+			throw handleError(response);
+		}
+	}
+
 	/**
 	 * Get a token for the session
 	 *

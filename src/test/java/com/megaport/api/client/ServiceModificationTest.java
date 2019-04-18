@@ -78,12 +78,14 @@ public class ServiceModificationTest {
     public void testChangeIxService() throws Exception{
 
         List<MegaportServiceDto> ports = session.findPorts();
+        Collections.shuffle(ports);
 
         // look for a testing service that is not decommissioned
         String productUid = null;
         for (MegaportServiceDto port : ports){
             if (port != null && port.getProvisioningStatus() != null && port.getProvisioningStatus().equals(ProvisioningStatus.CONFIGURED)){
                 if (port.getAssociatedIxs().size() > 0){
+                    Collections.shuffle(port.getAssociatedIxs());
                     for (IxServiceDto ix : port.getAssociatedIxs()){
                         productUid = ix.getProductUid();
                         break;

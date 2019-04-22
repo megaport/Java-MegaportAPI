@@ -1,8 +1,11 @@
 package com.megaport.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * This config is currently optional, and is used to configure the MCR service with a global ASN
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ConfigDto {
     private Long mcrAsn;
 

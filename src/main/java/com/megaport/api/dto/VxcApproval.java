@@ -1,10 +1,13 @@
 package com.megaport.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 
 /**
  * Created by pbarrientos on 14/07/16.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class VxcApproval implements Serializable {
     private VxcApprovalStatus status;
     private String message;

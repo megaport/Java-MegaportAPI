@@ -4,6 +4,8 @@
 
 package com.megaport.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,6 +18,7 @@ import java.util.Objects;
  * Time: 2:39 PM
  * To change this template use File | Settings | File Templates.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TimePeriodDto implements Serializable {
 
     private Date start;

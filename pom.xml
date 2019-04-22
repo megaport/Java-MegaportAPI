@@ -6,7 +6,7 @@
 
     <groupId>com.megaport.api</groupId>
     <artifactId>client</artifactId>
-    <version>1.4.28</version>
+    <version>1.4.29</version>
     <properties>
         <jackson.version>2.9.8</jackson.version>
     </properties>

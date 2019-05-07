@@ -242,6 +242,8 @@ public class PortOrdersTest {
 
         List<ServiceLineItemDto> serviceLineItemDtos = session.validateOrder(order);
         assertEquals(1, serviceLineItemDtos.size());
+        assertEquals(ProductType.MEGAPORT.getCode(), serviceLineItemDtos.get(0).getProductType());
+        assertEquals(ProductType.MEGAPORT, serviceLineItemDtos.get(0).getPrice().getProductType());
 
     }
 

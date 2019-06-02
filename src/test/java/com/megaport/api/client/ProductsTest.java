@@ -16,7 +16,7 @@ import static org.junit.Assert.fail;
 /**
  * Created by adam.wells on 17/06/2016.
  */
-public class ProductsTest {
+public class ProductsTest extends SessionHelper {
 
     MegaportApiSession session;
 
@@ -31,7 +31,7 @@ public class ProductsTest {
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123");
+        session = getSession();
 
         assertTrue(session.isValid());
 

@@ -15,14 +15,14 @@ import static org.junit.Assert.*;
 /**
  * Created by adam.wells on 17/06/2016.
  */
-public class PriceCheckTest {
+public class PriceCheckTest extends SessionHelper {
 
     MegaportApiSession session;
 
     @Before
     public void init() throws Exception {
 
-        session = new MegaportApiSession(Environment.STAGING, "fake");
+        session = getSession("fake");
         assertTrue(session.isValid());
 
     }

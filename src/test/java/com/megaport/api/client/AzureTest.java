@@ -15,14 +15,14 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by adam.wells on 17/06/2016.
  */
-public class AzureTest {
+public class AzureTest extends SessionHelper {
 
     MegaportApiSession session;
 
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123", null);
+        session = getSession();
         assertTrue(session.isValid());
 
     }

@@ -10,14 +10,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class NotificationPreferencesTest {
+public class NotificationPreferencesTest extends SessionHelper {
 
 	MegaportApiSession session;
 
 	@Before
 	public void init() throws Exception{
 
-		session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123", null);
+		session = getSession();
 		assertTrue(session.isValid());
 
 	}

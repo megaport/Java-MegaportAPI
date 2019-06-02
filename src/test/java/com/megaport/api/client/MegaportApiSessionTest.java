@@ -18,23 +18,23 @@ import static org.junit.Assert.*;
 /**
  * Created by adam.wells on 17/06/2016.
  */
-public class MegaportApiSessionTest {
+public class MegaportApiSessionTest extends SessionHelper {
 
     @Test
     public void testCreateSession() throws Exception{
         String goodToken;
-        MegaportApiSession session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123");
+        MegaportApiSession session = getSession();
         assertTrue(session.isValid());
 
-        session = new MegaportApiSession("https://api-staging.megaport.com", "api.test", "Abc123");
+        session = getSession();
         assertTrue(session.isValid());
 
         goodToken = session.getToken();
 
-        session = new MegaportApiSession("https://api-staging.megaport.com", goodToken);
+        session = getSession(goodToken);
         assertTrue(session.isValid());
 
-        session = new MegaportApiSession("https://api-staging.megaport.com:443", goodToken);
+        session = getSession(goodToken);
         assertTrue(session.isValid());
 
     }
@@ -43,14 +43,14 @@ public class MegaportApiSessionTest {
     public void testFailValidation() throws Exception{
 
         try {
-            MegaportApiSession session = new MegaportApiSession("https://api-staging.megaport.com", "api.test", "bad-password");
+            MegaportApiSession session = getSession("api.test", "bad-password");
             fail();
         } catch (InvalidCredentialsException e){
             // expect to be here bad password
         }
 
         try {
-            MegaportApiSession session = new MegaportApiSession("https://api-staging.megaport.com", "bad-token");
+            MegaportApiSession session = getSession("bad-token");
             fail();
         } catch (InvalidCredentialsException e){
             // expect to be here bad password
@@ -62,7 +62,7 @@ public class MegaportApiSessionTest {
     public void testServiceUnavailable() throws Exception{
 
         try {
-            MegaportApiSession session = new MegaportApiSession("https://api-staging.megaport.com", "api.test", "Abc123");
+            MegaportApiSession session = getSession();
             session.simulateServiceUnavailable();
             fail();
         } catch (ServiceUnavailableException e){
@@ -96,7 +96,7 @@ public class MegaportApiSessionTest {
     @Test
     public void testPartnerCustomers() throws Exception{
 
-        MegaportApiSession session = new MegaportApiSession("https://api-staging.megaport.com", "");
+        MegaportApiSession session = getSession("");
         List<CompanyDto> partnerCustomers = session.findPartnerCustomers();
         assertTrue(partnerCustomers.size() > 0);
 

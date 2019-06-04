@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
 
-public class McrToAzureTest {
+public class McrToAzureTest extends SessionHelper {
 
     MegaportApiSession session;
 

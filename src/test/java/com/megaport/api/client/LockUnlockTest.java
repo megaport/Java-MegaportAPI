@@ -11,14 +11,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class LockUnlockTest {
+public class LockUnlockTest extends SessionHelper {
 
 	MegaportApiSession session;
 
 	@Before
 	public void init() throws Exception {
 
-		session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123");
+		session = getSession();
 		assertTrue(session.isValid());
 
 	}
@@ -29,6 +29,7 @@ public class LockUnlockTest {
 			List<MegaportServiceDto> ports = session.findPorts();
 			Assert.assertTrue(ports.size() > 0);
 			final String productUid = ports.get(0).getProductUid();
+			System.out.println(productUid);
 			session.lockOrUnlock(productUid, LockStatus.LOCKED);
 			ports = session.findPorts();
 			MegaportServiceDto port = findPort(ports, productUid);

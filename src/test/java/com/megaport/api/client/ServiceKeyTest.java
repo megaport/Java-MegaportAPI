@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 /**
  * Created by adam.wells on 17/06/2016.
  */
-public class ServiceKeyTest {
+public class ServiceKeyTest extends SessionHelper {
 
     MegaportApiSession session;
 
@@ -24,7 +24,7 @@ public class ServiceKeyTest {
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123");
+        session = getSession();
 
         assertTrue(session.isValid());
 

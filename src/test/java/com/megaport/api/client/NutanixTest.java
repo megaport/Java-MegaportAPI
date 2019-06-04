@@ -9,14 +9,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class NutanixTest {
+public class NutanixTest extends SessionHelper {
 
 	MegaportApiSession session;
 
 	@Before
 	public void init() throws Exception{
 
-		session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123", null);
+		session = getSession();
 		System.out.println("## Environment: " + Environment.STAGING);
 		assertTrue(session.isValid());
 

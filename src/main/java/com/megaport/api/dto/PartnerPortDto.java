@@ -17,6 +17,7 @@ public class PartnerPortDto implements Serializable {
     private String title;
     private Integer locationId;
     private Integer speed;
+    private Boolean vxcPermitted;
     private Integer rank;
 
     public String getConnectType() {
@@ -73,6 +74,14 @@ public class PartnerPortDto implements Serializable {
 
     public void setSpeed(Integer speed) {
         this.speed = speed;
+    }
+
+    public Boolean getVxcPermitted() {
+        return vxcPermitted;
+    }
+
+    public void setVxcPermitted(Boolean vxcPermitted) {
+        this.vxcPermitted = vxcPermitted;
     }
 
     public Integer getRank() {

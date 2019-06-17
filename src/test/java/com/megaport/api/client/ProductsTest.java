@@ -146,6 +146,7 @@ public class ProductsTest extends SessionHelper {
 
         // since this is hitting the training system, there will be a variable number of services, but never 0
         assertTrue(ports.size() > 0);
+        assertTrue(ports.get(0).getVxcPermitted() != null);
 
     }
 

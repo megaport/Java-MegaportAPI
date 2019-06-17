@@ -10,14 +10,14 @@ import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
 
-public class McrToAwsTest {
+public class McrToAwsTest extends SessionHelper {
 
     MegaportApiSession session;
 
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123", null);
+        session = getSession();
         assertTrue(session.isValid());
 
     }

@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by adam.wells on 17/06/2016.
  */
-public class ServiceLifecycleTest {
+public class ServiceLifecycleTest extends SessionHelper {
 
     MegaportApiSession session;
     MegaportServiceDto configuredPort = null;
@@ -22,7 +22,7 @@ public class ServiceLifecycleTest {
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123");
+        session = getSession();
         assertTrue(session.isValid());
 
         List<MegaportServiceDto> ports = session.findPorts();

@@ -1,10 +1,13 @@
 package com.megaport.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 
 /**
  * Created by adam.wells on 27/06/2016.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class IxDto implements Serializable {
 
     private IpAddressDto primaryipv6;

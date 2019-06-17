@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 /**
  * Created by adam.wells on 17/06/2016.
  */
-public class IxOrdersTest {
+public class IxOrdersTest extends SessionHelper {
 
     MegaportApiSession session;
 
@@ -25,7 +25,7 @@ public class IxOrdersTest {
     @Before
     public void init() throws Exception {
 
-        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123");
+        session = getSession();
         assertTrue(session.isValid());
 
     }
@@ -46,7 +46,7 @@ public class IxOrdersTest {
 
         System.out.println(vxcPrice.toString());
 
-        assertEquals(new BigDecimal("162.4"), vxcPrice.getMonthlyRate());
+        assertEquals(new BigDecimal("162"), vxcPrice.getMonthlyRate());
 
     }
 

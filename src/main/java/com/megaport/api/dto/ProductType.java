@@ -19,6 +19,8 @@ public enum ProductType {
     MEGAPORT("MEGAPORT"),
     IX("IX"),
     VXC("VXC"),
+    MCR("MCR"),
+    MCR2("MCR2"),
     CXC("CXC")
     ;
 

@@ -650,6 +650,8 @@ public class MegaportApiSession {
 				case "cxc":
 					return JsonConverter.fromJsonDataAsObject(json, VxcServiceDto.class);
 
+				case "mcr":
+				case "mcr2":
 				case "megaport":
 					return JsonConverter.fromJsonDataAsObject(json, MegaportServiceDto.class);
 

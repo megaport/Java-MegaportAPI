@@ -18,14 +18,14 @@ import static org.junit.Assert.*;
 /**
  * Created by adam.wells on 17/06/2016.
  */
-public class PortOrdersTest {
+public class PortOrdersTest extends SessionHelper {
 
     MegaportApiSession session;
 
     @Before
     public void init() throws Exception {
 
-        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123");
+        session = getSession();
         assertTrue(session.isValid());
 
     }
@@ -242,6 +242,8 @@ public class PortOrdersTest {
 
         List<ServiceLineItemDto> serviceLineItemDtos = session.validateOrder(order);
         assertEquals(1, serviceLineItemDtos.size());
+        assertEquals(ProductType.MEGAPORT.getCode(), serviceLineItemDtos.get(0).getProductType());
+        assertEquals(ProductType.MEGAPORT, serviceLineItemDtos.get(0).getPrice().getProductType());
 
     }
 

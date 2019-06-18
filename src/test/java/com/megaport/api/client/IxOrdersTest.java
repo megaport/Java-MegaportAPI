@@ -34,7 +34,7 @@ public class IxOrdersTest extends SessionHelper {
     public void testFindAvailableIxByLocation() throws Exception{
 
         List<IxDto> ixForLocation = session.findIxForLocation(3);
-        assertEquals(19, ixForLocation.size());
+        assertEquals(18, ixForLocation.size());
 
     }
 

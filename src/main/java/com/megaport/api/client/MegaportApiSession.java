@@ -645,7 +645,6 @@ public class MegaportApiSession {
 			String productType = (String) map.get("productType");
 			switch (productType.toLowerCase()) {
 				case "vxc":
-					return JsonConverter.fromJsonDataAsObject(json, VxcServiceDto.class);
 
 				case "cxc":
 					return JsonConverter.fromJsonDataAsObject(json, VxcServiceDto.class);

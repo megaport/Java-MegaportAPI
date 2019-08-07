@@ -18,7 +18,7 @@ public class McrToAzureTest extends SessionHelper {
     @Before
     public void init() throws Exception{
 
-        session = new MegaportApiSession(Environment.STAGING, "api.test", "Abc123", null);
+        session = new MegaportApiSession(Environment.LOCALHOST, "api.test", "Abc123", null);
         assertTrue(session.isValid());
 
     }

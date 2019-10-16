@@ -1,7 +1,7 @@
 package com.megaport.api.client;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
 import com.megaport.api.dto.Environment;
+import kong.unirest.UnirestException;
 
 import java.io.IOException;
 

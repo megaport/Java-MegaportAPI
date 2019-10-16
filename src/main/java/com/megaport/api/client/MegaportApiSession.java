@@ -1,14 +1,15 @@
 package com.megaport.api.client;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.GetRequest;
 import com.megaport.api.dto.*;
 import com.megaport.api.dto.notifications.NotificationPreferencesDto;
 import com.megaport.api.exceptions.*;
 import com.megaport.api.util.JsonConverter;
+import kong.unirest.GetRequest;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
+import kong.unirest.UnirestInstance;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -25,6 +26,8 @@ import java.util.Map;
  */
 public class MegaportApiSession {
 
+	public static final int CONNECT_TIMEOUT_IN_MILLIES = 10000;
+	public static final int SOCKET_TIMEOUT_IN_MILLIES = 60000;
 	private final Map<Environment, String> environments = new HashMap<>();
 	private String token = null;
 	private String server;
@@ -49,7 +52,9 @@ public class MegaportApiSession {
 	}
 
 	/**
-	 * Constructor for Megaport API session
+	 * Constructor for Megaport API session.
+	 *
+	 * This will reset Unirest and set default timeout.
 	 *
 	 * @param environment The environment to be targeted e.g. TRAINING
 	 * @param token The token to use for secure auth
@@ -59,116 +64,141 @@ public class MegaportApiSession {
 	public MegaportApiSession(Environment environment, String token) throws InvalidCredentialsException, UnirestException {
 		this.token = token;
 		this.server = environments.get(environment);
-		Unirest.setTimeouts(10000, 60000);
+		Unirest.config().reset().connectTimeout(CONNECT_TIMEOUT_IN_MILLIES).socketTimeout(SOCKET_TIMEOUT_IN_MILLIES);
 		login(null, null, token);
 	}
 
 	/**
 	 * Constructor for Megaport API session
 	 *
+	 * This will reset Unirest and set the connection timeout.
+	 *
 	 * @param environment The environment to be targeted e.g. TRAINING
 	 * @param token The token to use for secure auth
+	 * @param timeout The connection timeout for all requests in millis
+	 *
 	 * @throws InvalidCredentialsException Reporting invalid credentials
 	 * @throws UnirestException Report any REST specific exceptions
 	 */
-	public MegaportApiSession(Environment environment, String token, Long timeout) throws InvalidCredentialsException, UnirestException {
+	public MegaportApiSession(Environment environment, String token, Integer timeout) throws InvalidCredentialsException, UnirestException {
 		this.token = token;
 		this.server = environments.get(environment);
-		Unirest.setTimeouts(10000, timeout == null ? 60000 : timeout);
+		Unirest.config().reset().connectTimeout(CONNECT_TIMEOUT_IN_MILLIES).socketTimeout(timeout == null ? SOCKET_TIMEOUT_IN_MILLIES : timeout);
 		login(null, null, token);
 	}
 
 	/**
 	 * Constructor for Megaport API session
+	 *
+	 * This will reset Unirest and set default timeout.
 	 *
 	 * @param environment The environment to be targeted e.g. TRAINING
 	 * @param username The username to use for secure auth
 	 * @param password The password to use for secure auth
+	 *
 	 * @throws InvalidCredentialsException Reporting invalid credentials
 	 * @throws IOException Report any IO exceptions
 	 * @throws UnirestException To report any REST specific exceptions
 	 */
 	public MegaportApiSession(Environment environment, String username, String password) throws InvalidCredentialsException, IOException, UnirestException {
 		this.server = environments.get(environment);
-		Unirest.setTimeouts(10000, 60000);
+		Unirest.config().reset().connectTimeout(CONNECT_TIMEOUT_IN_MILLIES).socketTimeout(SOCKET_TIMEOUT_IN_MILLIES);
 		login(username, password, null);
 	}
 
 	/**
 	 * Constructor for Megaport API session
 	 *
+	 * This will reset Unirest and set the connection timeout.
+	 *
 	 * @param environment The environment to be targeted e.g. TRAINING
 	 * @param username The username to use for secure auth
 	 * @param password The password to use for secure auth
+	 * @param timeout The connection timeout for all requests in millis
+	 *
 	 * @throws InvalidCredentialsException Reporting invalid credentials
 	 * @throws IOException Report any IO exceptions
 	 * @throws UnirestException To report any REST specific exceptions
 	 */
-	public MegaportApiSession(Environment environment, String username, String password, Long timeout) throws InvalidCredentialsException, IOException, UnirestException {
+	public MegaportApiSession(Environment environment, String username, String password, Integer timeout) throws InvalidCredentialsException, IOException, UnirestException {
 		this.server = environments.get(environment);
-		Unirest.setTimeouts(10000, timeout == null ? 60000 : timeout);
+		Unirest.config().reset().connectTimeout(CONNECT_TIMEOUT_IN_MILLIES).socketTimeout(timeout == null ? SOCKET_TIMEOUT_IN_MILLIES : timeout);
 		login(username, password, null);
 	}
 
 	/**
 	 * Use this only if you get instruction from Megaport support.
 	 *
+	 * This will reset Unirest and set default timeout.
+	 *
 	 * @param server The server name of the environment to be targeted
 	 * @param username The username to use for secure auth
 	 * @param password The password to use for secure auth
+	 *
 	 * @throws InvalidCredentialsException Reporting invalid credentials
 	 * @throws IOException Report any IO exceptions
 	 * @throws UnirestException Report any REST specific exceptions
 	 */
 	public MegaportApiSession(String server, String username, String password) throws InvalidCredentialsException, IOException, UnirestException {
 		this.server = validateServer(server);
-		Unirest.setTimeouts(10000, 60000);
+		Unirest.config().reset().connectTimeout(CONNECT_TIMEOUT_IN_MILLIES).socketTimeout(SOCKET_TIMEOUT_IN_MILLIES);
 		login(username, password, null);
 	}
 
 	/**
 	 * Use this only if you get instruction from Megaport support.
+	 *
+	 * This will reset Unirest and set the connection timeout.
 	 *
 	 * @param server The server name of the environment to be targeted
 	 * @param username The username to use for secure auth
 	 * @param password The password to use for secure auth
+	 * @param timeout The connection timeout for all requests in millis
+	 *
 	 * @throws InvalidCredentialsException Reporting invalid credentials
 	 * @throws IOException Report any IO exceptions
 	 * @throws UnirestException Report any REST specific exceptions
 	 */
-	public MegaportApiSession(String server, String username, String password, Long timeout) throws InvalidCredentialsException, IOException, UnirestException {
+	public MegaportApiSession(String server, String username, String password, Integer timeout) throws InvalidCredentialsException, IOException, UnirestException {
 		this.server = validateServer(server);
-		Unirest.setTimeouts(10000, timeout == null ? 60000 : timeout);
+		Unirest.config().reset().connectTimeout(CONNECT_TIMEOUT_IN_MILLIES).socketTimeout(timeout == null ? SOCKET_TIMEOUT_IN_MILLIES : timeout);
 		login(username, password, null);
 	}
 
 	/**
 	 * Use this only if you get instruction from Megaport support.
 	 *
+	 * This will reset Unirest and set the connection timeout.
+	 *
 	 * @param server The server name of the environment to be targeted
 	 * @param token The token to use for secure auth
+	 * @param timeout The connection timeout for all requests in millis
+	 *
 	 * @throws InvalidCredentialsException Reporting invalid credentials
 	 * @throws IOException Report any IO exceptions
 	 * @throws UnirestException Report any REST specific exceptions
 	 */
-	public MegaportApiSession(String server, String token, Long timeout) throws InvalidCredentialsException, IOException, UnirestException {
+	public MegaportApiSession(String server, String token, Integer timeout) throws InvalidCredentialsException, IOException, UnirestException {
 		this.server = validateServer(server);
-		Unirest.setTimeouts(10000, timeout == null ? 60000 : timeout);
+		Unirest.config().reset().connectTimeout(CONNECT_TIMEOUT_IN_MILLIES).socketTimeout(timeout == null ? SOCKET_TIMEOUT_IN_MILLIES : timeout);
 		login(null, null, token);
 	}
 
 	/**
 	 * Use this only if you get instruction from Megaport support.
 	 *
+	* This will reset Unirest and set default timeout.
+	 *
 	 * @param server The server name of the environment to be targeted
 	 * @param token The token to use for secure auth
+	 *
 	 * @throws InvalidCredentialsException Reporting invalid credentials
 	 * @throws IOException Report any IO exceptions
 	 * @throws UnirestException Report any REST specific exceptions
 	 */
 	public MegaportApiSession(String server, String token) throws InvalidCredentialsException, IOException, UnirestException {
 		this.server = validateServer(server);
-		Unirest.setTimeouts(10000, 60000);
+		Unirest.config().reset().connectTimeout(CONNECT_TIMEOUT_IN_MILLIES).socketTimeout(SOCKET_TIMEOUT_IN_MILLIES);
 		login(null, null, token);
 	}
 
@@ -431,14 +461,20 @@ public class MegaportApiSession {
 
 		String url = server + "/v2/networkdesign/buy";
 		HttpResponse<JsonNode> response = null;
+		UnirestInstance postRest = null;
 		try {
-			Unirest.setTimeouts(0, 0);
+			postRest = Unirest.spawnInstance();
+			postRest.config().connectTimeout(0).socketTimeout(0);
 			String jsonBody = JsonConverter.toJson(megaportServiceDtos);
-			System.out.println("POST " + url +", body: " + jsonBody);
-			response = Unirest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(jsonBody).asJson();
+			System.out.println("POST " + url + ", body: " + jsonBody);
+			response = postRest.post(url).header("X-Auth-Token", token).header("Content-Type", "application/json").body(jsonBody).asJson();
 		} catch (UnirestException e) {
 			e.printStackTrace();
 			throw new ServiceUnavailableException("API Server is not available", 503, null);
+		} finally {
+			if (postRest != null) {
+				postRest.shutDown();
+			}
 		}
 		if (response.getStatus() < 400) {
 			String json = response.getBody().toString();

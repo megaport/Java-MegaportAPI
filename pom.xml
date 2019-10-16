@@ -6,9 +6,9 @@
 
     <groupId>com.megaport.api</groupId>
     <artifactId>client</artifactId>
-    <version>1.4.30</version>
+    <version>2.0.0</version>
     <properties>
-        <jackson.version>2.9.8</jackson.version>
+        <jackson.version>2.9.9</jackson.version>
     </properties>
     <dependencies>
         <dependency>
@@ -28,17 +28,17 @@
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.mashape.unirest</groupId>
+            <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
-            <version>1.4.9</version>
+            <version>2.4.03</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.4</version>
+            <version>3.9</version>
         </dependency>
     </dependencies>
-
     <packaging>jar</packaging>
     <name>Megaport API Client SDK</name>
     <description>This library is a Java wrapper for the Megaport API.</description>
@@ -79,10 +79,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>

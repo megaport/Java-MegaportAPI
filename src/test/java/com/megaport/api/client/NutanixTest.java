@@ -17,7 +17,7 @@ public class NutanixTest extends SessionHelper {
 	public void init() throws Exception{
 
 		session = getSession();
-		System.out.println("## Environment: " + Environment.STAGING);
+		System.out.println("## Environment: " + Environment.LOCALHOST);
 		assertTrue(session.isValid());
 
 	}

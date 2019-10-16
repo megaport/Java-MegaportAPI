@@ -58,7 +58,7 @@ public class VxcOrdersTest extends SessionHelper {
     @Ignore
     public void testVxcPrice3() throws Exception {
 
-        MegaportApiSession testSession = new MegaportApiSession(Environment.STAGING, "5555e6cd-ae58-ac20-90b4-1de713c8a62d");
+        MegaportApiSession testSession = new MegaportApiSession(Environment.LOCALHOST, "5555e6cd-ae58-ac20-90b4-1de713c8a62d");
 
         PriceDto vxcPrice = testSession.findVxcPrice(140,140, 10000, "DEFAULT");
 

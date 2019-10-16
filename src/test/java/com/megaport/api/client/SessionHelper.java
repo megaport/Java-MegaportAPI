@@ -1,12 +1,12 @@
 package com.megaport.api.client;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
 import com.megaport.api.dto.Environment;
+import kong.unirest.UnirestException;
 
 import java.io.IOException;
 
 public class SessionHelper {
-    private final Environment environment = Environment.STAGING;
+    private final Environment environment = Environment.LOCALHOST;
 
     MegaportApiSession getSession() throws IOException, UnirestException {
         return new MegaportApiSession(environment, "api.test", "Abc123", null);

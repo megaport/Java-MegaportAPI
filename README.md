@@ -11,7 +11,7 @@ You can add this library as a Maven dependency:
 <dependency>
     <groupId>com.megaport.api</groupId>
     <artifactId>client</artifactId>
-    <version>1.4.5</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 

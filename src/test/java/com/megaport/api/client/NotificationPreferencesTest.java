@@ -2,7 +2,6 @@ package com.megaport.api.client;
 
 import static org.junit.Assert.assertTrue;
 
-import com.megaport.api.dto.Environment;
 import com.megaport.api.dto.notifications.NotificationPreferencesDto;
 import com.megaport.api.dto.notifications.MessageDestination;
 import com.megaport.api.dto.notifications.MessageGroupPreferencesDto;
